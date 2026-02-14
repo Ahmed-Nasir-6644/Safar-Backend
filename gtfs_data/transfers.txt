@@ -1,0 +1,12 @@
+﻿from_stop_id,to_stop_id,transfer_type,min_transfer_time
+shaheen_down,shaheen_down,,120
+shaheen_up,shaheen_up,,120
+f9_park_down,f9_park_down,,120
+f9_park_up,f9_park_up,,120
+pims_hospital_fr_down,pims_hospital_fr_down,,120
+pims_hospital_fr_up,pims_hospital_fr_up,,120
+children_hospital_down,children_hospital_down,,120
+children_hospital_up,children_hospital_up,,120
+g9_markaz_up,g9_markaz_up,,120
+g94_park_down,g94_park_down,,120
+g94_park_up,g94_park_up,,120

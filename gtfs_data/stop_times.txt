@@ -1,168 +1,456 @@
 trip_id,arrival_time,departure_time,stop_id,stop_sequence,stop_headsign,pickup_type,drop_off_type,continuous_pickup,continuous_drop_off,shape_dist_traveled,timepoint
+
 fr_3A_0_T01,06:00:00,06:00:00,pims_hospital_fr_up,1,PIMS Hospital,,,1,1,,1
-fr_3A_0_T01,06:02:26,06:02:26,pims_station_fr_up,2,PIMS Metro Station,,,1,1,,0
-fr_3A_0_T01,06:08:35,06:08:35,katcher_up,3,Katchery,,,1,1,,0
-fr_3A_0_T01,06:11:11,06:11:11,f8_markaz_up,4,F-8 Markaz,,,1,1,,0
-fr_3A_0_T01,06:16:50,06:16:50,f9_park_up,5,F-9 Park,,,1,1,,0
-fr_3A_0_T01,06:19:02,06:19:02,shaheen_up,6,Shaheen Chowk,,,1,1,,0
-fr_3A_0_T01,06:22:53,06:22:53,bahria_uni_up,7,Bahria University,,,1,1,,0
-fr_3A_0_T01,06:27:31,06:27:31,naval_up,8,Naval Complex,,,1,1,,0
-fr_3A_0_T01,06:34:08,06:34:08,faisal_masjid_up,9,Faisal Masjid,,,1,1,,0
-fr_3A_0_T01,06:38:51,06:38:51,parveen_up,10,Parveen Shakir Road,,,1,1,,0
-fr_3A_0_T01,06:44:55,06:44:55,kohsar_up,11,Kohsar Road,,,1,1,,0
-fr_3A_0_T01,06:52:13,06:52:13,zoo_up,12,Murghzar Zoo,,,1,1,,0
-fr_3A_0_T01,06:54:59,06:54:59,f6_2_up,13,F-6/2,,,1,1,,0
+fr_3A_0_T01,,,pims_station_fr_up,2,PIMS Metro Station,,,1,1,,
+fr_3A_0_T01,,,katcher_up,3,Katchery,,,1,1,,
+fr_3A_0_T01,,,f8_markaz_up,4,F-8 Markaz,,,1,1,,
+fr_3A_0_T01,,,f9_park_up,5,F-9 Park,,,1,1,,
+fr_3A_0_T01,,,shaheen_up,6,Shaheen Chowk,,,1,1,,
+fr_3A_0_T01,,,bahria_uni_up,7,Bahria University,,,1,1,,
+fr_3A_0_T01,,,naval_up,8,Naval Complex,,,1,1,,
+fr_3A_0_T01,,,faisal_masjid_up,9,Faisal Masjid,,,1,1,,
+fr_3A_0_T01,,,parveen_up,10,Parveen Shakir Road,,,1,1,,
+fr_3A_0_T01,,,kohsar_up,11,Kohsar Road,,,1,1,,
+fr_3A_0_T01,,,zoo_up,12,Murghzar Zoo,,,1,1,,
+fr_3A_0_T01,,,f6_2_up,13,F-6/2,,,1,1,,
 fr_3A_0_T01,07:00:00,07:00:00,saidpur_up,14,Saidpur Village,,,1,1,,1
 fr_3A_1_T01,06:00:00,06:00:00,saidpur_down,1,Saidpur Village,,,1,1,,1
-fr_3A_1_T01,06:05:04,06:05:04,f6_2_down,2,F-6/2,,,1,1,,0
-fr_3A_1_T01,06:07:50,06:07:50,zoo_down,3,Murghzar Zoo,,,1,1,,0
-fr_3A_1_T01,06:15:12,06:15:12,kohsar_down,4,Kohsar Road,,,1,1,,0
-fr_3A_1_T01,06:21:14,06:21:14,parveen_down,5,Parveen Shakir Road,,,1,1,,0
-fr_3A_1_T01,06:25:59,06:25:59,faisal_masjid_down,6,Faisal Masjid,,,1,1,,0
-fr_3A_1_T01,06:32:48,06:32:48,naval_down,7,Naval Complex,,,1,1,,0
-fr_3A_1_T01,06:37:09,06:37:09,bahria_uni_down,8,Bahria University,,,1,1,,0
-fr_3A_1_T01,06:41:01,06:41:01,shaheen_down,9,Shaheen Chowk,,,1,1,,0
-fr_3A_1_T01,06:43:16,06:43:16,f9_park_down,10,Ravi Gate F-9,,,1,1,,0
-fr_3A_1_T01,06:48:48,06:48:48,f8_markaz_down,11,F-8 Markaz,,,1,1,,0
-fr_3A_1_T01,06:51:28,06:51:28,katcher_down,12,F-8 Katchery,,,1,1,,0
-fr_3A_1_T01,06:57:06,06:57:06,pims_station_fr_down,13,PIMS Metro Station,,,1,1,,0
+fr_3A_1_T01,,,f6_2_down,2,F-6/2,,,1,1,,
+fr_3A_1_T01,,,kohsar_down,4,Kohsar Road,,,1,1,,
+fr_3A_1_T01,,,parveen_down,5,Parveen Shakir Road,,,1,1,,
+fr_3A_1_T01,,,faisal_masjid_down,6,Faisal Masjid,,,1,1,,
+fr_3A_1_T01,,,naval_down,7,Naval Complex,,,1,1,,
+fr_3A_1_T01,,,bahria_uni_down,8,Bahria University,,,1,1,,
+fr_3A_1_T01,,,shaheen_down,9,Shaheen Chowk,,,1,1,,
+fr_3A_1_T01,,,f9_park_down,10,Ravi Gate F-9,,,1,1,,
+fr_3A_1_T01,,,f8_markaz_down,11,F-8 Markaz,,,1,1,,
+fr_3A_1_T01,,,katcher_down,12,F-8 Katchery,,,1,1,,
+fr_3A_1_T01,,,pims_station_fr_down,13,PIMS Metro Station,,,1,1,,
 fr_3A_1_T01,07:00:00,07:00:00,pims_hospital_fr_down,14,PIMS Hospital,,,1,1,,1
 fr_4_0_T01,06:00:00,06:00:00,pims_hospital_fr_up,1,PIMS Hospital,,,1,1,,1
-fr_4_0_T01,06:01:40,06:01:40,children_hospital_up,2,Children Hospital,,,1,1,,0
-fr_4_0_T01,06:05:27,06:05:27,rescue_up,3,Rescue 15,,,1,1,,0
-fr_4_0_T01,06:06:31,06:06:31,bank_up,4,Bank Colony,,,1,1,,0
-fr_4_0_T01,06:09:03,06:09:03,salai_up,5,Salai Centre,,,1,1,,0
-fr_4_0_T01,06:10:58,06:10:58,sitara_up,6,Sitara Market,,,1,1,,0
-fr_4_0_T01,06:12:48,06:12:48,pully_up,7,Pully Stop,,,1,1,,0
-fr_4_0_T01,06:15:19,06:15:19,iqbal_hall_up,8,Iqbal Hall,,,1,1,,0
-fr_4_0_T01,06:18:49,06:18:49,g61_up,9,"G-6/1,2",,,1,1,,0
-fr_4_0_T01,06:21:04,06:21:04,melody_up,10,Melody Market,,,1,1,,0
-fr_4_0_T01,06:24:49,06:24:49,aabpara_market_up,11,Abpara Market,,,1,1,,0
-fr_4_0_T01,06:26:10,06:26:10,youth_hostel_up,12,Youth Hostel,,,1,1,,0
-fr_4_0_T01,06:30:15,06:30:15,mci_up,13,Metropolitan Corporation,,,1,1,,0
-fr_4_0_T01,06:32:14,06:32:14,icb_up,14,ICB College,,,1,1,,0
-fr_4_0_T01,06:34:49,06:34:49,nadra_up,15,NADRA Chowk,,,1,1,,0
-fr_4_0_T01,06:37:39,06:37:39,lodges_up,16,Lodges Park,,,1,1,,0
-fr_4_0_T01,06:39:19,06:39:19,sukh_park_up,17,Sukh Chayn Park,,,1,1,,0
-fr_4_0_T01,06:42:30,06:42:30,mofa_up,18,Ministry of Foreign Affairs,,,1,1,,0
-fr_4_0_T01,06:45:25,06:45:25,radio_up,19,Radio Pakistan,,,1,1,,0
-fr_4_0_T01,06:46:59,06:46:59,nat_library_up,20,National Library,,,1,1,,0
-fr_4_0_T01,06:50:09,06:50:09,sec_police_up,21,Secretariate Police Station,,,1,1,,0
-fr_4_0_T01,06:52:26,06:52:26,diplomatic_up,22,Diplomatic Enclave Gate 4,,,1,1,,0
-fr_4_0_T01,06:54:16,06:54:16,aiwan_up,23,Aiwan e Sadar Colony,,,1,1,,0
-fr_4_0_T01,06:56:52,06:56:52,muslim_colony_up,24,Muslim Colony,,,1,1,,0
+fr_4_0_T01,,,children_hospital_up,2,Children Hospital,,,1,1,,
+fr_4_0_T01,,,rescue_up,3,Rescue 15,,,1,1,,
+fr_4_0_T01,,,bank_up,4,Bank Colony,,,1,1,,
+fr_4_0_T01,,,salai_up,5,Salai Centre,,,1,1,,
+fr_4_0_T01,,,sitara_up,6,Sitara Market,,,1,1,,
+fr_4_0_T01,,,pully_up,7,Pully Stop,,,1,1,,
+fr_4_0_T01,,,iqbal_hall_up,8,Iqbal Hall,,,1,1,,
+fr_4_0_T01,,,g61_up,9,"G-6/1,2",,,1,1,,
+fr_4_0_T01,,,melody_up,10,Melody Market,,,1,1,,
+fr_4_0_T01,,,aabpara_up,11,Abpara Market,,,1,1,,
+fr_4_0_T01,,,youth_hostel_up,12,Youth Hostel,,,1,1,,
+fr_4_0_T01,,,mci_up,13,Metropolitan Corporation,,,1,1,,
+fr_4_0_T01,,,icb_up,14,ICB College,,,1,1,,
+fr_4_0_T01,,,nadra_up,15,NADRA Chowk,,,1,1,,
+fr_4_0_T01,,,lodges_up,16,Lodges Park,,,1,1,,
+fr_4_0_T01,,,sukh_park_up,17,Sukh Chayn Park,,,1,1,,
+fr_4_0_T01,,,mofa_up,18,Ministry of Foreign Affairs,,,1,1,,
+fr_4_0_T01,,,radio_up,19,Radio Pakistan,,,1,1,,
+fr_4_0_T01,,,nat_library_up,20,National Library,,,1,1,,
+fr_4_0_T01,,,sec_police_up,21,Secretariate Police Station,,,1,1,,
+fr_4_0_T01,,,diplomatic_up,22,Diplomatic Enclave Gate 4,,,1,1,,
+fr_4_0_T01,,,aiwan_up,23,Aiwan e Sadar Colony,,,1,1,,
+fr_4_0_T01,,,muslim_colony_up,24,Muslim Colony,,,1,1,,
 fr_4_0_T01,07:00:00,07:00:00,bari_imam_up,25,Bari Imam,,,1,1,,1
 fr_4_1_T01,06:00:00,06:00:00,bari_imam_down,1,Bari Imam,,,1,1,,1
-fr_4_1_T01,06:03:05,06:03:05,muslim_colony_down,2,Muslim Colony,,,1,1,,0
-fr_4_1_T01,06:05:39,06:05:39,aiwan_down,3,Aiwan e Sadar Colony,,,1,1,,0
-fr_4_1_T01,06:07:29,06:07:29,diplomatic_down,4,Diplomatic Enclave Gate 4,,,1,1,,0
-fr_4_1_T01,06:10:08,06:10:08,sec_police_down,5,Secretariate Police Station,,,1,1,,0
-fr_4_1_T01,06:13:01,06:13:01,nat_library_down,6,National Library,,,1,1,,0
-fr_4_1_T01,06:14:19,06:14:19,radio_down,7,Radio Pakistan,,,1,1,,0
-fr_4_1_T01,06:17:08,06:17:08,mofa_down,8,Ministry of Foreign Affairs,,,1,1,,0
-fr_4_1_T01,06:20:49,06:20:49,sukh_park_down,9,Sukh Chayn Park,,,1,1,,0
-fr_4_1_T01,06:22:37,06:22:37,lodges_down,10,Lodges Park,,,1,1,,0
-fr_4_1_T01,06:25:35,06:25:35,nadra_down,11,NADRA Chowk,,,1,1,,0
-fr_4_1_T01,06:27:56,06:27:56,icb_down,12,ICB College,,,1,1,,0
-fr_4_1_T01,06:29:47,06:29:47,mci_down,13,Metropolitan Corporation,,,1,1,,0
-fr_4_1_T01,06:33:50,06:33:50,youth_hostel_down,14,Youth Hostel,,,1,1,,0
-fr_4_1_T01,06:35:19,06:35:19,aabpara_market_down,15,Abpara Market,,,1,1,,0
-fr_4_1_T01,06:39:08,06:39:08,melody_down,16,Melody Market,,,1,1,,0
-fr_4_1_T01,06:41:35,06:41:35,g61_down,17,"G-6/1,2",,,1,1,,0
-fr_4_1_T01,06:44:43,06:44:43,iqbal_hall_down,18,Iqbal Hall,,,1,1,,0
-fr_4_1_T01,06:47:17,06:47:17,pully_down,19,Pully Stop,,,1,1,,0
-fr_4_1_T01,06:48:55,06:48:55,sitara_down,20,Sitara Market,,,1,1,,0
-fr_4_1_T01,06:51:00,06:51:00,salai_down,21,Salai Centre,,,1,1,,0
-fr_4_1_T01,06:53:28,06:53:28,bank_down,22,Bank Colony,,,1,1,,0
-fr_4_1_T01,06:54:42,06:54:42,rescue_down,23,Rescue 15,,,1,1,,0
-fr_4_1_T01,06:58:23,06:58:23,children_hospital_down,24,Children Hospital,,,1,1,,0
+fr_4_1_T01,,,muslim_colony_down,2,Muslim Colony,,,1,1,,
+fr_4_1_T01,,,aiwan_down,3,Aiwan e Sadar Colony,,,1,1,,
+fr_4_1_T01,,,diplomatic_down,4,Diplomatic Enclave Gate 4,,,1,1,,
+fr_4_1_T01,,,sec_police_down,5,Secretariate Police Station,,,1,1,,
+fr_4_1_T01,,,nat_library_down,6,National Library,,,1,1,,
+fr_4_1_T01,,,radio_down,7,Radio Pakistan,,,1,1,,
+fr_4_1_T01,,,mofa_down,8,Ministry of Foreign Affairs,,,1,1,,
+fr_4_1_T01,,,sukh_park_down,9,Sukh Chayn Park,,,1,1,,
+fr_4_1_T01,,,lodges_down,10,Lodges Park,,,1,1,,
+fr_4_1_T01,,,nadra_down,11,NADRA Chowk,,,1,1,,
+fr_4_1_T01,,,icb_down,12,ICB College,,,1,1,,
+fr_4_1_T01,,,mci_down,13,Metropolitan Corporation,,,1,1,,
+fr_4_1_T01,,,youth_hostel_down,14,Youth Hostel,,,1,1,,
+fr_4_1_T01,,,aabpara_down,15,Abpara Market,,,1,1,,
+fr_4_1_T01,,,melody_down,16,Melody Market,,,1,1,,
+fr_4_1_T01,,,g61_down,17,"G-6/1,2",,,1,1,,
+fr_4_1_T01,,,iqbal_hall_down,18,Iqbal Hall,,,1,1,,
+fr_4_1_T01,,,pully_down,19,Pully Stop,,,1,1,,
+fr_4_1_T01,,,sitara_down,20,Sitara Market,,,1,1,,
+fr_4_1_T01,,,salai_down,21,Salai Centre,,,1,1,,
+fr_4_1_T01,,,bank_down,22,Bank Colony,,,1,1,,
+fr_4_1_T01,,,rescue_down,23,Rescue 15,,,1,1,,
+fr_4_1_T01,,,children_hospital_down,24,Children Hospital,,,1,1,,
 fr_4_1_T01,07:00:00,07:00:00,pims_hospital_fr_down,25,PIMS Hospital,,,1,1,,1
 fr_6_0_T01,06:00:00,06:00:00,pims_hospital_fr_up,1,PIMS Hospital,,,1,1,,1
-fr_6_0_T01,06:04:30,06:04:30,tipu_market_up,2,Tipu Market,,,1,1,,0
-fr_6_0_T01,06:07:14,06:07:14,ibn_station_up,3,Ibn-e-Sina Metro Station,,,1,1,,0
-fr_6_0_T01,06:11:21,06:11:21,g94_park_up,4,G-9/4 Park,,,1,1,,0
-fr_6_0_T01,06:13:45,06:13:45,margalla_ground_up,5,Margalla Ground G-9,,,1,1,,0
-fr_6_0_T01,06:16:54,06:16:54,g9_markaz_down,6,G-9 Markaz,,,1,1,,0
-fr_6_0_T01,06:21:46,06:21:46,ibn_sina_g94_up,7,Ibn-e-Sina Road G-9,,,1,1,,0
-fr_6_0_T01,06:28:40,06:28:40,f9_park_up,8,F-9 Park,,,1,1,,0
-fr_6_0_T01,06:30:09,06:30:09,shaheen_up,9,Shaheen Chowk,,,1,1,,0
-fr_6_0_T01,06:32:36,06:32:36,fazaia_housing_up,10,Fazaia Housing Society,,,1,1,,0
-fr_6_0_T01,06:34:52,06:34:52,paf_hos_up,11,PAF Hospital,,,1,1,,0
-fr_6_0_T01,06:38:40,06:38:40,pak_dci_up,12,Pakistan Gate DCI,,,1,1,,0
-fr_6_0_T01,06:41:58,06:41:58,maroof_up,13,Maroof International Hospital,,,1,1,,0
-fr_6_0_T01,06:43:53,06:43:53,f10_up,14,F-10 Markaz,,,1,1,,0
-fr_6_0_T01,06:47:00,06:47:00,imcb_f104_up,15,IMCB F-10/4,,,1,1,,0
-fr_6_0_T01,06:51:22,06:51:22,f10f11_up,16,F-10/ F-11 Greenbelt,,,1,1,,0
-fr_6_0_T01,06:53:51,06:53:51,major_up,17,Major Road F-11,,,1,1,,0
-fr_6_0_T01,06:53:54,06:53:54,ptcl_f10_up,18,PTCL F-11,,,1,1,,0
-fr_6_0_T01,06:55:22,06:55:22,f11_markaz_up,19,F-11 Markaz,,,1,1,,0
-fr_6_0_T01,06:58:19,06:58:19,opf_up,20,OPF,,,1,1,,0
-fr_6_0_T01,07:00:00,07:00:00,golra_f11_up,21,Golra Sharif,,,1,1,,1
-fr_6_1_T01,06:00:00,06:00:00,golra_f11_down,1,Golra Sharif,,,1,1,,1
-fr_6_1_T01,06:01:44,06:01:44,opf_down,2,OPF,,,1,1,,0
-fr_6_1_T01,06:04:06,06:04:06,f11_markaz_down,3,F-11 Markaz,,,1,1,,0
-fr_6_1_T01,06:05:39,06:05:39,ptcl_f10_down,4,PTCL F-11,,,1,1,,0
-fr_6_1_T01,06:07:04,06:07:04,major_down,5,Major Road,,,1,1,,0
-fr_6_1_T01,06:08:21,06:08:21,f10f11_down,6,F-10/ F-11 Greenbelt,,,1,1,,0
-fr_6_1_T01,06:12:44,06:12:44,imcb_f104_down,7,IMCB F-10/4,,,1,1,,0
-fr_6_1_T01,06:15:48,06:15:48,f10_down,8,F-10 Markaz,,,1,1,,0
-fr_6_1_T01,06:17:36,06:17:36,maroof_down,9,Maroof International Hospital,,,1,1,,0
-fr_6_1_T01,06:20:41,06:20:41,pak_dci_down,10,Pakistan Gate DCI,,,1,1,,0
-fr_6_1_T01,06:24:50,06:24:50,paf_hos_down,11,PAF Hospital,,,1,1,,0
-fr_6_1_T01,06:27:38,06:27:38,fazaia_housing_down,12,F-9 Khyber Gate,,,1,1,,0
-fr_6_1_T01,06:29:59,06:29:59,shaheen_down,13,Shaheen Chowk,,,1,1,,0
-fr_6_1_T01,06:31:30,06:31:30,f9_park_down,14,F-9 Park Ravi Gate,,,1,1,,0
-fr_6_1_T01,06:38:26,06:38:26,ibn_sina_g94_down,15,Ibn-e-Sina Road G-9,,,1,1,,0
-fr_6_1_T01,06:43:08,06:43:08,g9_markaz_up,16,G-9 Markaz,,,1,1,,0
-fr_6_1_T01,06:46:05,06:46:05,margalla_ground_down,17,Margalla Ground G-9,,,1,1,,0
-fr_6_1_T01,06:48:41,06:48:41,g94_park_down,18,G-9/4 Park,,,1,1,,0
-fr_6_1_T01,06:52:40,06:52:40,ibn_station_down,19,Ibn-e-Sina Metro Station,,,1,1,,0
-fr_6_1_T01,06:55:29,06:55:29,tipu_market_down,20,Tipu Market,,,1,1,,0
+fr_6_0_T01,,,tipu_market_up,2,Tipu Market,,,1,1,,
+fr_6_0_T01,,,ibn_station_up,3,Ibn-e-Sina Metro Station,,,1,1,,
+fr_6_0_T01,,,g94_park_up,4,G-9/4 Park,,,1,1,,
+fr_6_0_T01,,,margalla_ground_up,5,Margalla Ground G-9,,,1,1,,
+fr_6_0_T01,,,g9_markaz_down,6,G-9 Markaz,,,1,1,,
+fr_6_0_T01,,,ibn_sina_g94_up,7,Ibn-e-Sina Road G-9,,,1,1,,
+fr_6_0_T01,,,f9_park_up,8,F-9 Park,,,1,1,,
+fr_6_0_T01,,,shaheen_up,9,Shaheen Chowk,,,1,1,,
+fr_6_0_T01,,,fazaia_housing_up,10,Fazaia Housing Society,,,1,1,,
+fr_6_0_T01,,,paf_hos_up,11,PAF Hospital,,,1,1,,
+fr_6_0_T01,,,pak_dci_up,12,Pakistan Gate DCI,,,1,1,,
+fr_6_0_T01,,,maroof_up,13,Maroof International Hospital,,,1,1,,
+fr_6_0_T01,,,f10_up,14,F-10 Markaz,,,1,1,,
+fr_6_0_T01,,,imcb_f104_up,15,IMCB F-10/4,,,1,1,,
+fr_6_0_T01,,,f10f11_up,16,F-10/ F-11 Greenbelt,,,1,1,,
+fr_6_0_T01,,,major_up,17,Major Road F-11,,,1,1,,
+fr_6_0_T01,,,ptcl_f10_up,18,PTCL F-11,,,1,1,,
+fr_6_0_T01,,,f11_markaz_up,19,F-11 Markaz,,,1,1,,
+fr_6_0_T01,,,opf_up,20,OPF,,,1,1,,
+fr_6_0_T01,07:00:00,07:00:00,golra_f11_up,21,Golra Sharif,,,1,1,,
+fr_6_1_T01,06:00:00,06:00:00,golra_f11_down,1,Golra Sharif,,,1,1,,
+fr_6_1_T01,,,opf_down,2,OPF,,,1,1,,
+fr_6_1_T01,,,f11_markaz_down,3,F-11 Markaz,,,1,1,,
+fr_6_1_T01,,,ptcl_f10_down,4,PTCL F-11,,,1,1,,
+fr_6_1_T01,,,major_down,5,Major Road,,,1,1,,
+fr_6_1_T01,,,f10f11_down,6,F-10/ F-11 Greenbelt,,,1,1,,
+fr_6_1_T01,,,imcb_f104_down,7,IMCB F-10/4,,,1,1,,
+fr_6_1_T01,,,f10_down,8,F-10 Markaz,,,1,1,,
+fr_6_1_T01,,,maroof_down,9,Maroof International Hospital,,,1,1,,
+fr_6_1_T01,,,pak_dci_down,10,Pakistan Gate DCI,,,1,1,,
+fr_6_1_T01,,,paf_hos_down,11,PAF Hospital,,,1,1,,
+fr_6_1_T01,,,fazaia_housing_down,12,F-9 Khyber Gate,,,1,1,,
+fr_6_1_T01,,,shaheen_down,13,Shaheen Chowk,,,1,1,,
+fr_6_1_T01,,,f9_park_down,14,F-9 Park Ravi Gate,,,1,1,,
+fr_6_1_T01,,,ibn_sina_g94_down,15,Ibn-e-Sina Road G-9,,,1,1,,
+fr_6_1_T01,,,g9_markaz_up,16,G-9 Markaz,,,1,1,,
+fr_6_1_T01,,,margalla_ground_down,17,Margalla Ground G-9,,,1,1,,
+fr_6_1_T01,,,g94_park_down,18,G-9/4 Park,,,1,1,,
+fr_6_1_T01,,,ibn_station_down,19,Ibn-e-Sina Metro Station,,,1,1,,
+fr_6_1_T01,,,tipu_market_down,20,Tipu Market,,,1,1,,
 fr_6_1_T01,07:00:00,07:00:00,pims_hospital_fr_down,21,PIMS Hospital,,,1,1,,1
 fr_7_0_T01,06:00:00,06:00:00,pims_hospital_fr_up,1,PIMS Hospital,,,1,1,,1
-fr_7_0_T01,06:01:45,06:01:45,children_hospital_up,2,Children Hospital,,,1,1,,0
-fr_7_0_T01,06:06:01,06:06:01,nori_hosp_up,3,NORI Hospital,,,1,1,,0
-fr_7_0_T01,06:08:33,06:08:33,dental_up,4,Dental Hospital,,,1,1,,0
-fr_7_0_T01,06:09:24,06:09:24,g8_markaz_up,5,G-8 Markaz,,,1,1,,0
-fr_7_0_T01,06:11:30,06:11:30,dev_park_up,6,Development Park,,,1,1,,0
-fr_7_0_T01,06:14:34,06:14:34,chaman_station_fr_up,7,Chaman Metro Station,,,1,1,,0
-fr_7_0_T01,06:18:14,06:18:14,g94_park_up,8,G-9/4 Park,,,1,1,,0
-fr_7_0_T01,06:19:28,06:19:28,karachi_company_up,9,Karachi Company,,,1,1,,0
-fr_7_0_T01,06:21:46,06:21:46,g9_markaz_up,10,G-9 Markaz,,,1,1,,0
-fr_7_0_T01,06:25:59,06:25:59,police_flats_g9_up,11,Police Flats,,,1,1,,0
-fr_7_0_T01,06:29:33,06:29:33,college_morh_up,12,College Morh,,,1,1,,0
-fr_7_0_T01,06:32:34,06:32:34,g10_markaz_up,13,G-10 Markaz,,,1,1,,0
-fr_7_0_T01,06:34:19,06:34:19,pha_flats_g10_up,14,PHA Flats,,,1,1,,0
-fr_7_0_T01,06:35:49,06:35:49,tanki_stop_up,15,Tanki Stop,,,1,1,,0
-fr_7_0_T01,06:37:20,06:37:20,greenbelt_gg_up,16,Greenbelt G-10/G-11,,,1,1,,0
-fr_7_0_T01,06:39:42,06:39:42,ims_up,17,Institute of Modern Studies,,,1,1,,0
-fr_7_0_T01,06:42:22,06:42:22,g11_markaz_up,18,G-11 Markaz,,,1,1,,0
-fr_7_0_T01,06:47:00,06:47:00,mehrabadi_up,19,Mehrabad,,,1,1,,0
-fr_7_0_T01,06:52:49,06:52:49,nust_station_fr_up,20,NUST Metro Station,,,1,1,,0
-fr_7_0_T01,06:55:28,06:55:28,bar_council_up,21,Bar Council,,,1,1,,0
-fr_7_0_T01,06:58:26,06:58:26,ak_brohi_up,22,A. K. Brohi Road,,,1,1,,0
-fr_7_0_T01,06:59:42,06:59:42,police_foundation_station_fr7_up,23,Police Foundation Metro Station,,,1,1,,0
+fr_7_0_T01,,,children_hospital_up,2,Children Hospital,,,1,1,,
+fr_7_0_T01,,,nori_hosp_up,3,NORI Hospital,,,1,1,,
+fr_7_0_T01,,,dental_up,4,Dental Hospital,,,1,1,,
+fr_7_0_T01,,,g8_markaz_up,5,G-8 Markaz,,,1,1,,
+fr_7_0_T01,,,dev_park_up,6,Development Park,,,1,1,,
+fr_7_0_T01,,,chaman_station_fr_up,7,Chaman Metro Station,,,1,1,,
+fr_7_0_T01,,,g94_park_up,8,G-9/4 Park,,,1,1,,
+fr_7_0_T01,,,karachi_company_up,9,Karachi Company,,,1,1,,
+fr_7_0_T01,,,g9_markaz_up,10,G-9 Markaz,,,1,1,,
+fr_7_0_T01,,,police_flats_g9_up,11,Police Flats,,,1,1,,
+fr_7_0_T01,,,college_morh_up,12,College Morh,,,1,1,,
+fr_7_0_T01,,,g10_markaz_up,13,G-10 Markaz,,,1,1,,
+fr_7_0_T01,,,pha_flats_g10_up,14,PHA Flats,,,1,1,,
+fr_7_0_T01,,,tanki_stop_up,15,Tanki Stop,,,1,1,,
+fr_7_0_T01,,,greenbelt_gg_up,16,Greenbelt G-10/G-11,,,1,1,,
+fr_7_0_T01,,,ims_up,17,Institute of Modern Studies,,,1,1,,
+fr_7_0_T01,,,g11_markaz_up,18,G-11 Markaz,,,1,1,,
+fr_7_0_T01,,,mehrabadi_up,19,Mehrabad,,,1,1,,
+fr_7_0_T01,,,nust_station_fr_up,20,NUST Metro Station,,,1,1,,
+fr_7_0_T01,,,bar_council_up,21,Bar Council,,,1,1,,
+fr_7_0_T01,,,ak_brohi_up,22,A. K. Brohi Road,,,1,1,,
+fr_7_0_T01,,,police_foundation_station_fr7_up,23,Police Foundation Metro Station,,,1,1,,
 fr_7_0_T01,07:00:00,07:00:00,high_station_fr_up,24,High Court Metro Station,,,1,1,,1
 fr_7_1_T01,06:00:00,06:00:00,police_foundation_station_fr7_down,1,Police Foundation Metro Station,,,1,1,,1
-fr_7_1_T01,06:01:14,06:01:14,ak_brohi_down,2,A. K. Brohi Road,,,1,1,,0
-fr_7_1_T01,06:04:25,06:04:25,bar_council_down,3,Bar Council,,,1,1,,0
-fr_7_1_T01,06:06:55,06:06:55,nust_station_fr_down,4,NUST Metro Station,,,1,1,,0
-fr_7_1_T01,06:12:59,06:12:59,mehrabadi_down,5,Mehrabad,,,1,1,,0
-fr_7_1_T01,06:17:30,06:17:30,g11_markaz_down,6,G-11 Markaz,,,1,1,,0
-fr_7_1_T01,06:20:21,06:20:21,ims_down,7,Institute of Modern Studies,,,1,1,,0
-fr_7_1_T01,06:22:36,06:22:36,greenbelt_gg_down,8,Greenbelt G-10/G-11,,,1,1,,0
-fr_7_1_T01,06:24:10,06:24:10,tanki_stop_down,9,Tanki Stop,,,1,1,,0
-fr_7_1_T01,06:25:41,06:25:41,pha_flats_g10_down,10,PHA Flats,,,1,1,,0
-fr_7_1_T01,06:26:54,06:26:54,g10_markaz_down,11,G-10 Markaz,,,1,1,,0
-fr_7_1_T01,06:30:09,06:30:09,college_morh_down,12,College Morh,,,1,1,,0
-fr_7_1_T01,06:34:05,06:34:05,police_flats_g9_down,13,Police Flats,,,1,1,,0
-fr_7_1_T01,06:38:10,06:38:10,g9_markaz_down,14,G-9 Markaz,,,1,1,,0
-fr_7_1_T01,06:40:39,06:40:39,karachi_company_down,15,Karachi Company,,,1,1,,0
-fr_7_1_T01,06:41:51,06:41:51,g94_park_down,16,G-9/4 Park,,,1,1,,0
-fr_7_1_T01,06:45:32,06:45:32,chaman_station_fr_down,17,Chaman Metro Station,,,1,1,,0
-fr_7_1_T01,06:48:34,06:48:34,dev_park_down,18,Development Park,,,1,1,,0
-fr_7_1_T01,06:50:42,06:50:42,g8_markaz_down,19,G-8 Markaz,,,1,1,,0
-fr_7_1_T01,06:51:38,06:51:38,dental_down,20,Dental Hospital,,,1,1,,0
-fr_7_1_T01,06:53:56,06:53:56,nori_hosp_down,21,NORI Hospital,,,1,1,,0
-fr_7_1_T01,06:58:18,06:58:18,children_hospital_down,22,Children Hospital,,,1,1,,0
+fr_7_1_T01,,,ak_brohi_down,2,A. K. Brohi Road,,,1,1,,
+fr_7_1_T01,,,bar_council_down,3,Bar Council,,,1,1,,
+fr_7_1_T01,,,nust_station_fr_down,4,NUST Metro Station,,,1,1,,
+fr_7_1_T01,,,mehrabadi_down,5,Mehrabad,,,1,1,,
+fr_7_1_T01,,,g11_markaz_down,6,G-11 Markaz,,,1,1,,
+fr_7_1_T01,,,ims_down,7,Institute of Modern Studies,,,1,1,,
+fr_7_1_T01,,,greenbelt_gg_down,8,Greenbelt G-10/G-11,,,1,1,,
+fr_7_1_T01,,,tanki_stop_down,9,Tanki Stop,,,1,1,,
+fr_7_1_T01,,,pha_flats_g10_down,10,PHA Flats,,,1,1,,
+fr_7_1_T01,,,g10_markaz_down,11,G-10 Markaz,,,1,1,,
+fr_7_1_T01,,,college_morh_down,12,College Morh,,,1,1,,
+fr_7_1_T01,,,police_flats_g9_down,13,Police Flats,,,1,1,,
+fr_7_1_T01,,,g9_markaz_down,14,G-9 Markaz,,,1,1,,
+fr_7_1_T01,,,karachi_company_down,15,Karachi Company,,,1,1,,
+fr_7_1_T01,,,g94_park_down,16,G-9/4 Park,,,1,1,,
+fr_7_1_T01,,,chaman_station_fr_down,17,Chaman Metro Station,,,1,1,,
+fr_7_1_T01,,,dev_park_down,18,Development Park,,,1,1,,
+fr_7_1_T01,,,g8_markaz_down,19,G-8 Markaz,,,1,1,,
+fr_7_1_T01,,,dental_down,20,Dental Hospital,,,1,1,,
+fr_7_1_T01,,,nori_hosp_down,21,NORI Hospital,,,1,1,,
+fr_7_1_T01,,,children_hospital_down,22,Children Hospital,,,1,1,,
 fr_7_1_T01,07:00:00,07:00:00,pims_hospital_fr_down,23,PIMS Hospital,,,1,1,,1
+
+fr_8a_0_T01,06:00:00,06:00:00,pims_hospital_fr_up,1,PIMS Hospital,,,1,1,,1
+fr_8a_0_T01,,,children_hospital_up,2,Children Hospital,,,1,1,,
+fr_8a_0_T01,,,g7g8_up,3,G-7 / G-8,,,1,1,,
+fr_8a_0_T01,,,zero_point_up,4,Zero Point (Pak Monument),,,1,1,,
+fr_8a_0_T01,,,cda_stop_f8a_up,5,CDA Stop,,,1,1,,
+fr_8a_0_T01,,,aabpara_f8a_up,6,Aabpara,,,1,1,,
+fr_8a_0_T01,,,fo_f8a_down,7,Foreign Office,,,1,1,,
+fr_8a_0_T01,,,kashmir_chowk_up,8,Kashmir Chowk,,,1,1,,
+fr_8a_0_T01,,,rawal_chowk_up,9,Rawal Chowk,,,1,1,,
+fr_8a_0_T01,,,rawal_town_up,10,Rawal Town,,,1,1,,
+fr_8a_0_T01,,,school_board_up,11,School Board Stop,,,1,1,,
+fr_8a_0_T01,,,rawal_dam_colony_up,12,Rawal Dam Colony,,,1,1,,
+fr_8a_0_T01,,,narc_colony_up,13,NARC Colony,,,1,1,,
+fr_8a_0_T01,,,nih_allergy_up,14,NIH Allergy Center,,,1,1,,
+fr_8a_0_T01,,,shehzad_town_up,15,Shahzad Town,,,1,1,,
+fr_8a_0_T01,,,park_view_city_up,16,Park View City,,,1,1,,
+fr_8a_0_T01,,,green_avenue_up,17,Green Avenue,,,1,1,,
+fr_8a_0_T01,,,chatta_bakhtawar_up,18,Chatta Bakhtawar,,,1,1,,
+fr_8a_0_T01,,,hostel_city_up,19,Hostel City,,,1,1,,
+fr_8a_0_T01,,,comsats_up,20,COMSATS University,,,1,1,,
+fr_8a_0_T01,,,tamma_up,21,Tamma Stop,,,1,1,,
+fr_8a_0_T01,07:00:00,07:00:00,tramri_up,22,Tramri Chowk,,,1,1,,1
+fr_8a_1_T01,06:00:00,06:00:00,tramri_down,1,Tramri Chowk,,,1,1,,1
+fr_8a_1_T01,,,tamma_down,2,Tamma Stop,,,1,1,,
+fr_8a_1_T01,,,comsats_down,3,COMSATS University,,,1,1,,
+fr_8a_1_T01,,,hostel_city_down,4,Hostel City,,,1,1,,
+fr_8a_1_T01,,,chatta_bakhtawar_down,5,Chatta Bakhtawar,,,1,1,,
+fr_8a_1_T01,,,green_avenue_down,6,Green Avenue,,,1,1,,
+fr_8a_1_T01,,,park_view_city_down,7,Park View (Kuri Road),,,1,1,,
+fr_8a_1_T01,,,shehzad_town_down,8,Shahzad Town,,,1,1,,
+fr_8a_1_T01,,,nih_allergy_down,9,NIH Allergy Center,,,1,1,,
+fr_8a_1_T01,,,narc_colony_down,10,NARC Colony,,,1,1,,
+fr_8a_1_T01,,,rawal_dam_colony_down,11,Rawal Dam Colony,,,1,1,,
+fr_8a_1_T01,,,school_board_down,12,School Board Stop,,,1,1,,
+fr_8a_1_T01,,,rawal_town_down,13,Rawal Town,,,1,1,,
+fr_8a_1_T01,,,rawal_chowk_down,14,Rawal Chowk,,,1,1,,
+fr_8a_1_T01,,,kashmir_chowk_down,15,Kashmir Chowk,,,1,1,,
+fr_8a_1_T01,,,fo_f8a_down,16,Foreign Office,,,1,1,,
+fr_8a_1_T01,,,aabpara_f8a_down,17,Aabpara,,,1,1,,
+fr_8a_1_T01,,,cda_stop_f8a_down,18,CDA Stop,,,1,1,,
+fr_8a_1_T01,,,zero_point_down,19,Zero Point (Pak Monument),,,1,1,,
+fr_8a_1_T01,,,g7g8_down,20,G-7/ G-8,,,1,1,,
+fr_8a_1_T01,,,children_hospital_gb_down,21,Children Hospital,,,1,1,,
+fr_8a_1_T01,07:00:00,07:00:00,pims_hospital_fr_down,22,PIMS Hospital,,,1,1,,1
+fr_8c_0_T01,06:00:00,06:00:00,pims_hospital_fr_up,1,PIMS Hospital,,,1,1,,1
+fr_8c_0_T01,,,shakarparia_up,2,H-8 / Shakarparia,,,1,1,,
+fr_8c_0_T01,,,parade_ground_up,3,I-8 / Parade Ground,,,1,1,,
+fr_8c_0_T01,,,faizabad_interchange_up,4,Faizabad Interchange,,,1,1,,
+fr_8c_0_T01,,,itp_up,5,ITP Centre,,,1,1,,
+fr_8c_0_T01,,,margalla_town_up,6,Margalla Town,,,1,1,,
+fr_8c_0_T01,,,garden_avenue_up,7,Garden Avenue,,,1,1,,
+fr_8c_0_T01,,,rawal_town_up,8,Rawal Town,,,1,1,,
+fr_8c_0_T01,,,school_board_up,9,School Board Stop,,,1,1,,
+fr_8c_0_T01,,,rawal_dam_colony_up,10,Rawal Dam Colony,,,1,1,,
+fr_8c_0_T01,,,narc_colony_up,11,NARC Colony,,,1,1,,
+fr_8c_0_T01,,,nih_allergy_up,12,NIH Allergy Center,,,1,1,,
+fr_8c_0_T01,,,shehzad_town_up,13,Shahzad Town,,,1,1,,
+fr_8c_0_T01,,,park_view_city_up,14,Park View City,,,1,1,,
+fr_8c_0_T01,,,green_avenue_up,15,Green Avenue,,,1,1,,
+fr_8c_0_T01,,,chatta_bakhtawar_up,16,Chatta Bakhtawar,,,1,1,,
+fr_8c_0_T01,,,hostel_city_up,17,Hostel City,,,1,1,,
+fr_8c_0_T01,,,comsats_up,18,COMSATS University,,,1,1,,
+fr_8c_0_T01,,,tamma_up,19,Tamma Stop,,,1,1,,
+fr_8c_0_T01,07:00:00,07:00:00,tramri_up,20,Tramri Chowk,,,1,1,,1
+fr_8c_1_T01,06:00:00,06:00:00,tramri_down,1,Tramri Chowk,,,1,1,,1
+fr_8c_1_T01,,,tamma_down,2,Tamma Stop,,,1,1,,
+fr_8c_1_T01,,,comsats_down,3,COMSATS University,,,1,1,,
+fr_8c_1_T01,,,hostel_city_down,4,Hostel City,,,1,1,,
+fr_8c_1_T01,,,chatta_bakhtawar_down,5,Chatta Bakhtawar,,,1,1,,
+fr_8c_1_T01,,,green_avenue_down,6,Green Avenue,,,1,1,,
+fr_8c_1_T01,,,park_view_city_down,7,Park View City,,,1,1,,
+fr_8c_1_T01,,,shehzad_town_down,8,Shahzad Town,,,1,1,,
+fr_8c_1_T01,,,nih_allergy_down,9,NIH Allergy Center,,,1,1,,
+fr_8c_1_T01,,,narc_colony_down,10,NARC Colony,,,1,1,,
+fr_8c_1_T01,,,rawal_dam_colony_down,11,Rawal Dam Colony,,,1,1,,
+fr_8c_1_T01,,,school_board_down,12,School Board Stop,,,1,1,,
+fr_8c_1_T01,,,rawal_town_down,13,Rawal Town,,,1,1,,
+fr_8c_1_T01,,,garden_avenue_down,14,Garden Avenue,,,1,1,,
+fr_8c_1_T01,,,margalla_town_down,15,Margalla Town,,,1,1,,
+fr_8c_1_T01,,,itp_down,16,ITP Centre,,,1,1,,
+fr_8c_1_T01,,,faizabad_interchange_down,17,Faizabad Interchange,,,1,1,,
+fr_8c_1_T01,,,parade_ground_down,18,I-8 / Parade Ground,,,1,1,,
+fr_8c_1_T01,,,shakarparia_down,19,H-8 / Shakarparia,,,1,1,,
+fr_8c_1_T01,07:00:00,07:00:00,pims_hospital_fr_down,20,PIMS Hospital,,,1,1,,1
+fr_9_0_T01,06:00:00,06:00:00,khanna_pull_fr9_up,1,Khanna Pull,,,1,1,,1
+fr_9_0_T01,,,zia_masjid_up,2,Zia Masjid,,,1,1,,
+fr_9_0_T01,,,kuri_road_up,3,Kuri Road,,,1,1,,
+fr_9_0_T01,,,iqbal_town_up,4,Iqbal Town,,,1,1,,
+fr_9_0_T01,,,dhok_kala_up,5,Dhoke Kala Khan,,,1,1,,
+fr_9_0_T01,,,sohan_up,6,Sohan,,,1,1,,
+fr_9_0_T01,,,faizabad_station_up,7,Faizabad Metro Station,,,1,1,,
+fr_9_0_T01,,,ijp_station_fr_up,8,IJP Metro Station,,,1,1,,
+fr_9_0_T01,,,pindora_chungi_up,9,Pindora Chungi,,,1,1,,
+fr_9_0_T01,,,katarian_up,10,Katarian Chungi,,,1,1,,
+fr_9_0_T01,,,katarian_pull_up,11,Katarian Pull,,,1,1,,
+fr_9_0_T01,,,cda_ijp_up,12,CDA Stop,,,1,1,,
+fr_9_0_T01,,,pully_stop_ijp_up,13,Pully Stop,,,1,1,,
+fr_9_0_T01,,,mandi_morh_up,14,Mandi Morh,,,1,1,,
+fr_9_0_T01,,,fauji_colony_up,15,Fauji Colony,,,1,1,,
+fr_9_0_T01,,,carriage_factory_up,16,Carriage Factory,,,1,1,,
+fr_9_0_T01,,,westridge_up,17,Westridge,,,1,1,,
+fr_9_0_T01,,,ctti_up,18,CTTI,,,1,1,,
+fr_9_0_T01,,,social_sec_hos_up,19,Social Security Hospital,,,1,1,,
+fr_9_0_T01,,,british_homes_up,20,British Homes,,,1,1,,
+fr_9_0_T01,,,pir_wadhai_up,21,Pir Wadhai Morh,,,1,1,,
+fr_9_0_T01,,,kohinoor_colony_up,22,Kohinoor Mill Colony,,,1,1,,
+fr_9_0_T01,,,kohinoor_up,23,Kohinoor Mill,,,1,1,,
+fr_9_0_T01,,,golra_morh_fr9_up,24,Golra Morh Chowk,,,1,1,,
+fr_9_0_T01,07:00:00,07:00:00,golra_morh_station_fr_up,25,Golra Morh Metro Station,,,1,1,,1
+fr_9_1_T01,06:00:00,06:00:00,golra_morh_station_fr_down,1,Golra Morh Metro Station,,,1,1,,1
+fr_9_1_T01,,,golra_morh_fr9_down,2,Golra Morh Chowk,,,1,1,,
+fr_9_1_T01,,,kohinoor_down,3,Kohinoor Mill,,,1,1,,
+fr_9_1_T01,,,kohinoor_colony_down,4,Kohinoor Mill Colony,,,1,1,,
+fr_9_1_T01,,,pir_wadhai_down,5,Pir Wadhai Morh,,,1,1,,
+fr_9_1_T01,,,british_homes_down,6,British Homes,,,1,1,,
+fr_9_1_T01,,,social_sec_hos_down,7,Social Security Hospital,,,1,1,,
+fr_9_1_T01,,,ctti_down,8,CTTI,,,1,1,,
+fr_9_1_T01,,,westridge_down,9,Westridge,,,1,1,,
+fr_9_1_T01,,,carriage_factory_down,10,Carriage Factory,,,1,1,,
+fr_9_1_T01,,,fauji_colony_down,11,Fauji Colony,,,1,1,,
+fr_9_1_T01,,,mandi_morh_down,12,Mandi Morh,,,1,1,,
+fr_9_1_T01,,,pully_stop_ijp_down,13,Pully Stop,,,1,1,,
+fr_9_1_T01,,,cda_ijp_down,14,CDA Stop,,,1,1,,
+fr_9_1_T01,,,katarian_pull_down,15,Katarian Pull,,,1,1,,
+fr_9_1_T01,,,katarian_down,16,Katarian Chungi,,,1,1,,
+fr_9_1_T01,,,pindora_chungi_down,17,Pindora Chungi,,,1,1,,
+fr_9_1_T01,,,ijp_station_fr_down,18,IJP Metro Station,,,1,1,,
+fr_9_1_T01,,,faizabad_station_down,19,Faizabad Metro Station,,,1,1,,
+fr_9_1_T01,,,sohan_down,20,Sohan,,,1,1,,
+fr_9_1_T01,,,dhok_kala_down,21,Dhoke Kala Khan,,,1,1,,
+fr_9_1_T01,,,iqbal_town_down,22,Iqbal Town,,,1,1,,
+fr_9_1_T01,,,kuri_road_down,23,Kuri Road,,,1,1,,
+fr_9_1_T01,,,zia_masjid_down,24,Zia Masjid,,,1,1,,
+fr_9_1_T01,07:00:00,07:00:00,khanna_pull_down,25,Khanna Pul,,,1,1,,1
+fr_14_0_T01,06:00:00,06:00:00,Barakahu_up,1,Barakahu,,,1,1,,1
+fr_14_0_T01,,,shahdara_up,2,Shahdara,,,1,1,,
+fr_14_0_T01,,,malpur_up,3,Malpur,,,1,1,,
+fr_14_0_T01,,,lake_up,4,Lake View Point,,,1,1,,
+fr_14_0_T01,,,kashmir_chowk_up,5,Kashmir Chowk,,,1,1,,
+fr_14_0_T01,,,rawal_chowk_up,6,Rawal Chowk,,,1,1,,
+fr_14_0_T01,,,garden_avenue_down,7,Garden Avenue,,,1,1,,
+fr_14_0_T01,,,margalla_town_down,8,Margalla Town,,,1,1,,
+fr_14_0_T01,,,itp_down,9,ITP Centre,,,1,1,,
+fr_14_0_T01,,,faizabad_station_up,11,Faizabad Metro Station,,,1,1,,
+fr_14_0_T01,,,ijp_station_fr_up,12,IJP Metro Station,,,1,1,,
+fr_14_0_T01,,,pindora_chungi_up,13,Pindora Chungi,,,1,1,,
+fr_14_0_T01,,,katarian_up,14,Katarian Chungi,,,1,1,,
+fr_14_0_T01,,,katarian_pull_up,15,Katarian Pull,,,1,1,,
+fr_14_0_T01,,,cda_ijp_up,16,CDA Stop,,,1,1,,
+fr_14_0_T01,,,pully_stop_ijp_up,17,Pully Stop,,,1,1,,
+fr_14_0_T01,07:00:00,07:00:00,mandi_morh_up,18,Mandi Morh,,,1,1,,1
+fr_14_1_T01,06:00:00,06:00:00,mandi_morh_down,1,Mandi Morh,,,1,1,,1
+fr_14_1_T01,,,pully_stop_ijp_down,2,Pully Stop,,,1,1,,
+fr_14_1_T01,,,cda_ijp_down,3,CDA Stop,,,1,1,,
+fr_14_1_T01,,,katarian_pull_down,4,Katarian Pull,,,1,1,,
+fr_14_1_T01,,,katarian_down,5,Katarian Chungi,,,1,1,,
+fr_14_1_T01,,,pindora_chungi_down,6,Pindora Chungi,,,1,1,,
+fr_14_1_T01,,,ijp_station_fr_down,7,IJP Metro Station,,,1,1,,
+fr_14_1_T01,,,faizabad_station_down,8,Faizabad Metro Station,,,1,1,,
+fr_14_1_T01,,,itp_up,9,ITP Centre,,,1,1,,
+fr_14_1_T01,,,margalla_town_up,10,Margalla Town,,,1,1,,
+fr_14_1_T01,,,garden_avenue_up,11,Garden Avenue,,,1,1,,
+fr_14_1_T01,,,rawal_chowk_down,12,Rawal Chowk,,,1,1,,
+fr_14_1_T01,,,kashmir_chowk_down,13,Kashmir Chowk,,,1,1,,
+fr_14_1_T01,,,lake_down,14,Lake View Point,,,1,1,,
+fr_14_1_T01,,,malpur_down,15,Malpur,,,1,1,,
+fr_14_1_T01,,,shahdara_down,16,Shahdara,,,1,1,,
+fr_14_1_T01,07:00:00,07:00:00,Barakahu_down,17,Barakahu,,,1,1,,1
+green_0_T01,06:00:00,06:00:00,pims_hospital_gb_up,1,PIMS Hospital,,,1,1,,1
+green_0_T01,,,children_hospital_up,2,Children Hospital,,,1,1,,
+green_0_T01,,,g7g8_up,3,G-7 / G-8,,,1,1,,
+green_0_T01,,,cda_stop_up,4,CDA Stop,,,1,1,,
+green_0_T01,,,aabpara_up,5,Aabpara,,,1,1,,
+green_0_T01,,,fo_up,6,Foreign Office,,,1,1,,
+green_0_T01,,,lake_down,7,Lake View Point,,,1,1,,
+green_0_T01,,,malpur_down,8,Malpur,,,1,1,,
+green_0_T01,,,shahdara_down,9,Shahdara,,,1,1,,
+green_0_T01,07:00:00,07:00:00,Barakahu_down,10,Barakahu,,,1,1,,1
+green_1_T01,06:00:00,06:00:00,Barakahu_up,1,Barakahu,,,1,1,,1
+green_1_T01,,,shahdara_up,2,Shahdara,,,1,1,,
+green_1_T01,,,malpur_up,3,Malpur,,,1,1,,
+green_1_T01,,,lake_up,4,Lake View Point,,,1,1,,
+green_1_T01,,,fo_down,5,Foreign Office,,,1,1,,
+green_1_T01,,,aabpara_down,6,Aabpara,,,1,1,,
+green_1_T01,,,cda_stop_down,7,CDA Stop,,,1,1,,
+green_1_T01,,,g7g8_down,8,G-7/ G-8,,,1,1,,
+green_1_T01,,,children_hospital_gb_down,9,Children Hospital,,,1,1,,
+green_1_T01,,,pims_station_fr_up,10,PIMS Metro Station,,,1,1,,
+green_1_T01,07:00:00,07:00:00,pims_hospital_gb_down,12,PIMS Hospital,,,1,1,,1
+blue_0_T01,06:00:00,06:00:00,pims_hospital_gb_up,1,PIMS Hospital,,,1,1,,1
+blue_0_T01,,,children_hospital_up,2,Children Hospital,,,1,1,,
+blue_0_T01,,,g7g8_up,3,G-7 / G-8,,,1,1,,
+blue_0_T01,,,shakarparia_up,4,H-8 / Shakarparia,,,1,1,,
+blue_0_T01,,,parade_ground_up,5,I-8 / Parade Ground,,,1,1,,
+blue_0_T01,,,sohan_down,6,Sohan,,,1,1,,
+blue_0_T01,,,dhok_kala_down,7,Dhoke Kala Khan,,,1,1,,
+blue_0_T01,,,iqbal_town_down,8,Iqbal Town,,,1,1,,
+blue_0_T01,,,kuri_road_down,9,Kuri Road,,,1,1,,
+blue_0_T01,,,zia_masjid_down,10,Zia Masjid,,,1,1,,
+blue_0_T01,,,khanna_pull_down,11,Khanna Pul,,,1,1,,
+blue_0_T01,,,fazaia_colony_up,12,Fazia,,,1,1,,
+blue_0_T01,,,gangal_up,13,Gangal,,,1,1,,
+blue_0_T01,07:00:00,07:00:00,koral_chowk_up,14,Koral Chowk,,,1,1,,1
+blue_1_T01,06:00:00,06:00:00,gulberg_down,1,Gulberg,,,1,1,,1
+blue_1_T01,,,koral_chowk_down,2,Koral Chowk,,,1,1,,
+blue_1_T01,,,gangal_down,3,Gangal,,,1,1,,
+blue_1_T01,,,fazaia_colony_down,4,Fazia,,,1,1,,
+blue_1_T01,,,khanna_pull_up,5,Khanna Pul,,,1,1,,
+blue_1_T01,,,zia_masjid_up,6,Zia Masjid,,,1,1,,
+blue_1_T01,,,kuri_road_up,7,Kuri Road,,,1,1,,
+blue_1_T01,,,iqbal_town_up,8,Iqbal Town,,,1,1,,
+blue_1_T01,,,dhok_kala_up,9,Dhoke Kala Khan,,,1,1,,
+blue_1_T01,,,sohan_up,10,Sohan,,,1,1,,
+blue_1_T01,,,parade_ground_down,11,I-8 / Parade Ground,,,1,1,,
+blue_1_T01,,,shakarparia_down,12,H-8 / Shakarparia,,,1,1,,
+blue_1_T01,,,g7g8_down,13,G-7/ G-8,,,1,1,,
+blue_1_T01,,,children_hospital_gb_down,14,Children Hospital,,,1,1,,
+blue_1_T01,,,pims_station_fr_up,15,PIMS Metro Station,,,1,1,,
+blue_1_T01,07:00:00,07:00:00,pims_hospital_gb_down,17,PIMS Hospital,,,1,1,,1
+red_0_T01,06:00:00,06:00:00,saddar_station_bus_bay,1,Saddar Metro Station,,,1,1,,1
+red_0_T01,,,marrir_station_bus_bay,2,Marrir Metro Station,,,1,1,,
+red_0_T01,,,liaquat_station_bus_bay,3,Liaquat Bagh Metro Station,,,1,1,,
+red_0_T01,,,committee_station_bus_bay,4,Committee Chowk Metro Station,,,1,1,,
+red_0_T01,,,waris_station_bus_bay,5,Waris Khan Metro Station,,,1,1,,
+red_0_T01,,,chandni_station_bus_bay,6,Chandni Chowk Metro Station,,,1,1,,
+red_0_T01,,,rehmanabad_station_bus_bay,7,Rehmanabad Metro Station,,,1,1,,
+red_0_T01,,,6th_station_bus_bay,8,6th Road Metro Station,,,1,1,,
+red_0_T01,,,shamsabad_station_bus_bay,9,Shamsabad Metro Station,,,1,1,,
+red_0_T01,,,faizabad_station_bus_bay,10,Faizabad Metro Station,,,1,1,,
+red_0_T01,,,ijp_station_bus_bay,11,IJP Metro Station,,,1,1,,
+red_0_T01,,,potohar_station_bus_bay,12,Potohar Metro Station,,,1,1,,
+red_0_T01,,,khayaban_station_bus_bay,13,Khayaban-e-Johar Metro Station,,,1,1,,
+red_0_T01,,,faiz_station_bus_bay_1,14,Faiz Ahmad Faiz Metro Station Bay 1,,,1,1,,
+red_0_T01,,,kashmir_station_bus_bay,15,Kashmir Highway Metro Station,,,1,1,,
+red_0_T01,,,chaman_station_bus_bay,16,Chaman Metro Station,,,1,1,,
+red_0_T01,,,ibn_station_bus_bay,17,Ibn-e-Sina Metro Station,,,1,1,,
+red_0_T01,,,katchery_station_bus_bay,18,Katchery Metro Station,,,1,1,,
+red_0_T01,,,pims_station_bus_bay,19,PIMS Metro Station,,,1,1,,
+red_0_T01,,,stock_station_bus_bay,20,Stock Exchange Metro Station,,,1,1,,
+red_0_T01,,,7th_station_bus_bay,21,7th Avenue Metro Station,,,1,1,,
+red_0_T01,,,shaheed_station_bus_bay,22,Shaheed-e-Millat Metro Station,,,1,1,,
+red_0_T01,,,parade_station_bus_bay,23,Parade Ground Metro Station,,,1,1,,
+red_0_T01,07:00:00,07:00:00,secretariat_station_bus_bay,24,Secretariat Metro Station,,,1,1,,1
+red_1_T01,06:00:00,06:00:00,secretariat_station_bus_bay,1,Secretariat Metro Station,,,1,1,,1
+red_1_T01,,,parade_station_bus_bay,2,Parade Ground Metro Station,,,1,1,,
+red_1_T01,,,shaheed_station_bus_bay,3,Shaheed-e-Millat Metro Station,,,1,1,,
+red_1_T01,,,7th_station_bus_bay,4,7th Avenue Metro Station,,,1,1,,
+red_1_T01,,,stock_station_bus_bay,5,Stock Exchange Metro Station,,,1,1,,
+red_1_T01,,,pims_station_bus_bay,6,PIMS Metro Station,,,1,1,,
+red_1_T01,,,katchery_station_bus_bay,7,Katchery Metro Station,,,1,1,,
+red_1_T01,,,ibn_station_bus_bay,8,Ibn-e-Sina Metro Station,,,1,1,,
+red_1_T01,,,chaman_station_bus_bay,9,Chaman Metro Station,,,1,1,,
+red_1_T01,,,kashmir_station_bus_bay,10,Kashmir Highway Metro Station,,,1,1,,
+red_1_T01,,,faiz_station_bus_bay_1,11,Faiz Ahmad Faiz Metro Station Bay 1,,,1,1,,
+red_1_T01,,,khayaban_station_bus_bay,12,Khayaban-e-Johar Metro Station,,,1,1,,
+red_1_T01,,,potohar_station_bus_bay,13,Potohar Metro Station,,,1,1,,
+red_1_T01,,,ijp_station_bus_bay,14,IJP Metro Station,,,1,1,,
+red_1_T01,,,faizabad_station_bus_bay,15,Faizabad Metro Station,,,1,1,,
+red_1_T01,,,shamsabad_station_bus_bay,16,Shamsabad Metro Station,,,1,1,,
+red_1_T01,,,6th_station_bus_bay,17,6th Road Metro Station,,,1,1,,
+red_1_T01,,,rehmanabad_station_bus_bay,18,Rehmanabad Metro Station,,,1,1,,
+red_1_T01,,,chandni_station_bus_bay,19,Chandni Chowk Metro Station,,,1,1,,
+red_1_T01,,,waris_station_bus_bay,20,Waris Khan Metro Station,,,1,1,,
+red_1_T01,,,committee_station_bus_bay,21,Committee Chowk Metro Station,,,1,1,,
+red_1_T01,,,liaquat_station_bus_bay,22,Liaquat Bagh Metro Station,,,1,1,,
+red_1_T01,,,marrir_station_bus_bay,23,Marrir Metro Station,,,1,1,,
+red_1_T01,07:00:00,07:00:00,saddar_station_bus_bay,24,Saddar Metro Station,,,1,1,,1
+orange_0_T01,06:00:00,06:00:00,faiz_station_bus_bay_3,1,Faiz Ahmad Faiz Metro Station Bay 3,,,1,1,,1
+orange_0_T01,,,nha_station_bus_bay,2,NHA Metro Station,,,1,1,,
+orange_0_T01,,,high_station_bus_bay,3,High Court Metro Station,,,1,1,,
+orange_0_T01,,,police_found_station_bus_bay,4,Police Foundation Metro Station,,,1,1,,
+orange_0_T01,,,nust_station_bus_bay,5,NUST Metro Station,,,1,1,,
+orange_0_T01,,,g13_station_bay,6,G-13 Metro Station,,,1,1,,
+orange_0_T01,,,golra_station_bus_bay,7,Golra Morr Metro Station,,,1,1,,
+orange_0_T01,07:00:00,07:00:00,n5_station_bay_1,8,N-5 Metro Station,,,1,1,,1
+orange_1_T01,06:00:00,06:00:00,n5_station_bay_1,1,N-5 Metro Station,,,1,1,,1
+orange_1_T01,,,golra_station_bus_bay,2,Golra Morr Metro Station,,,1,1,,
+orange_1_T01,,,g13_station_bay,3,G-13 Metro Station,,,1,1,,
+orange_1_T01,,,nust_station_bus_bay,4,NUST Metro Station,,,1,1,,
+orange_1_T01,,,police_found_station_bus_bay,5,Police Foundation Metro Station,,,1,1,,
+orange_1_T01,,,high_station_bus_bay,6,High Court Metro Station,,,1,1,,
+orange_1_T01,,,nha_station_bus_bay,7,NHA Metro Station,,,1,1,,
+orange_1_T01,07:00:00,07:00:00,faiz_station_bus_bay_3,8,Faiz Ahmad Faiz Metro Station Bay 3,,,1,1,,1
+orange2_0_T01,06:00:00,06:00:00,n5_station_bay_2,1,N-5 Metro Station,,,1,1,,1
+orange2_0_T01,06:30:00,06:30:00,airport_station_bus_bay,2,Airport,,,1,1,,1
+orange2_1_T01,06:00:00,06:00:00,airport_station_bus_bay,1,Airport,,,1,1,,1
+orange2_1_T01,06:30:00,06:30:00,n5_station_bay_2,2,N-5 Metro Station,,,1,1,,1

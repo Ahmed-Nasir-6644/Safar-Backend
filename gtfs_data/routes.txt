@@ -1,5 +1,16 @@
 ﻿route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,route_sort_order,continuous_pickup,continuous_drop_off
-fr_3a,CDA,FR-3A,Feeder Route - 3A,,3,,FF5733,FFFFFF,,1,1
-fr_4,CDA,FR-4,Feeder Route - 4,,3,,33C3FF,000000,,1,1
-fr_6,CDA,FR-6,Feeder Route - 6,,3,,28A745,FFFFFF,,1,1
-fr_7,CDA,FR-7,Feeder Route - 7,,3,,FFC107,000000,,1,1
+
+red,PMA_CDA,Red Line,Red Line BRT,,3,,E53E3E,FFFFFF,,1,1
+orange,CDA,Orange Line,Orange Line BRT,,3,,ED8936,FFFFFF,,1,1
+orange2,CDA,Shuttle,Airport Shuttle,,3,,F59E0B,FFFFFF,,1,1
+blue,CDA,FRB-1,Blue Line,,3,,3182CE,FFFFFF,,1,1
+green,CDA,FRG-1,Green Line,,3,,38A169,FFFFFF,,1,1
+fr_3a,CDA,FR-3A,Feeder Route - 3A,,3,,4FD1C5,FFFFFF,,1,1
+fr_4,CDA,FR-4,Feeder Route - 4,,3,,4FD1C5,FFFFFF,,1,1
+fr_6,CDA,FR-6,Feeder Route - 6,,3,,4FD1C5,FFFFFF,,1,1
+fr_7,CDA,FR-7,Feeder Route - 7,,3,,4FD1C5,FFFFFF,,1,1
+fr_8a,CDA,FR-8A,Feeder Route - 8A,,3,,4FD1C5,FFFFFF,,1,1
+fr_8c,CDA,FR-8C,Feeder Route - 8C,,3,,4FD1C5,FFFFFF,,1,1
+fr_9,CDA,FR-9,Feeder Route - 9,,3,,4FD1C5,FFFFFF,,1,1
+fr_14,CDA,FR-14,Feeder Route - 14,,3,,4FD1C5,FFFFFF,,1,1
+

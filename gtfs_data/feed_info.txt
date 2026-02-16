@@ -1,2 +1,2 @@
 ﻿feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version,feed_contact_email,feed_contact_url
-NaqhaBande,https://www.instagram.com/naqshabandey/,en,20250101,20300101,20250101,,
+NaqhaBande,https://www.instagram.com/naqshabandey/,en,20250101,20300101,20250101,naqshabandeypk@gmail.com,https://www.instagram.com/naqshabandey/

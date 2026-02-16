@@ -1,2 +1,3 @@
 ﻿fare_id,price,currency_type,payment_method,transfers,agency_id,transfer_duration
-cda_fare,50,PKR,cash,,CDA,
+cda_fare,50,PKR,1,,CDA,
+pmbs_fare,30,PKR,1,,PMA_CDA,

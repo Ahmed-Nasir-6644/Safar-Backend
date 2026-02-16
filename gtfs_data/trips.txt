@@ -1,9 +1,28 @@
-route_id,service_id,trip_id,trip_headsign,direction_id,block_id,shape_id,wheelchair_accessible,bikes_allowed
-fr_3A,daily,fr_3A_0_T01,Saidpur Village,0,,fr_3A_0_T01,0,0
-fr_3A,daily,fr_3A_1_T01,PIMS Gate,1,,fr_3A_1_T01,0,0
-fr_4,daily,fr_4_0_T01,Bari Imam,0,,fr_4_0_T01,0,0
-fr_4,daily,fr_4_1_T01,PIMS Hospital,1,,fr_4_1_T01,0,0
-fr_6,daily,fr_6_0_T01,Golra Sharif,0,,fr_6_0_T01,0,0
-fr_6,daily,fr_6_1_T01,PIMS Hospital,1,,fr_6_1_T01,0,0
-fr_7,daily,fr_7_0_T01,Police Foundation Metro Station,0,,fr_7_0_T01,0,0
-fr_7,daily,fr_7_1_T01,PIMS Hospital,1,,fr_7_1_T01,0,0
+﻿route_id,service_id,trip_id,trip_headsign,direction_id,block_id,shape_id,wheelchair_accessible,bikes_allowed
+fr_3A,daily,fr_3A_0_T01,Saidpur Village,0,,,0,0
+fr_3A,daily,fr_3A_1_T01,PIMS Gate,1,,,0,0
+fr_4,daily,fr_4_0_T01,Bari Imam,0,,,0,0
+fr_4,daily,fr_4_1_T01,PIMS Hospital,1,,,0,0
+fr_6,daily,fr_6_0_T01,Golra Sharif,0,,,0,0
+fr_6,daily,fr_6_1_T01,PIMS Hospital,1,,,0,0
+fr_7,daily,fr_7_0_T01,Police Foundation Metro Station,0,,,0,0
+fr_7,daily,fr_7_1_T01,PIMS Hospital,1,,,0,0
+
+fr_8a,daily,fr_8a_0_T01,Tramri Chowk,0,,fr_8a_0,0,0
+fr_8a,daily,fr_8a_1_T01,PIMS Hospital,1,,fr_8a_1,0,0
+fr_8c,daily,fr_8c_0_T01,Tramri Chowk,0,,fr_8c_0,0,0
+fr_8c,daily,fr_8c_1_T01,PIMS Hospital,1,,fr_8c_1,0,0
+fr_9,daily,fr_9_0_T01,Golra Morh Metro Station,0,,fr_9_0,0,0
+fr_9,daily,fr_9_1_T01,Khanna Pul,1,,fr_9_1,0,0
+fr_14,daily,fr_14_0_T01,Mandi Morh,0,,fr_14_0,0,0
+fr_14,daily,fr_14_1_T01,Bharakahu,1,,fr_14_1,0,0
+green,daily,green_0_T01,Barakahu,0,,green_0,0,0
+green,daily,green_1_T01,PIMS Hospital,1,,green_1,0,0
+blue,daily,blue_0_T01,Gulberg,0,,blue_0,0,0
+blue,daily,blue_1_T01,PIMS Hospital,1,,blue_1,0,0
+red,daily,red_0_T01,Secretariat,0,,red_0,0,0
+red,daily,red_1_T01,Saddar,1,,red_1,0,0
+orange,daily,orange_0_T01,N-5 Station,0,,orange_0,0,0
+orange,daily,orange_1_T01,Faiz Ahmad Faiz,1,,orange_1,0,0
+orange2,daily,orange2_0_T01,N-5 Metro Station,0,,orange2_0,0,0
+orange2,daily,orange2_1_T01,Airport,1,,orange2_1,0,0

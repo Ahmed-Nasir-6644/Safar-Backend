@@ -2,7 +2,10 @@ const gtfsService = require('./gtfsService');
 const {
   buildStopGraph,
   buildAdjacencyList,
+  addTransferEdges,
+  addSameLocationTransfers,
   dijkstraShortestPath,
+  kShortestPaths,
   findNearbyStops,
 } = require('../utils/dijkstra');
 
@@ -10,18 +13,117 @@ class RouteFinderService {
   constructor() {
     this.graph = null;
     this.graphBuiltTime = null;
+    this.averageSpeedKmh = 35;
+    this.minutesPerStop = 0.5;
+    this.tripToShape = new Map();
+    this.tripToRoute = new Map();
+    this.shapeIds = new Set();
+    this.fareMap = {
+      red: 30,
+      orange2: 90,
+      orange: 50,
+      blue: 50,
+      green: 50,
+      fr_3a: 50,
+      fr_4: 50,
+      fr_6: 50,
+      fr_7: 50,
+      fr_8a: 50,
+      fr_8c: 50,
+      fr_9: 50,
+      fr_14: 50,
+    };
   }
 
-  /**
-   * Initialize and build the route graph
-   */
+  estimateMinutes(distanceKm, numberOfStops) {
+    const speed = Number.parseFloat(this.averageSpeedKmh);
+    const dwell = Number.parseFloat(this.minutesPerStop);
+    if (!Number.isFinite(distanceKm) || !Number.isFinite(speed) || speed <= 0) {
+      return null;
+    }
+
+    const stops = Math.max(0, (Number.parseInt(numberOfStops, 10) || 0) - 1);
+    const travelMinutes = (distanceKm / speed) * 60;
+    const dwellMinutes = Number.isFinite(dwell) ? dwell * stops : 0;
+    return Math.round(travelMinutes + dwellMinutes);
+  }
+
+  buildTripShapeIndex(trips, shapes) {
+    this.tripToShape = new Map();
+    this.tripToRoute = new Map();
+    this.shapeIds = new Set();
+
+    if (Array.isArray(shapes)) {
+      shapes.forEach((shape) => {
+        if (shape?.shape_id) {
+          this.shapeIds.add(shape.shape_id);
+        }
+      });
+    }
+
+    if (Array.isArray(trips)) {
+      trips.forEach((trip) => {
+        if (trip?.trip_id) {
+          // Map trip to route_id for fare calculation
+          if (trip?.route_id) {
+            this.tripToRoute.set(trip.trip_id, trip.route_id);
+          }
+          // Map trip to shape_id if available
+          if (trip?.shape_id) {
+            this.tripToShape.set(trip.trip_id, trip.shape_id);
+          }
+        }
+      });
+    }
+
+    console.log(`✓ Indexed ${this.tripToRoute.size} trips → routes, ${this.tripToShape.size} trips → shapes`);
+  }
+
+  calculateFare(routeEdges) {
+    const usedRoutes = new Set();
+    const fareDetails = [];
+
+    if (Array.isArray(routeEdges)) {
+      routeEdges.forEach((edge) => {
+        if (!edge?.trip_id || edge.trip_id === 'TRANSFER' || edge.trip_id === 'TRANSFER_NEARBY' || edge.trip_id === 'TRANSFER_SAME_LOCATION') {
+          return;
+        }
+
+        const routeId = this.tripToRoute.get(edge.trip_id);
+        if (routeId) {
+          usedRoutes.add(routeId);
+        }
+      });
+    }
+
+    // Calculate total fare based on routes used
+    let totalFare = 0;
+    usedRoutes.forEach((routeId) => {
+      const fare = this.fareMap[routeId] || 50; // Default to 50 if not in map
+      totalFare += fare;
+      fareDetails.push({
+        route: routeId.toUpperCase(),
+        fare: fare,
+      });
+    });
+
+    return {
+      amount: totalFare,
+      currency: 'PKR',
+      routes: Array.from(usedRoutes).map(r => r.toUpperCase()),
+      fareDetails: fareDetails,
+    };
+  }
+
   async initializeGraph() {
     try {
       console.log('🔨 Building route graph...');
       
-      // Load GTFS data
       const stops = await gtfsService.getStops();
       const stopTimes = await gtfsService.getStopTimes();
+      const transfers = await gtfsService.getDataByType('transfers').catch(() => []);
+      const trips = await gtfsService.getDataByType('trips').catch(() => []);
+      const shapes = await gtfsService.getDataByType('shapes').catch(() => []);
 
       console.log(`📊 Loaded ${stops ? stops.length : 0} stops from GTFS`);
       console.log(`📊 Loaded ${stopTimes ? stopTimes.length : 0} stop times from GTFS`);
@@ -34,12 +136,19 @@ class RouteFinderService {
         throw new Error('No stop times data available');
       }
 
-      // Build graph
       this.graph = buildStopGraph(stops);
       console.log(`📊 Graph after buildStopGraph: ${Object.keys(this.graph).length} stops`);
+
+      // Add transfers from transfers.txt
+      addTransferEdges(transfers, this.graph, 0);
+      
+      // Add automatic transfers between stops with same base name (_up/_down variants)
+      addSameLocationTransfers(this.graph);
       
       buildAdjacencyList(stopTimes, this.graph);
       console.log(`📊 Graph after buildAdjacencyList: ${Object.keys(this.graph).length} stops`);
+      
+      this.buildTripShapeIndex(trips, shapes);
       
       this.graphBuiltTime = new Date();
 
@@ -51,9 +160,6 @@ class RouteFinderService {
     }
   }
 
-  /**
-   * Get or initialize graph
-   */
   async getGraph() {
     if (!this.graph) {
       await this.initializeGraph();
@@ -61,27 +167,32 @@ class RouteFinderService {
     return this.graph;
   }
 
-  /**
-   * Find stop ID by stop name (case-insensitive, partial match)
-   */
   async findStopByName(stopName) {
     try {
       const graph = await this.getGraph();
       const searchTerm = stopName.toLowerCase();
 
-      // Exact match first
-      const exactMatch = Object.values(graph).find(
+      const exactMatches = Object.values(graph).filter(
         (stop) => stop.stop_name.toLowerCase() === searchTerm
       );
 
-      if (exactMatch) {
+      if (exactMatches.length === 1) {
         return {
-          stop_id: exactMatch.stop_id,
-          stop_name: exactMatch.stop_name,
+          stop_id: exactMatches[0].stop_id,
+          stop_name: exactMatches[0].stop_name,
         };
       }
 
-      // Partial match
+      if (exactMatches.length > 1) {
+        return {
+          multiple: true,
+          matches: exactMatches.map((s) => ({
+            stop_id: s.stop_id,
+            stop_name: s.stop_name,
+          })),
+        };
+      }
+
       const partialMatches = Object.values(graph).filter((stop) =>
         stop.stop_name.toLowerCase().includes(searchTerm)
       );
@@ -97,7 +208,6 @@ class RouteFinderService {
         };
       }
 
-      // Multiple matches - return all
       return {
         multiple: true,
         matches: partialMatches.map((s) => ({
@@ -110,42 +220,89 @@ class RouteFinderService {
     }
   }
 
-  /**
-   * Find shortest route between two stops (by ID or name)
-   */
-  async findRouteByNames(startStopName, endStopName) {
+  async findRouteByNames(startStopName, endStopName, maxRoutes = 3) {
     try {
-      // Find start stop
       const startStop = await this.findStopByName(startStopName);
-      if (startStop.multiple) {
-        throw new Error(
-          `Multiple matches for "${startStopName}". Please be more specific. Matches: ${startStop.matches
-            .map((m) => m.stop_name)
-            .join(', ')}`
-        );
-      }
+      const startCandidates = startStop.multiple
+        ? startStop.matches
+        : [startStop];
 
-      // Find end stop
       const endStop = await this.findStopByName(endStopName);
-      if (endStop.multiple) {
-        throw new Error(
-          `Multiple matches for "${endStopName}". Please be more specific. Matches: ${endStop.matches
-            .map((m) => m.stop_name)
-            .join(', ')}`
-        );
+      const endCandidates = endStop.multiple ? endStop.matches : [endStop];
+
+      const limit = Math.max(1, Number.parseInt(maxRoutes, 10) || 3);
+      const allRoutes = [];
+      const seen = new Set();
+
+      const graph = await this.getGraph();
+
+      console.log(`🔍 Searching routes between ${startCandidates.length} start and ${endCandidates.length} end candidates`);
+
+      for (const startCandidate of startCandidates) {
+        for (const endCandidate of endCandidates) {
+          console.log(`  🚦 Trying: ${startCandidate.stop_id} → ${endCandidate.stop_id}`);
+          
+          const routes = kShortestPaths(
+            graph,
+            startCandidate.stop_id,
+            endCandidate.stop_id,
+            limit
+          );
+
+          console.log(`    ✓ Found ${routes.length} route(s)`);
+
+          routes.forEach((route) => {
+            const key = route.routeKey || route.routeStops.map((s) => s.stop_id).join('>');
+            if (!seen.has(key)) {
+              allRoutes.push(route);
+              seen.add(key);
+            }
+          });
+        }
       }
 
-      // Find route using IDs
-      return await this.findRoute(startStop.stop_id, endStop.stop_id);
+      if (allRoutes.length === 0) {
+        throw new Error('No route found between these stops');
+      }
+
+      allRoutes.sort((a, b) => a.totalDistance - b.totalDistance);
+      const nameKeyMap = new Map();
+
+      allRoutes.forEach((route) => {
+        const nameKey = route.routeStops.map((s) => s.stop_name).join('>');
+        const existing = nameKeyMap.get(nameKey);
+        if (!existing || route.totalDistance < existing.totalDistance) {
+          nameKeyMap.set(nameKey, route);
+        }
+      });
+
+      const uniqueRoutes = Array.from(nameKeyMap.values()).map((route) => ({
+        ...route,
+        estimatedMinutes: this.estimateMinutes(
+          route.totalDistance,
+          route.numberOfStops
+        ),
+        fare: this.calculateFare(route.routeEdges),
+      }));
+      uniqueRoutes.sort((a, b) => a.totalDistance - b.totalDistance);
+
+      return {
+        routes: uniqueRoutes.slice(0, limit),
+        farePolicy: {
+          currency: 'PKR',
+          fares: {
+            'Red Line': 30,
+            'Orange2 (Airport)': 90,
+            'Blue, Green, Orange, FR-3A, FR-4, FR-6, FR-7, FR-8A, FR-8C, FR-9, FR-14': 50,
+          },
+        },
+      };
     } catch (error) {
       console.error('❌ Find route by names error:', error);
       throw new Error(`Failed to find route: ${error.message}`);
     }
   }
 
-  /**
-   * Find shortest route between two stops
-   */
   async findRoute(startStopId, endStopId) {
     try {
       const graph = await this.getGraph();
@@ -164,16 +321,20 @@ class RouteFinderService {
         throw new Error(result.message);
       }
 
-      return result;
+      return {
+        ...result,
+        estimatedMinutes: this.estimateMinutes(
+          result.totalDistance,
+          result.numberOfStops
+        ),
+        fare: this.calculateFare(result.routeEdges),
+      };
     } catch (error) {
       console.error('❌ Route finding error:', error);
       throw new Error(`Failed to find route: ${error.message}`);
     }
   }
 
-  /**
-   * Find nearby stops
-   */
   async findNearby(stopId, radiusKm = 5) {
     try {
       const graph = await this.getGraph();
@@ -190,9 +351,6 @@ class RouteFinderService {
     }
   }
 
-  /**
-   * Get all stop options (for autocomplete)
-   */
   async getAllStops() {
     try {
       const graph = await this.getGraph();
@@ -211,9 +369,6 @@ class RouteFinderService {
     }
   }
 
-  /**
-   * Search stops by name
-   */
   async searchStops(query) {
     try {
       const graph = await this.getGraph();
@@ -233,9 +388,6 @@ class RouteFinderService {
     }
   }
 
-  /**
-   * Get route statistics
-   */
   async getGraphStats() {
     try {
       const graph = await this.getGraph();
@@ -268,9 +420,6 @@ class RouteFinderService {
     }
   }
 
-  /**
-   * Rebuild graph (refresh from GTFS data)
-   */
   async rebuildGraph() {
     try {
       console.log('🔄 Rebuilding graph...');

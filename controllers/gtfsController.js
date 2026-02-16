@@ -147,10 +147,16 @@ class GTFSController {
   async getStops(req, res) {
     try {
       const stops = await gtfsService.getStops();
+      const stopNames = Array.isArray(stops)
+        ? stops
+            .map((stop) => stop?.stop_name)
+            .filter((name) => typeof name === 'string' && name.trim().length > 0)
+        : [];
+      console.log('📍 getStops: stop names', stopNames);
       res.status(200).json({
         success: true,
         message: 'Stops retrieved successfully',
-        data: stops,
+        data: stopNames,
       });
     } catch (error) {
       console.error('❌ Get stops error:', error);

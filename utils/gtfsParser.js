@@ -25,9 +25,21 @@ const parseGTFSFile = (fileName) => {
         const clonedRow = {};
         for (const key in row) {
           if (Object.prototype.hasOwnProperty.call(row, key)) {
-            clonedRow[key] = row[key];
+            // Normalize headers to handle BOM/whitespace issues.
+            const normalizedKey = key.replace(/^\uFEFF/, '').trim();
+            // Trim all string values to remove whitespace
+            const value = row[key];
+            clonedRow[normalizedKey] = typeof value === 'string' ? value.trim() : value;
           }
         }
+
+        if (Object.prototype.hasOwnProperty.call(clonedRow, 'stop_id')) {
+          clonedRow.stop_id = String(clonedRow.stop_id).trim();
+        }
+        if (Object.prototype.hasOwnProperty.call(clonedRow, 'trip_id')) {
+          clonedRow.trip_id = String(clonedRow.trip_id).trim();
+        }
+
         results.push(clonedRow);
       })
       .on('end', () => {

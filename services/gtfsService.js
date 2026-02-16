@@ -1,9 +1,19 @@
+const mongoose = require('mongoose');
 const {
   parseAllGTFSFiles,
   getGTFSData,
   exportToJSON,
   getGTFSStats,
 } = require('../utils/gtfsParser');
+
+const getCollectionModel = (collectionName) => {
+  if (mongoose.models[collectionName]) {
+    return mongoose.models[collectionName];
+  }
+
+  const schema = new mongoose.Schema({}, { strict: false, collection: collectionName });
+  return mongoose.model(collectionName, schema);
+};
 
 class GTFSService {
   constructor() {
@@ -17,11 +27,33 @@ class GTFSService {
     try {
       console.log('Loading all GTFS data...');
       this.cachedData = await parseAllGTFSFiles();
+      await this.storeDataInDatabase(this.cachedData);
       console.log('✓ All GTFS data loaded successfully');
       return this.cachedData;
     } catch (error) {
       console.error('❌ Error loading GTFS data:', error);
       throw new Error(`Failed to load GTFS data: ${error.message}`);
+    }
+  }
+
+  /**
+   * Append GTFS data into MongoDB collections
+   */
+  async storeDataInDatabase(gtfsData) {
+    try {
+      const entries = Object.entries(gtfsData || {});
+      for (const [collectionName, records] of entries) {
+        if (!Array.isArray(records) || records.length === 0) {
+          continue;
+        }
+
+        const Model = getCollectionModel(collectionName);
+        await Model.insertMany(records, { ordered: false });
+        console.log(`✓ Stored ${records.length} records in ${collectionName}`);
+      }
+    } catch (error) {
+      console.error('❌ Error storing GTFS data in database:', error);
+      throw new Error(`Failed to store GTFS data: ${error.message}`);
     }
   }
 

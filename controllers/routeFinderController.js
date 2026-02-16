@@ -7,9 +7,17 @@ class RouteFinderController {
   async initializeGraph(req, res) {
     try {
       await routeFinderService.initializeGraph();
+      const stops = await routeFinderService.getAllStops();
+      const stopNames = Array.isArray(stops)
+        ? stops
+            .map((stop) => stop?.stop_name)
+            .filter((name) => typeof name === 'string' && name.trim().length > 0)
+        : [];
+      console.log('📍 /routes/init stop names', stopNames);
       res.status(200).json({
         success: true,
-        message: 'Route graph initialized successfully',
+        message: `Route graph initialized successfully (${stopNames.length} stops)`,
+        data: stopNames,
       });
     } catch (error) {
       console.error('❌ Initialize graph error:', error);
@@ -55,7 +63,7 @@ class RouteFinderController {
    */
   async findRouteByNames(req, res) {
     try {
-      const { startStopName, endStopName } = req.body;
+      const { startStopName, endStopName, maxRoutes } = req.body;
 
       if (!startStopName || !endStopName) {
         return res.status(400).json({
@@ -64,15 +72,16 @@ class RouteFinderController {
         });
       }
 
-      const route = await routeFinderService.findRouteByNames(
+      const result = await routeFinderService.findRouteByNames(
         startStopName,
-        endStopName
+        endStopName,
+        maxRoutes
       );
 
       res.status(200).json({
         success: true,
-        message: 'Route found successfully',
-        data: route,
+        message: 'Routes found successfully',
+        data: result,
       });
     } catch (error) {
       console.error('❌ Find route by names error:', error);

@@ -1,2 +1,3 @@
 ﻿agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url,agency_email
-CDA,CDA,www.cda.gov.pk,GMT+5,en,,,
+PMA_CDA,Punjab Masstransit Authority / Capital Development Authority,https://pma.punjab.gov.pk/pakistan-metrobus-system,GMT+5,en,,,
+CDA,Capital Development Authority,https://www.cda.gov.pk/public/,GMT+5,en,,,

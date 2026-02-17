@@ -6,6 +6,8 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const gtfsRoutes = require('./routes/gtfsRoutes');
 const routeFinderRoutes = require('./routes/routeFinderRoutes');
+const chatbotRoutes = require('./routes/chatbotRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 const authenticateToken = require('./middleware/auth');
 
 const app = express();
@@ -48,6 +50,9 @@ app.use('/gtfs', gtfsRoutes);
 
 // Route Finder routes (public) - Uses Dijkstra's algorithm
 app.use('/routes', routeFinderRoutes);
+
+// Contact form routes (public) - Handle contact form submissions
+app.use('/contact', contactRoutes);
 
 // Error handling
 app.use((req, res) => {

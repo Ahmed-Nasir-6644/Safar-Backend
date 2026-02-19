@@ -115,6 +115,122 @@ class RouteFinderService {
     };
   }
 
+
+  getTransfersAndBuses(routeEdges, routeStops) {
+    const busesUsed = new Set();
+    const busSequence = [];
+    const tripLegs = []; // Detailed information about each leg of the journey
+    let currentBus = null;
+    let legStartIndex = 0;
+
+    if (Array.isArray(routeEdges)) {
+      routeEdges.forEach((edge, index) => {
+        if (!edge?.trip_id) {
+          return;
+        }
+
+        // Handle transfer edges - they mark a transfer point
+        if (edge.trip_id === 'TRANSFER' || edge.trip_id === 'TRANSFER_NEARBY' || edge.trip_id === 'TRANSFER_SAME_LOCATION') {
+          // End current leg if there's a bus
+          if (currentBus !== null) {
+            tripLegs.push({
+              bus: currentBus,
+              startEdgeIndex: legStartIndex,
+              endEdgeIndex: index - 1,
+            });
+          }
+          currentBus = null;
+          return;
+        }
+
+        // Get route ID for this trip/bus
+        const routeId = this.tripToRoute.get(edge.trip_id);
+        if (routeId) {
+          busesUsed.add(routeId);
+          
+          // If this is a new bus, record it in sequence and start a new leg
+          if (currentBus !== routeId) {
+            // End previous leg if exists
+            if (currentBus !== null) {
+              tripLegs.push({
+                bus: currentBus,
+                startEdgeIndex: legStartIndex,
+                endEdgeIndex: index - 1,
+              });
+            }
+            // Start new leg
+            currentBus = routeId;
+            legStartIndex = index;
+            
+            // Add to sequence if different from last bus
+            if (busSequence.length === 0 || busSequence[busSequence.length - 1] !== routeId) {
+              busSequence.push(routeId);
+            }
+          }
+        }
+      });
+
+      // Don't forget the last leg
+      if (currentBus !== null) {
+        tripLegs.push({
+          bus: currentBus,
+          startEdgeIndex: legStartIndex,
+          endEdgeIndex: routeEdges.length - 1,
+        });
+      }
+    }
+
+    // transferCount = number of buses - 1
+    const transferCount = Math.max(0, busSequence.length - 1);
+
+    // Build detailed route segments with stops for each bus/line
+    const routeSegments = tripLegs.map((leg, legIndex) => {
+      // Get stops for this leg
+      // Each edge connects stop[i] to stop[i+1], so we need stops from startEdgeIndex to endEdgeIndex+1
+      const legStops = [];
+      if (routeStops && Array.isArray(routeStops)) {
+        // Add the starting stop of the first edge
+        if (leg.startEdgeIndex < routeStops.length) {
+          legStops.push(routeStops[leg.startEdgeIndex]);
+        }
+        
+        // Add all subsequent stops up to and including the end
+        for (let i = leg.startEdgeIndex + 1; i <= Math.min(leg.endEdgeIndex + 1, routeStops.length - 1); i++) {
+          legStops.push(routeStops[i]);
+        }
+      }
+
+      // Calculate distance for this leg
+      let legDistance = 0;
+      for (let i = leg.startEdgeIndex; i <= leg.endEdgeIndex; i++) {
+        if (routeEdges[i] && routeEdges[i].distance) {
+          legDistance += routeEdges[i].distance;
+        }
+      }
+
+      return {
+        routeName: leg.bus.toUpperCase(),
+        routeId: leg.bus,
+        stops: legStops,
+        stopCount: legStops.length,
+        distance: parseFloat(legDistance.toFixed(2)),
+        boardingStop: legStops[0]?.stop_name || 'Unknown',
+        alightingStop: legStops[legStops.length - 1]?.stop_name || 'Unknown',
+      };
+    });
+
+    return {
+      transferCount,
+      busesUsed: Array.from(busesUsed).map(b => b.toUpperCase()),
+      busSequence: busSequence.map(b => b.toUpperCase()),
+      routeSegments: routeSegments,
+      tripLegs: tripLegs.map(leg => ({
+        bus: leg.bus.toUpperCase(),
+        edgeRange: `${leg.startEdgeIndex}-${leg.endEdgeIndex}`,
+      })),
+    };
+  }
+
   async initializeGraph() {
     try {
       console.log('🔨 Building route graph...');
@@ -220,7 +336,28 @@ class RouteFinderService {
     }
   }
 
-  async findRouteByNames(startStopName, endStopName, maxRoutes = 3) {
+  // Helper function to remove consecutive duplicate stops based on stop_name
+  removeDuplicateStops(routeStops) {
+    if (!Array.isArray(routeStops) || routeStops.length === 0) {
+      return routeStops;
+    }
+
+    const uniqueStops = [routeStops[0]];
+    
+    for (let i = 1; i < routeStops.length; i++) {
+      const prevStopName = uniqueStops[uniqueStops.length - 1].stop_name;
+      const currentStopName = routeStops[i].stop_name;
+      
+      // Only add if the stop name is different from the previous one
+      if (prevStopName !== currentStopName) {
+        uniqueStops.push(routeStops[i]);
+      }
+    }
+    
+    return uniqueStops;
+  }
+
+  async findRouteByNames(startStopName, endStopName, maxRoutes = 6) {
     try {
       const startStop = await this.findStopByName(startStopName);
       const startCandidates = startStop.multiple
@@ -252,10 +389,19 @@ class RouteFinderService {
           console.log(`    ✓ Found ${routes.length} route(s)`);
 
           routes.forEach((route) => {
-            const key = route.routeKey || route.routeStops.map((s) => s.stop_id).join('>');
-            if (!seen.has(key)) {
+            // Remove consecutive duplicate stops
+            const cleanedStops = this.removeDuplicateStops(route.routeStops);
+            
+            // Create route key based on stop names (after removing duplicates)
+            const nameKey = cleanedStops.map((s) => s.stop_name).join('>');
+            
+            if (!seen.has(nameKey)) {
+              // Update route with cleaned stops
+              route.routeStops = cleanedStops;
+              route.numberOfStops = cleanedStops.length;
+              
               allRoutes.push(route);
-              seen.add(key);
+              seen.add(nameKey);
             }
           });
         }
@@ -266,24 +412,36 @@ class RouteFinderService {
       }
 
       allRoutes.sort((a, b) => a.totalDistance - b.totalDistance);
-      const nameKeyMap = new Map();
-
+      const routeKeyMap = new Map();
       allRoutes.forEach((route) => {
+        // Use stop names for final deduplication
         const nameKey = route.routeStops.map((s) => s.stop_name).join('>');
-        const existing = nameKeyMap.get(nameKey);
-        if (!existing || route.totalDistance < existing.totalDistance) {
-          nameKeyMap.set(nameKey, route);
+        if (!routeKeyMap.has(nameKey)) {
+          routeKeyMap.set(nameKey, route);
         }
       });
 
-      const uniqueRoutes = Array.from(nameKeyMap.values()).map((route) => ({
-        ...route,
-        estimatedMinutes: this.estimateMinutes(
+     const uniqueRoutes = Array.from(routeKeyMap.values()).map((route) => {
+        const estimatedMinutes = this.estimateMinutes(
           route.totalDistance,
           route.numberOfStops
-        ),
-        fare: this.calculateFare(route.routeEdges),
-      }));
+         );
+        const fare = this.calculateFare(route.routeEdges);
+        const transferInfo = this.getTransfersAndBuses(route.routeEdges, route.routeStops);
+        
+        console.log(`  📊 Route: ${route.routeStops.length} stops, ${route.totalDistance.toFixed(2)}km, ${estimatedMinutes}min, ${fare.amount} PKR, ${transferInfo.transferCount} transfers, buses: ${transferInfo.busesUsed.join(', ')}, bus sequence: ${transferInfo.busSequence.join(' → ')}`);
+        // for first route display the transfer details in console for debugging
+        if (allRoutes.indexOf(route) === 0 || allRoutes.indexOf(route) === 1) {
+          console.log(`    Transfer Details: ${JSON.stringify(transferInfo, null, 2)}`);
+        }
+
+        return {
+          ...route,
+          estimatedMinutes,
+          fare,
+          ...transferInfo,
+        };
+      });
       uniqueRoutes.sort((a, b) => a.totalDistance - b.totalDistance);
 
       return {
@@ -320,7 +478,13 @@ class RouteFinderService {
       if (!result.success) {
         throw new Error(result.message);
       }
-
+      
+      // Remove consecutive duplicate stops
+      const cleanedStops = this.removeDuplicateStops(result.routeStops);
+      result.routeStops = cleanedStops;
+      result.numberOfStops = cleanedStops.length;
+      
+      const transferInfo = this.getTransfersAndBuses(result.routeEdges, cleanedStops);
       return {
         ...result,
         estimatedMinutes: this.estimateMinutes(
@@ -328,6 +492,7 @@ class RouteFinderService {
           result.numberOfStops
         ),
         fare: this.calculateFare(result.routeEdges),
+        ...transferInfo,
       };
     } catch (error) {
       console.error('❌ Route finding error:', error);

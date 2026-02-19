@@ -163,8 +163,6 @@ class RouteFinderController {
       console.log('📍 Fetching all stops...');
       const stops = await routeFinderService.getAllStops();
 
-      console.log(`✓ Sending ${stops.length} stops to frontend`);
-      console.log('📋 All stops:', JSON.stringify(stops, null, 2));
       res.status(200).json({
         success: true,
         message: `Retrieved ${stops.length} stops`,

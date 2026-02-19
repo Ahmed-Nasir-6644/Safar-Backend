@@ -442,10 +442,43 @@ class RouteFinderService {
           ...transferInfo,
         };
       });
-      uniqueRoutes.sort((a, b) => a.totalDistance - b.totalDistance);
+
+      // Filter out routes with duplicate buses in sequence
+      const validRoutes = uniqueRoutes.filter((route) => {
+        const busSequence = route.busSequence;
+        const uniqueBuses = new Set(busSequence);
+        
+        // If the set size is different from array length, there are duplicates
+        const hasDuplicates = uniqueBuses.size !== busSequence.length;
+        
+        if (hasDuplicates) {
+          console.log(`  ⚠️ Discarding route with duplicate buses: ${busSequence.join(' → ')}`);
+        }
+        
+        return !hasDuplicates; // Keep only routes without duplicates
+      });
+
+      // Deduplicate routes by bus sequence - keep only the one with least distance
+      const busSequenceMap = new Map();
+      validRoutes.forEach((route) => {
+        const sequenceKey = route.busSequence.join('→');
+        const existing = busSequenceMap.get(sequenceKey);
+        
+        if (!existing || route.totalDistance < existing.totalDistance) {
+          if (existing) {
+            console.log(`  🔄 Replacing route with same sequence (${sequenceKey}): ${existing.totalDistance.toFixed(2)}km → ${route.totalDistance.toFixed(2)}km`);
+          }
+          busSequenceMap.set(sequenceKey, route);
+        } else {
+          console.log(`  ⚠️ Discarding route with same sequence (${sequenceKey}): ${route.totalDistance.toFixed(2)}km (keeping ${existing.totalDistance.toFixed(2)}km)`);
+        }
+      });
+
+      const finalRoutes = Array.from(busSequenceMap.values());
+      finalRoutes.sort((a, b) => a.totalDistance - b.totalDistance);
 
       return {
-        routes: uniqueRoutes.slice(0, limit),
+        routes: finalRoutes.slice(0, limit),
         farePolicy: {
           currency: 'PKR',
           fares: {

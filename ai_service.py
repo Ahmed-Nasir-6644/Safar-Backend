@@ -29,6 +29,93 @@ INSTRUCTIONS:
 - Keep responses conversational but informative
 """
 
+SYSTEM_PROMPT_VOICE = """
+You are a public transport journey summarization engine.
+
+Your job is to extract high-level journey structure from structured or semi-structured transit data.
+
+You must generate:
+
+1. A single short spoken summary paragraph (maximum 90 words).
+2. A structured JSON dictionary with extracted journey details.
+
+-------------------------------------------------------
+IMPORTANT RULES
+-------------------------------------------------------
+
+- DO NOT list all stops.
+- DO NOT repeat intermediate station names.
+- DO NOT exceed one paragraph.
+- DO NOT explain reasoning.
+- DO NOT invent or guess missing values.
+- ALWAYS return valid JSON only.
+- If required data is missing, return the fallback response exactly as shown.
+
+-------------------------------------------------------
+HOW TO IDENTIFY TRANSFERS
+-------------------------------------------------------
+
+A transfer occurs when:
+- A new route begins after a previous one ends.
+
+There may be ZERO, ONE, or MULTIPLE transfers.
+
+You must dynamically extract all route segments in order.
+
+Each segment must include:
+- route_name
+- stop_count
+
+The transfer stop is the stop where one route ends and the next route begins.
+
+-------------------------------------------------------
+REQUIRED OUTPUT STRUCTURE
+-------------------------------------------------------
+
+{
+  "summary": "One short paragraph summary here.",
+  "details": {
+    "total_duration": "",
+    "total_stops": "",
+    "total_transfers": "",
+    "walking_distance_meters": "",
+    "total_fare": "",
+    "segments": [
+      {
+        "route_name": "",
+        "stop_count": "",
+        "boarding_stop": "",
+        "alighting_stop": ""
+      }
+    ]
+  }
+}
+
+-------------------------------------------------------
+SUMMARY REQUIREMENTS
+-------------------------------------------------------
+
+The summary must include:
+- Total journey time
+- Each route in order
+- Transfer locations (without listing all stops)
+- Total fare
+
+Keep it natural and concise.
+
+-------------------------------------------------------
+FALLBACK RESPONSE (IF DATA IS INCOMPLETE)
+-------------------------------------------------------
+
+{
+  "summary": "Journey information is currently unavailable.",
+  "details": null
+}
+
+Do not return anything outside JSON.
+
+"""
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -85,21 +172,97 @@ async def classify(request: OCRRequest):
             "prediction": None, 
             "error": str(e)
         }
+    
 
-# # --- TESTING BLOCK ---
-# if __name__ == "__main__":
-#     import asyncio
+@app.post("/dictate")
+async def dictate(request: OCRRequest):
+    # 2. Try/Except block for error handling
+    try:
+        response = client.chat.completions.create(
+            model="arcee-ai/trinity-large-preview:free",
+            temperature=0,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT_VOICE},
+                {
+                    "role": "user",
+                    "content": json.dumps(
+                        {"ocr_result": request.ocr_result},
+                        ensure_ascii=False
+                    )
+                }
+            ]
+        )
 
-#     async def run_test():
-#         print("Sending request... (Timeout set to 60s)\n")
+        prediction = response.choices[0].message.content.strip()
         
-#         # Simulating a dynamic request
-#         test_data = OCRRequest(ocr_result="what is metromate")
-        
-#         result = await classify(test_data)
-        
-#         print("=== RESPONSE ===")
-#         print(json.dumps(result, indent=2))
-#         print("================")
+        # 3. Success Response format
+        return {
+            "success": True, 
+            "prediction": prediction, 
+            "error": None
+        }
 
-#     asyncio.run(run_test())
+    except Exception as e:
+        # 4. Error Response format (catches timeouts, bad API keys, etc.)
+        return {
+            "success": False, 
+            "prediction": None, 
+            "error": str(e)
+        }
+
+# --- TESTING BLOCK ---
+if __name__ == "__main__":
+    import asyncio
+
+    async def run_test():
+        print("Sending request... (Timeout set to 60s)\n")
+        
+        # Simulating a dynamic request
+        test_data = OCRRequest(ocr_result="""27 min
+Total journey time
+20 stops
+1 transfer
+Rs. 80
+
+Board FR-3A at F-6/3
+
+11 stops
+•
+12 min
+F-6/3 Origin
+Old Zoo Stop
+Kohsar Road Stop
+Parveen Shakir Road Stop
+Faisal Masjid Stop
+Naval Complex Stop
+Bahria University Stop
+Shaheen Chowk Stop
+F-9 Park Ravi Gate Stop
+F-8 Markaz Stop
+F-8 Katchery Stop
+PIMS Metro Station
+Transfer
+Transfer to Red Line at PIMS Metro Station
+
+9 stops
+•
+11 min
+PIMS Metro Station
+Kachehry Metro Station
+Ibn-e-Sina Metro Station
+Chaman Metro Station
+Kashmir Highway Metro Station
+Faiz Ahmad Faiz Metro Station
+Khayaban-e-Johar Metro Station
+Potohar Metro Station
+IJ Principal Metro Station
+Faizabad Metro Station
+""")
+
+        result = await dictate(test_data)
+        
+        print("=== RESPONSE ===")
+        print(json.dumps(result, indent=2))
+        print("================")
+
+    asyncio.run(run_test())

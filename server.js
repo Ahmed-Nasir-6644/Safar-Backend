@@ -6,7 +6,6 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const gtfsRoutes = require('./routes/gtfsRoutes');
 const routeFinderRoutes = require('./routes/routeFinderRoutes');
-const chatbotRoutes = require('./routes/chatbotRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const authenticateToken = require('./middleware/auth');
 

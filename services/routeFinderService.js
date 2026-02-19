@@ -8,6 +8,8 @@ const {
   kShortestPaths,
   findNearbyStops,
 } = require('../utils/dijkstra');
+const RouteSearch = require('../models/RouteSearch');
+const FavoriteRoute = require('../models/FavoriteRoute');
 
 class RouteFinderService {
   constructor() {
@@ -552,12 +554,25 @@ class RouteFinderService {
   async getAllStops() {
     try {
       const graph = await this.getGraph();
-      const stops = Object.values(graph).map((stop) => ({
-        stop_id: stop.stop_id,
-        stop_name: stop.stop_name,
-        stop_lat: stop.stop_lat,
-        stop_lon: stop.stop_lon,
-      }));
+      const stops = [];
+      const seenBaseStopIds = new Set();
+
+      Object.values(graph).forEach((stop) => {
+        const stopId = typeof stop.stop_id === 'string' ? stop.stop_id : '';
+        const baseStopId = stopId.replace(/_(up|down)$/i, '');
+
+        if (seenBaseStopIds.has(baseStopId)) {
+          return;
+        }
+
+        seenBaseStopIds.add(baseStopId);
+        stops.push({
+          stop_id: stop.stop_id,
+          stop_name: stop.stop_name,
+          stop_lat: stop.stop_lat,
+          stop_lon: stop.stop_lon,
+        });
+      });
 
       console.log(`✓ Retrieved ${stops.length} stops from graph`);
       return stops;
@@ -628,6 +643,98 @@ class RouteFinderService {
     } catch (error) {
       console.error('❌ Rebuild graph error:', error);
       throw new Error(`Failed to rebuild graph: ${error.message}`);
+    }
+  }
+
+  async saveRouteSearchHistory({
+    userId,
+    startingPoint,
+    destination,
+    startStopId,
+    endStopId,
+    searchType,
+  }) {
+    try {
+      if (!userId) {
+        throw new Error('userId is required to save route search history');
+      }
+
+      if (!startingPoint || !destination) {
+        throw new Error('startingPoint and destination are required');
+      }
+
+      const savedSearch = await RouteSearch.create({
+        userId,
+        startingPoint,
+        destination,
+        startStopId,
+        endStopId,
+        searchType,
+      });
+
+      return savedSearch;
+    } catch (error) {
+      console.error('❌ Save route search history error:', error);
+      throw new Error(`Failed to save route search history: ${error.message}`);
+    }
+  }
+
+  async getRouteSearchHistory(userId) {
+    try {
+      if (!userId) {
+        throw new Error('userId is required to fetch route search history');
+      }
+
+      const history = await RouteSearch.find({ userId })
+        .sort({ createdAt: -1 })
+        .select('_id startingPoint destination startStopId endStopId searchType createdAt updatedAt');
+
+      return history;
+    } catch (error) {
+      console.error('❌ Get route search history error:', error);
+      throw new Error(`Failed to get route search history: ${error.message}`);
+    }
+  }
+
+  async saveFavoriteRoute({ userId, startingPoint, destination, tripName, routeData }) {
+    try {
+      if (!userId) {
+        throw new Error('userId is required to save favorite route');
+      }
+
+      if (!startingPoint || !destination || !routeData) {
+        throw new Error('startingPoint, destination, and routeData are required');
+      }
+
+      const favoriteRoute = await FavoriteRoute.create({
+        userId,
+        startingPoint,
+        destination,
+        tripName,
+        routeData,
+      });
+
+      return favoriteRoute;
+    } catch (error) {
+      console.error('❌ Save favorite route error:', error);
+      throw new Error(`Failed to save favorite route: ${error.message}`);
+    }
+  }
+
+  async getFavoriteRoutes(userId) {
+    try {
+      if (!userId) {
+        throw new Error('userId is required to fetch favorite routes');
+      }
+
+      const favorites = await FavoriteRoute.find({ userId })
+        .sort({ createdAt: -1 })
+        .select('_id startingPoint destination tripName routeData createdAt updatedAt');
+
+      return favorites;
+    } catch (error) {
+      console.error('❌ Get favorite routes error:', error);
+      throw new Error(`Failed to get favorite routes: ${error.message}`);
     }
   }
 }

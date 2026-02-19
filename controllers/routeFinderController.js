@@ -34,6 +34,7 @@ class RouteFinderController {
   async findRoute(req, res) {
     try {
       const { startStopId, endStopId } = req.body;
+      const userId = req.user?.userId;
 
       if (!startStopId || !endStopId) {
         return res.status(400).json({
@@ -43,6 +44,16 @@ class RouteFinderController {
       }
 
       const route = await routeFinderService.findRoute(startStopId, endStopId);
+
+      await routeFinderService.saveRouteSearchHistory({
+        userId,
+        startingPoint: route?.routeStops?.[0]?.stop_name || startStopId,
+        destination:
+          route?.routeStops?.[route.routeStops.length - 1]?.stop_name || endStopId,
+        startStopId,
+        endStopId,
+        searchType: 'by-id',
+      });
 
       res.status(200).json({
         success: true,
@@ -64,6 +75,7 @@ class RouteFinderController {
   async findRouteByNames(req, res) {
     try {
       const { startStopName, endStopName, maxRoutes } = req.body;
+      const userId = req.user?.userId;
 
       if (!startStopName || !endStopName) {
         return res.status(400).json({
@@ -78,6 +90,13 @@ class RouteFinderController {
         maxRoutes
       );
 
+      await routeFinderService.saveRouteSearchHistory({
+        userId,
+        startingPoint: startStopName,
+        destination: endStopName,
+        searchType: 'by-name',
+      });
+
       res.status(200).json({
         success: true,
         message: 'Routes found successfully',
@@ -85,6 +104,88 @@ class RouteFinderController {
       });
     } catch (error) {
       console.error('❌ Find route by names error:', error);
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  /**
+   * Get route search history for authenticated user
+   */
+  async getSearchHistory(req, res) {
+    try {
+      const userId = req.user?.userId;
+
+      const history = await routeFinderService.getRouteSearchHistory(userId);
+
+      res.status(200).json({
+        success: true,
+        message: `Retrieved ${history.length} search history item(s)`,
+        data: history,
+      });
+    } catch (error) {
+      console.error('❌ Get search history error:', error);
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  /**
+   * Save selected generated route as favorite for authenticated user
+   */
+  async saveFavoriteRoute(req, res) {
+    try {
+      const userId = req.user?.userId;
+      const { startingPoint, destination, tripName, routeData } = req.body;
+
+      if (!startingPoint || !destination || !routeData) {
+        return res.status(400).json({
+          success: false,
+          message: 'startingPoint, destination, and routeData are required',
+        });
+      }
+
+      const savedFavorite = await routeFinderService.saveFavoriteRoute({
+        userId,
+        startingPoint,
+        destination,
+        tripName,
+        routeData,
+      });
+
+      res.status(201).json({
+        success: true,
+        message: 'Favorite route saved successfully',
+        data: savedFavorite,
+      });
+    } catch (error) {
+      console.error('❌ Save favorite route error:', error);
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  /**
+   * Get favorite routes for authenticated user
+   */
+  async getFavoriteRoutes(req, res) {
+    try {
+      const userId = req.user?.userId;
+      const favorites = await routeFinderService.getFavoriteRoutes(userId);
+
+      res.status(200).json({
+        success: true,
+        message: `Retrieved ${favorites.length} favorite route(s)`,
+        data: favorites,
+      });
+    } catch (error) {
+      console.error('❌ Get favorite routes error:', error);
       res.status(400).json({
         success: false,
         message: error.message,

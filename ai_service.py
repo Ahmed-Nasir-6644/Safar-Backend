@@ -210,226 +210,226 @@ async def dictate(request: OCRRequest):
             "error": str(e)
         }
 
-# --- TESTING BLOCK ---
-if __name__ == "__main__":
-    import asyncio
+# # --- TESTING BLOCK ---
+# if __name__ == "__main__":
+#     import asyncio
 
-    async def run_test():
-        print("Sending request... (Timeout set to 60s)\n")
+#     async def run_test():
+#         print("Sending request... (Timeout set to 60s)\n")
         
-        # Simulating a dynamic request
-        test_data = OCRRequest(ocr_result="""
-Route: 16 stops, 11.74km, 28min, 200 PKR, 4 transfers, buses: FR_9, FR_14, FR_8C, FR_8A, bus sequence: FR_9 → FR_14 → FR_8C → FR_14 → FR_8A
-    Transfer Details: {
-  "transferCount": 4,
-  "busesUsed": [
-    "FR_9",
-    "FR_14",
-    "FR_8C",
-    "FR_8A"
-  ],
-  "busSequence": [
-    "FR_9",
-    "FR_14",
-    "FR_8C",
-    "FR_14",
-    "FR_8A"
-  ],
-  "routeSegments": [
-    {
-      "routeName": "FR_9",
-      "routeId": "fr_9",
-      "stops": [
-        {
-          "stop_id": "pindora_chungi_down",
-          "stop_name": "Pindora Chungi",
-          "stop_lat": 33.65193979,
-          "stop_lon": 73.06369298
-        },
-        {
-          "stop_id": "ijp_station_fr_down",
-          "stop_name": "IJP Metro Station",
-          "stop_lat": 33.65557403,
-          "stop_lon": 73.06965844
-        },
-        {
-          "stop_id": "faizabad_station_down",
-          "stop_name": "Faizabad Metro Station",
-          "stop_lat": 33.66188134,
-          "stop_lon": 73.08220051
-        }
-      ],
-      "stopCount": 3,
-      "distance": 2.04,
-      "boardingStop": "Pindora Chungi",
-      "alightingStop": "Faizabad Metro Station"
-    },
-    {
-      "routeName": "FR_14",
-      "routeId": "fr_14",
-      "stops": [
-        {
-          "stop_id": "faizabad_station_down",
-          "stop_name": "Faizabad Metro Station",
-          "stop_lat": 33.66188134,
-          "stop_lon": 73.08220051
-        },
-        {
-          "stop_id": "itp_up",
-          "stop_name": "ITP Centre",
-          "stop_lat": 33.67178766,
-          "stop_lon": 73.09291283
-        }
-      ],
-      "stopCount": 2,
-      "distance": 1.48,
-      "boardingStop": "Faizabad Metro Station",
-      "alightingStop": "ITP Centre"
-    },
-    {
-      "routeName": "FR_8C",
-      "routeId": "fr_8c",
-      "stops": [
-        {
-          "stop_id": "itp_up",
-          "stop_name": "ITP Centre",
-          "stop_lat": 33.67178766,
-          "stop_lon": 73.09291283
-        },
-        {
-          "stop_id": "margalla_town_up",
-          "stop_name": "Margalla Town",
-          "stop_lat": 33.68145652,
-          "stop_lon": 73.10160518
-        },
-        {
-          "stop_id": "garden_avenue_up",
-          "stop_name": "Garden Avenue",
-          "stop_lat": 33.68530141,
-          "stop_lon": 73.1065224
-        }
-      ],
-      "stopCount": 3,
-      "distance": 1.97,
-      "boardingStop": "ITP Centre",
-      "alightingStop": "Garden Avenue"
-    },
-    {
-      "routeName": "FR_14",
-      "routeId": "fr_14",
-      "stops": [
-        {
-          "stop_id": "garden_avenue_up",
-          "stop_name": "Garden Avenue",
-          "stop_lat": 33.68530141,
-          "stop_lon": 73.1065224
-        },
-        {
-          "stop_id": "rawal_chowk_down",
-          "stop_name": "Rawal Chowk",
-          "stop_lat": 33.69205444,
-          "stop_lon": 73.11004651
-        }
-      ],
-      "stopCount": 2,
-      "distance": 0.82,
-      "boardingStop": "Garden Avenue",
-      "alightingStop": "Rawal Chowk"
-    },
-    {
-      "routeName": "FR_8A",
-      "routeId": "fr_8a",
-      "stops": [
-        {
-          "stop_id": "rawal_town_up",
-          "stop_name": "Rawal Town",
-          "stop_lat": 33.68926848,
-          "stop_lon": 73.11281756
-        },
-        {
-          "stop_id": "school_board_up",
-          "stop_name": "School Board Stop",
-          "stop_lat": 33.68900199,
-          "stop_lon": 73.11626498
-        },
-        {
-          "stop_id": "rawal_dam_colony_up",
-          "stop_name": "Rawal Dam Colony",
-          "stop_lat": 33.68818115,
-          "stop_lon": 73.12138032
-        },
-        {
-          "stop_id": "narc_colony_up",
-          "stop_name": "NARC Colony",
-          "stop_lat": 33.68752881,
-          "stop_lon": 73.1309279
-        },
-        {
-          "stop_id": "nih_allergy_up",
-          "stop_name": "NIH Allergy Center",
-          "stop_lat": 33.68511973,
-          "stop_lon": 73.13510897
-        },
-        {
-          "stop_id": "shehzad_town_up",
-          "stop_name": "Shahzad Town",
-          "stop_lat": 33.67656387,
-          "stop_lon": 73.1423405
-        },
-        {
-          "stop_id": "park_view_city_up",
-          "stop_name": "Park View City",
-          "stop_lat": 33.67413884,
-          "stop_lon": 73.14436779
-        },
-        {
-          "stop_id": "green_avenue_up",
-          "stop_name": "Green Avenue",
-          "stop_lat": 33.66730581,
-          "stop_lon": 73.15014159
-        },
-        {
-          "stop_id": "chatta_bakhtawar_up",
-          "stop_name": "Chatta Bakhtawar",
-          "stop_lat": 33.6642002,
-          "stop_lon": 73.1527488
-        }
-      ],
-      "stopCount": 9,
-      "distance": 5.43,
-      "boardingStop": "Rawal Town",
-      "alightingStop": "Chatta Bakhtawar"
-    }
-  ],
-  "tripLegs": [
-    {
-      "bus": "FR_9",
-      "edgeRange": "0-1"
-    },
-    {
-      "bus": "FR_14",
-      "edgeRange": "2-2"
-    },
-    {
-      "bus": "FR_8C",
-      "edgeRange": "3-4"
-    },
-    {
-      "bus": "FR_14",
-      "edgeRange": "5-5"
-    },
-    {
-      "bus": "FR_8A",
-      "edgeRange": "7-15"
-    }
-  ]
-}
-""")
+#         # Simulating a dynamic request
+#         test_data = OCRRequest(ocr_result="""
+# Route: 16 stops, 11.74km, 28min, 200 PKR, 4 transfers, buses: FR_9, FR_14, FR_8C, FR_8A, bus sequence: FR_9 → FR_14 → FR_8C → FR_14 → FR_8A
+#     Transfer Details: {
+#   "transferCount": 4,
+#   "busesUsed": [
+#     "FR_9",
+#     "FR_14",
+#     "FR_8C",
+#     "FR_8A"
+#   ],
+#   "busSequence": [
+#     "FR_9",
+#     "FR_14",
+#     "FR_8C",
+#     "FR_14",
+#     "FR_8A"
+#   ],
+#   "routeSegments": [
+#     {
+#       "routeName": "FR_9",
+#       "routeId": "fr_9",
+#       "stops": [
+#         {
+#           "stop_id": "pindora_chungi_down",
+#           "stop_name": "Pindora Chungi",
+#           "stop_lat": 33.65193979,
+#           "stop_lon": 73.06369298
+#         },
+#         {
+#           "stop_id": "ijp_station_fr_down",
+#           "stop_name": "IJP Metro Station",
+#           "stop_lat": 33.65557403,
+#           "stop_lon": 73.06965844
+#         },
+#         {
+#           "stop_id": "faizabad_station_down",
+#           "stop_name": "Faizabad Metro Station",
+#           "stop_lat": 33.66188134,
+#           "stop_lon": 73.08220051
+#         }
+#       ],
+#       "stopCount": 3,
+#       "distance": 2.04,
+#       "boardingStop": "Pindora Chungi",
+#       "alightingStop": "Faizabad Metro Station"
+#     },
+#     {
+#       "routeName": "FR_14",
+#       "routeId": "fr_14",
+#       "stops": [
+#         {
+#           "stop_id": "faizabad_station_down",
+#           "stop_name": "Faizabad Metro Station",
+#           "stop_lat": 33.66188134,
+#           "stop_lon": 73.08220051
+#         },
+#         {
+#           "stop_id": "itp_up",
+#           "stop_name": "ITP Centre",
+#           "stop_lat": 33.67178766,
+#           "stop_lon": 73.09291283
+#         }
+#       ],
+#       "stopCount": 2,
+#       "distance": 1.48,
+#       "boardingStop": "Faizabad Metro Station",
+#       "alightingStop": "ITP Centre"
+#     },
+#     {
+#       "routeName": "FR_8C",
+#       "routeId": "fr_8c",
+#       "stops": [
+#         {
+#           "stop_id": "itp_up",
+#           "stop_name": "ITP Centre",
+#           "stop_lat": 33.67178766,
+#           "stop_lon": 73.09291283
+#         },
+#         {
+#           "stop_id": "margalla_town_up",
+#           "stop_name": "Margalla Town",
+#           "stop_lat": 33.68145652,
+#           "stop_lon": 73.10160518
+#         },
+#         {
+#           "stop_id": "garden_avenue_up",
+#           "stop_name": "Garden Avenue",
+#           "stop_lat": 33.68530141,
+#           "stop_lon": 73.1065224
+#         }
+#       ],
+#       "stopCount": 3,
+#       "distance": 1.97,
+#       "boardingStop": "ITP Centre",
+#       "alightingStop": "Garden Avenue"
+#     },
+#     {
+#       "routeName": "FR_14",
+#       "routeId": "fr_14",
+#       "stops": [
+#         {
+#           "stop_id": "garden_avenue_up",
+#           "stop_name": "Garden Avenue",
+#           "stop_lat": 33.68530141,
+#           "stop_lon": 73.1065224
+#         },
+#         {
+#           "stop_id": "rawal_chowk_down",
+#           "stop_name": "Rawal Chowk",
+#           "stop_lat": 33.69205444,
+#           "stop_lon": 73.11004651
+#         }
+#       ],
+#       "stopCount": 2,
+#       "distance": 0.82,
+#       "boardingStop": "Garden Avenue",
+#       "alightingStop": "Rawal Chowk"
+#     },
+#     {
+#       "routeName": "FR_8A",
+#       "routeId": "fr_8a",
+#       "stops": [
+#         {
+#           "stop_id": "rawal_town_up",
+#           "stop_name": "Rawal Town",
+#           "stop_lat": 33.68926848,
+#           "stop_lon": 73.11281756
+#         },
+#         {
+#           "stop_id": "school_board_up",
+#           "stop_name": "School Board Stop",
+#           "stop_lat": 33.68900199,
+#           "stop_lon": 73.11626498
+#         },
+#         {
+#           "stop_id": "rawal_dam_colony_up",
+#           "stop_name": "Rawal Dam Colony",
+#           "stop_lat": 33.68818115,
+#           "stop_lon": 73.12138032
+#         },
+#         {
+#           "stop_id": "narc_colony_up",
+#           "stop_name": "NARC Colony",
+#           "stop_lat": 33.68752881,
+#           "stop_lon": 73.1309279
+#         },
+#         {
+#           "stop_id": "nih_allergy_up",
+#           "stop_name": "NIH Allergy Center",
+#           "stop_lat": 33.68511973,
+#           "stop_lon": 73.13510897
+#         },
+#         {
+#           "stop_id": "shehzad_town_up",
+#           "stop_name": "Shahzad Town",
+#           "stop_lat": 33.67656387,
+#           "stop_lon": 73.1423405
+#         },
+#         {
+#           "stop_id": "park_view_city_up",
+#           "stop_name": "Park View City",
+#           "stop_lat": 33.67413884,
+#           "stop_lon": 73.14436779
+#         },
+#         {
+#           "stop_id": "green_avenue_up",
+#           "stop_name": "Green Avenue",
+#           "stop_lat": 33.66730581,
+#           "stop_lon": 73.15014159
+#         },
+#         {
+#           "stop_id": "chatta_bakhtawar_up",
+#           "stop_name": "Chatta Bakhtawar",
+#           "stop_lat": 33.6642002,
+#           "stop_lon": 73.1527488
+#         }
+#       ],
+#       "stopCount": 9,
+#       "distance": 5.43,
+#       "boardingStop": "Rawal Town",
+#       "alightingStop": "Chatta Bakhtawar"
+#     }
+#   ],
+#   "tripLegs": [
+#     {
+#       "bus": "FR_9",
+#       "edgeRange": "0-1"
+#     },
+#     {
+#       "bus": "FR_14",
+#       "edgeRange": "2-2"
+#     },
+#     {
+#       "bus": "FR_8C",
+#       "edgeRange": "3-4"
+#     },
+#     {
+#       "bus": "FR_14",
+#       "edgeRange": "5-5"
+#     },
+#     {
+#       "bus": "FR_8A",
+#       "edgeRange": "7-15"
+#     }
+#   ]
+# }
+# """)
 
-        result = await dictate(test_data)
+#         result = await dictate(test_data)
         
-        print("=== RESPONSE ===")
-        print(json.dumps(result, indent=2))
-        print("================")
+#         print("=== RESPONSE ===")
+#         print(json.dumps(result, indent=2))
+#         print("================")
 
-    asyncio.run(run_test())
+#     asyncio.run(run_test())

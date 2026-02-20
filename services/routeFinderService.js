@@ -357,6 +357,117 @@ class RouteFinderService {
     return uniqueStops;
   }
 
+  // Helper function to clean and validate route
+  cleanAndValidateRoute(route) {
+    // Step 1: Remove duplicate consecutive stops from routeStops
+    const cleanedStops = this.removeDuplicateStops(route.routeStops);
+    
+    // Step 2: Check if we have valid stops
+    if (!cleanedStops || cleanedStops.length < 2) {
+      return null; // Invalid route
+    }
+    
+    const destinationName = cleanedStops[cleanedStops.length - 1].stop_name;
+    
+    // Step 3: Get transfer info and segments
+    let transferInfo = this.getTransfersAndBuses(route.routeEdges, cleanedStops);
+    
+    // Step 4: Filter out invalid segments and trim at destination
+    let validSegments = [];
+    let reachedDestination = false;
+    
+    for (const segment of transferInfo.routeSegments) {
+      // Discard segments with unknown boarding or alighting stops
+      if (segment.boardingStop === 'Unknown' || segment.alightingStop === 'Unknown') {
+        console.log(`  ⚠️ Discarding segment with unknown stops: ${segment.routeName} (${segment.boardingStop} → ${segment.alightingStop})`);
+        continue;
+      }
+      
+      // Discard empty segments
+      if (segment.stopCount === 0 || !segment.stops || segment.stops.length === 0) {
+        console.log(`  ⚠️ Discarding empty segment: ${segment.routeName}`);
+        continue;
+      }
+      
+      validSegments.push(segment);
+      
+      // Check if this segment reaches the destination
+      if (segment.alightingStop === destinationName) {
+        reachedDestination = true;
+        console.log(`  ✓ Reached destination at segment: ${segment.routeName} → ${destinationName}`);
+        break; // Stop processing further segments
+      }
+    }
+    
+    // If no valid segments, discard route
+    if (validSegments.length === 0) {
+      console.log(`  ⚠️ No valid segments found, discarding route`);
+      return null;
+    }
+    
+    // Step 5: Rebuild route information from valid segments
+    const newBusSequence = validSegments.map(s => s.routeId);
+    const newBusesUsed = [...new Set(newBusSequence)];
+    const newTransferCount = Math.max(0, newBusSequence.length - 1);
+    
+    // Rebuild stops from valid segments
+    const newRouteStops = [];
+    const stopsSeen = new Set();
+    
+    for (let i = 0; i < validSegments.length; i++) {
+      const segment = validSegments[i];
+      
+      for (const stop of segment.stops) {
+        // Add stop only if we haven't seen this stop name before
+        const stopKey = `${stop.stop_name}`;
+        if (!stopsSeen.has(stopKey)) {
+          newRouteStops.push(stop);
+          stopsSeen.add(stopKey);
+        }
+      }
+    }
+    
+    // Recalculate total distance from valid segments
+    const newTotalDistance = validSegments.reduce((sum, seg) => sum + seg.distance, 0);
+    
+    // Recalculate fare from valid segments
+    const usedRoutes = new Set(newBusSequence);
+    let totalFare = 0;
+    const fareDetails = [];
+    
+    usedRoutes.forEach((routeId) => {
+      const fare = this.fareMap[routeId] || 50;
+      totalFare += fare;
+      fareDetails.push({
+        route: routeId.toUpperCase(),
+        fare: fare,
+      });
+    });
+    
+    const newFare = {
+      amount: totalFare,
+      currency: 'PKR',
+      routes: Array.from(usedRoutes).map(r => r.toUpperCase()),
+      fareDetails: fareDetails,
+    };
+    
+    // Recalculate estimated time
+    const newEstimatedMinutes = this.estimateMinutes(newTotalDistance, newRouteStops.length);
+    
+    return {
+      ...route,
+      routeStops: newRouteStops,
+      numberOfStops: newRouteStops.length,
+      totalDistance: parseFloat(newTotalDistance.toFixed(2)),
+      estimatedMinutes: newEstimatedMinutes,
+      fare: newFare,
+      transferCount: newTransferCount,
+      busesUsed: newBusesUsed.map(b => b.toUpperCase()),
+      busSequence: newBusSequence.map(b => b.toUpperCase()),
+      routeSegments: validSegments,
+    };
+  }
+
   async findRouteByNames(startStopName, endStopName, maxRoutes = 6) {
     try {
       const startStop = await this.findStopByName(startStopName);
@@ -389,18 +500,20 @@ class RouteFinderService {
           console.log(`    ✓ Found ${routes.length} route(s)`);
 
           routes.forEach((route) => {
-            // Remove consecutive duplicate stops
-            const cleanedStops = this.removeDuplicateStops(route.routeStops);
+            // Clean and validate the route
+            const cleanedRoute = this.cleanAndValidateRoute(route);
             
-            // Create route key based on stop names (after removing duplicates)
-            const nameKey = cleanedStops.map((s) => s.stop_name).join('>');
+            // Skip invalid routes
+            if (!cleanedRoute) {
+              console.log(`  ⚠️ Skipping invalid route`);
+              return;
+            }
+            
+            // Create route key based on stop names (after cleaning)
+            const nameKey = cleanedRoute.routeStops.map((s) => s.stop_name).join('>');
             
             if (!seen.has(nameKey)) {
-              // Update route with cleaned stops
-              route.routeStops = cleanedStops;
-              route.numberOfStops = cleanedStops.length;
-              
-              allRoutes.push(route);
+              allRoutes.push(cleanedRoute);
               seen.add(nameKey);
             }
           });
@@ -422,25 +535,9 @@ class RouteFinderService {
       });
 
      const uniqueRoutes = Array.from(routeKeyMap.values()).map((route) => {
-        const estimatedMinutes = this.estimateMinutes(
-          route.totalDistance,
-          route.numberOfStops
-         );
-        const fare = this.calculateFare(route.routeEdges);
-        const transferInfo = this.getTransfersAndBuses(route.routeEdges, route.routeStops);
-        
-        console.log(`  📊 Route: ${route.routeStops.length} stops, ${route.totalDistance.toFixed(2)}km, ${estimatedMinutes}min, ${fare.amount} PKR, ${transferInfo.transferCount} transfers, buses: ${transferInfo.busesUsed.join(', ')}, bus sequence: ${transferInfo.busSequence.join(' → ')}`);
-        // for first route display the transfer details in console for debugging
-        if (allRoutes.indexOf(route) === 0 || allRoutes.indexOf(route) === 1) {
-          console.log(`    Transfer Details: ${JSON.stringify(transferInfo, null, 2)}`);
-        }
+        console.log(`  📊 Route: ${route.routeStops.length} stops, ${route.totalDistance.toFixed(2)}km, ${route.estimatedMinutes}min, ${route.fare.amount} PKR, ${route.transferCount} transfers, buses: ${route.busesUsed.join(', ')}, bus sequence: ${route.busSequence.join(' → ')}`);
 
-        return {
-          ...route,
-          estimatedMinutes,
-          fare,
-          ...transferInfo,
-        };
+        return route;
       });
 
       // Filter out routes with duplicate buses in sequence

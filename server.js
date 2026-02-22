@@ -7,6 +7,7 @@ const userRoutes = require('./routes/userRoutes');
 const gtfsRoutes = require('./routes/gtfsRoutes');
 const routeFinderRoutes = require('./routes/routeFinderRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const ticketRoutes  = require('./routes/ticketRoutes');
 const authenticateToken = require('./middleware/auth');
 
 const app = express();
@@ -52,6 +53,9 @@ app.use('/routes', routeFinderRoutes);
 
 // Contact form routes (public) - Handle contact form submissions
 app.use('/contact', contactRoutes);
+
+// Ticket booking routes (public create, protected /my)
+app.use('/tickets', ticketRoutes);
 
 // Error handling
 app.use((req, res) => {

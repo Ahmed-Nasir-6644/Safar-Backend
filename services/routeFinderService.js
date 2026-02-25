@@ -1,3 +1,4 @@
+const https = require('https');
 const gtfsService = require('./gtfsService');
 const {
   buildStopGraph,
@@ -34,6 +35,523 @@ class RouteFinderService {
       fr_8c: 50,
       fr_9: 50,
       fr_14: 50,
+    };
+  }
+
+  formatCoordinate(value, fieldName) {
+    const numeric = Number.parseFloat(value);
+    if (!Number.isFinite(numeric)) {
+      throw new Error(`Invalid ${fieldName} coordinate: ${value}`);
+    }
+    return String(numeric);
+  }
+
+  buildExternalRoutesUrl(startStop, endStop) {
+    const fromLat = this.formatCoordinate(startStop?.stop_lat, 'fromLat');
+    const fromLon = this.formatCoordinate(startStop?.stop_lon, 'fromLon');
+    const toLat = this.formatCoordinate(endStop?.stop_lat, 'toLat');
+    const toLon = this.formatCoordinate(endStop?.stop_lon, 'toLon');
+
+    const fromCoords = encodeURIComponent(`${fromLat},${fromLon}`);
+    const toCoords = encodeURIComponent(`${toLat},${toLon}`);
+    console.log(`https://www.safar.fyi/api/routes?fromCoords=${fromCoords}&toCoords=${toCoords}`);
+    return `https://www.safar.fyi/api/routes?fromCoords=${fromCoords}&toCoords=${toCoords}`;
+  }
+
+  fetchExternalJson(url) {
+    return new Promise((resolve, reject) => {
+      https
+        .get(url, (response) => {
+          let body = '';
+
+          response.on('data', (chunk) => {
+            body += chunk;
+          });
+
+          response.on('end', () => {
+            if (response.statusCode < 200 || response.statusCode >= 300) {
+              return reject(
+                new Error(
+                  `External API request failed (${response.statusCode}): ${body.slice(0, 300)}`
+                )
+              );
+            }
+
+            try {
+              resolve(JSON.parse(body));
+            } catch (error) {
+              reject(new Error(`Invalid JSON from external API: ${error.message}`));
+            }
+          });
+        })
+        .on('error', (error) => {
+          reject(new Error(`External API request error: ${error.message}`));
+        });
+    });
+  }
+
+  extractExternalRoutes(payload) {
+    if (Array.isArray(payload)) {
+      return payload;
+    }
+
+    if (payload && Array.isArray(payload.routes)) {
+      return payload.routes;
+    }
+
+    if (payload?.data) {
+      if (Array.isArray(payload.data)) {
+        return payload.data;
+      }
+      if (Array.isArray(payload.data.routes)) {
+        return payload.data.routes;
+      }
+      if (payload.data.routeSegments || payload.data.busSequence) {
+        return [payload.data];
+      }
+    }
+
+    if (payload && (payload.routeSegments || payload.busSequence)) {
+      return [payload];
+    }
+
+    return [];
+  }
+
+  parseDistanceMeters(value) {
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      return value;
+    }
+
+    if (typeof value !== 'string') {
+      return 0;
+    }
+
+    const numeric = Number.parseFloat(value);
+    if (!Number.isFinite(numeric)) {
+      return 0;
+    }
+
+    return value.toLowerCase().includes('km') ? numeric * 1000 : numeric;
+  }
+
+  parseDurationMinutes(value) {
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      return Math.max(0, Math.round(value));
+    }
+
+    if (typeof value !== 'string') {
+      return 0;
+    }
+
+    const numeric = Number.parseFloat(value);
+    if (!Number.isFinite(numeric)) {
+      return 0;
+    }
+
+    const lower = value.toLowerCase();
+    if (lower.includes('hour') || lower.includes('hr')) {
+      return Math.max(0, Math.round(numeric * 60));
+    }
+
+    return Math.max(0, Math.round(numeric));
+  }
+
+  parseFarePkr(value) {
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      return Math.max(0, Math.round(value));
+    }
+
+    if (typeof value !== 'string') {
+      return null;
+    }
+
+    const normalized = value.replace(/,/g, '');
+    const match = normalized.match(/(\d+(?:\.\d+)?)/);
+
+    if (!match) {
+      return null;
+    }
+
+    const numeric = Number.parseFloat(match[1]);
+    if (!Number.isFinite(numeric)) {
+      return null;
+    }
+
+    return Math.max(0, Math.round(numeric));
+  }
+
+  getExternalRouteWalkingMeters(route) {
+    if (!route || typeof route !== 'object') {
+      return Number.POSITIVE_INFINITY;
+    }
+
+    if (Number.isFinite(route.totalWalkingDistanceMeters)) {
+      return route.totalWalkingDistanceMeters;
+    }
+
+    let walkingMeters = 0;
+
+    if (Array.isArray(route.steps)) {
+      route.steps
+        .filter((step) => step?.type === 'walk')
+        .forEach((step) => {
+          walkingMeters += this.parseDistanceMeters(step?.distance);
+        });
+    }
+
+    if (Array.isArray(route.segments)) {
+      route.segments
+        .filter((segment) => segment?.type === 'walk')
+        .forEach((segment) => {
+          walkingMeters += this.parseDistanceMeters(segment?.walkingDistance);
+        });
+    }
+
+    return walkingMeters;
+  }
+
+  getExternalRouteTransfers(route) {
+    if (Number.isFinite(route?.transfers)) {
+      return route.transfers;
+    }
+
+    if (Array.isArray(route?.steps)) {
+      return Math.max(0, route.steps.filter((step) => step?.type === 'bus').length - 1);
+    }
+
+    return Number.MAX_SAFE_INTEGER;
+  }
+
+  async fetchBestExternalPayload(startStops, endStops) {
+    const evaluated = [];
+
+    for (const startStop of startStops) {
+      for (const endStop of endStops) {
+        const endpoint = this.buildExternalRoutesUrl(startStop, endStop);
+        console.log(`🌐 Trying candidate pair: ${startStop.stop_id} → ${endStop.stop_id}`);
+        const payload = await this.fetchExternalJson(endpoint);
+        const routes = this.extractExternalRoutes(payload);
+
+        if (!routes.length) {
+          continue;
+        }
+
+        const primaryRoute = routes[0];
+        const walkingMeters = this.getExternalRouteWalkingMeters(primaryRoute);
+        const transfers = this.getExternalRouteTransfers(primaryRoute);
+
+        evaluated.push({
+          startStop,
+          endStop,
+          payload,
+          walkingMeters,
+          transfers,
+        });
+      }
+    }
+
+    if (!evaluated.length) {
+      throw new Error('No route found from external API');
+    }
+
+    evaluated.sort((a, b) => {
+      if (a.walkingMeters !== b.walkingMeters) {
+        return a.walkingMeters - b.walkingMeters;
+      }
+      return a.transfers - b.transfers;
+    });
+
+    const best = evaluated[0];
+    console.log(
+      `✅ Selected candidate pair ${best.startStop.stop_id} → ${best.endStop.stop_id} (walk ${best.walkingMeters.toFixed(2)}m, transfers ${best.transfers})`
+    );
+    return best;
+  }
+
+  normalizeExternalStop(stop) {
+    const lat = Number.parseFloat(stop?.stop_lat);
+    const lon = Number.parseFloat(stop?.stop_lon);
+
+    return {
+      stop_id: stop?.stop_id || '',
+      stop_name: stop?.stop_name || '',
+      stop_lat: Number.isFinite(lat) ? lat : stop?.stop_lat,
+      stop_lon: Number.isFinite(lon) ? lon : stop?.stop_lon,
+    };
+  }
+
+  normalizeStopLookupName(value) {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/\b(metro|station|stop|terminal)\b/g, ' ')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  makeFallbackStop(stopName) {
+    const normalized = this.normalizeStopLookupName(stopName).replace(/\s+/g, '_');
+    return {
+      stop_id: normalized || 'unknown_stop',
+      stop_name: String(stopName || 'Unknown Stop').trim() || 'Unknown Stop',
+      stop_lat: null,
+      stop_lon: null,
+    };
+  }
+
+  buildStopNameIndex(graph) {
+    const index = new Map();
+    Object.values(graph || {}).forEach((stop) => {
+      const normalized = this.normalizeStopLookupName(stop?.stop_name);
+      if (!normalized) {
+        return;
+      }
+
+      if (!index.has(normalized)) {
+        index.set(normalized, this.normalizeExternalStop(stop));
+      }
+    });
+    return index;
+  }
+
+  resolveStopByName(stopName, stopNameIndex) {
+    const normalized = this.normalizeStopLookupName(stopName);
+    const matched = normalized ? stopNameIndex.get(normalized) : null;
+
+    if (matched) {
+      return matched;
+    }
+
+    return this.makeFallbackStop(stopName);
+  }
+
+  parseStationDetails(rawStationDetails) {
+    if (Array.isArray(rawStationDetails)) {
+      return rawStationDetails.map((name) => String(name));
+    }
+
+    if (typeof rawStationDetails !== 'string' || rawStationDetails.trim().length === 0) {
+      return [];
+    }
+
+    try {
+      const parsed = JSON.parse(rawStationDetails);
+      if (Array.isArray(parsed)) {
+        return parsed.map((name) => String(name));
+      }
+      return [];
+    } catch (error) {
+      console.warn('⚠️ Could not parse stationDetails JSON:', error.message);
+      return [];
+    }
+  }
+
+  getRouteIdFromStep(step) {
+    if (typeof step?.lineCode === 'string' && step.lineCode.includes(':')) {
+      const parts = step.lineCode.split(':');
+      return String(parts[parts.length - 1]).toLowerCase();
+    }
+
+    return String(step?.line || '')
+      .toLowerCase()
+      .replace(/-/g, '_')
+      .trim();
+  }
+
+  calculateSegmentDistance(stops) {
+    if (!Array.isArray(stops) || stops.length < 2) {
+      return 0;
+    }
+
+    const toRadians = (value) => (value * Math.PI) / 180;
+    const earthRadiusKm = 6371;
+    let total = 0;
+
+    for (let i = 1; i < stops.length; i++) {
+      const prev = stops[i - 1];
+      const curr = stops[i];
+      const prevLat = Number.parseFloat(prev?.stop_lat);
+      const prevLon = Number.parseFloat(prev?.stop_lon);
+      const currLat = Number.parseFloat(curr?.stop_lat);
+      const currLon = Number.parseFloat(curr?.stop_lon);
+
+      if (
+        !Number.isFinite(prevLat) ||
+        !Number.isFinite(prevLon) ||
+        !Number.isFinite(currLat) ||
+        !Number.isFinite(currLon)
+      ) {
+        continue;
+      }
+
+      const dLat = toRadians(currLat - prevLat);
+      const dLon = toRadians(currLon - prevLon);
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRadians(prevLat)) *
+          Math.cos(toRadians(currLat)) *
+          Math.sin(dLon / 2) ** 2;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      total += earthRadiusKm * c;
+    }
+
+    return parseFloat(total.toFixed(2));
+  }
+
+  normalizeExternalSegment(segment) {
+    const normalizedStops = Array.isArray(segment?.stops)
+      ? segment.stops.map((stop) => this.normalizeExternalStop(stop))
+      : [];
+
+    const parsedDistance = Number.parseFloat(segment?.distance);
+    const routeId = String(segment?.routeId || '').toLowerCase();
+    const routeName = String(segment?.routeName || routeId).toUpperCase();
+
+    return {
+      routeName,
+      routeId,
+      stops: normalizedStops,
+      stopCount: Number.parseInt(segment?.stopCount, 10) || normalizedStops.length,
+      distance: Number.isFinite(parsedDistance)
+        ? parseFloat(parsedDistance.toFixed(2))
+        : 0,
+      boardingStop:
+        segment?.boardingStop || normalizedStops[0]?.stop_name || 'Unknown',
+      alightingStop:
+        segment?.alightingStop ||
+        normalizedStops[normalizedStops.length - 1]?.stop_name ||
+        'Unknown',
+    };
+  }
+
+  normalizeExternalRoute(route, stopNameIndex) {
+    let routeSegments = Array.isArray(route?.routeSegments)
+      ? route.routeSegments.map((segment) => this.normalizeExternalSegment(segment))
+      : [];
+
+    if (routeSegments.length === 0 && Array.isArray(route?.steps)) {
+      const busSteps = route.steps.filter((step) => step?.type === 'bus');
+      routeSegments = busSteps.map((step) => {
+        const routeId = this.getRouteIdFromStep(step);
+        const routeName = String(step?.line || routeId).toUpperCase().replace(/-/g, '_');
+        const stationDetails = this.parseStationDetails(step?.stationDetails);
+        const stopNames = [step?.from, ...stationDetails, step?.to].filter(
+          (value) => typeof value === 'string' && value.trim().length > 0
+        );
+
+        const resolvedStops = this.removeDuplicateStops(
+          stopNames.map((stopName) => this.resolveStopByName(stopName, stopNameIndex))
+        );
+
+        return {
+          routeName,
+          routeId,
+          stops: resolvedStops,
+          stopCount: resolvedStops.length,
+          distance: this.calculateSegmentDistance(resolvedStops),
+          boardingStop: resolvedStops[0]?.stop_name || step?.from || 'Unknown',
+          alightingStop:
+            resolvedStops[resolvedStops.length - 1]?.stop_name || step?.to || 'Unknown',
+        };
+      });
+    }
+
+    const busesUsed = Array.isArray(route?.busesUsed)
+      ? route.busesUsed.map((bus) => String(bus).toUpperCase())
+      : [];
+
+    const busSequence =
+      Array.isArray(route?.busSequence) && route.busSequence.length > 0
+        ? route.busSequence.map((bus) => String(bus).toUpperCase())
+        : routeSegments.map((segment) => segment.routeName);
+
+    const transferCount = Number.isInteger(route?.transferCount)
+      ? Math.max(0, route.transferCount)
+      : Math.max(0, busSequence.length - 1);
+
+    const tripLegs =
+      Array.isArray(route?.tripLegs) && route.tripLegs.length > 0
+        ? route.tripLegs.map((leg) => ({
+            bus: String(leg?.bus || '').toUpperCase(),
+            edgeRange: String(leg?.edgeRange || ''),
+          }))
+        : (() => {
+            let edgeStart = 0;
+            return routeSegments.map((segment) => {
+              const edgesInSegment = Math.max(1, segment.stopCount - 1);
+              const leg = {
+                bus: segment.routeName,
+                edgeRange: `${edgeStart}-${edgeStart + edgesInSegment - 1}`,
+              };
+              edgeStart += edgesInSegment;
+              return leg;
+            });
+          })();
+
+    const totalStops = Number.parseInt(route?.stops, 10) || routeSegments.reduce(
+      (sum, segment) => sum + (Number.parseInt(segment?.stopCount, 10) || 0),
+      0
+    );
+    const durationMinutes = this.parseDurationMinutes(route?.duration);
+    const farePkr = this.parseFarePkr(route?.fare);
+    const fareText =
+      typeof route?.fare === 'string' && route.fare.trim().length > 0
+        ? route.fare
+        : farePkr !== null
+          ? `Rs. ${farePkr}`
+          : 'Rs. 0';
+
+    return {
+      duration: route?.duration || `${durationMinutes} min`,
+      durationMinutes,
+      transfers: transferCount,
+      totalStops,
+      fare: fareText,
+      farePkr,
+      transferCount,
+      busesUsed: busesUsed.length ? busesUsed : [...new Set(busSequence)],
+      busSequence,
+      routeSegments,
+      tripLegs,
+    };
+  }
+
+  async findRoutesViaExternalApi(startStop, endStop, maxRoutes = 6) {
+    const endpoint = this.buildExternalRoutesUrl(startStop, endStop);
+    console.log(`🌐 Fetching external routes: ${endpoint}`);
+
+    const payload = await this.fetchExternalJson(endpoint);
+    const graph = await this.getGraph();
+    const stopNameIndex = this.buildStopNameIndex(graph);
+    const routes = this.extractExternalRoutes(payload)
+      .map((route) => this.normalizeExternalRoute(route, stopNameIndex))
+      .filter((route) => route.routeSegments.length > 0);
+
+    if (routes.length === 0) {
+      throw new Error('No route found from external API');
+    }
+
+    const limit = Math.max(1, Number.parseInt(maxRoutes, 10) || routes.length);
+    return {
+      routes: routes.slice(0, limit),
+    };
+  }
+
+  mapExternalPayloadToRouteFormat(payload, maxRoutes = 6) {
+    const graph = this.graph || {};
+    const stopNameIndex = this.buildStopNameIndex(graph);
+    const routes = this.extractExternalRoutes(payload)
+      .map((route) => this.normalizeExternalRoute(route, stopNameIndex))
+      .filter((route) => route.routeSegments.length > 0);
+
+    if (routes.length === 0) {
+      throw new Error('No route found from external API');
+    }
+
+    const limit = Math.max(1, Number.parseInt(maxRoutes, 10) || routes.length);
+    return {
+      routes: routes.slice(0, limit),
     };
   }
 
@@ -480,113 +998,30 @@ class RouteFinderService {
       const endStop = await this.findStopByName(endStopName);
       const endCandidates = endStop.multiple ? endStop.matches : [endStop];
 
-      const limit = Math.max(1, Number.parseInt(maxRoutes, 10) || 3);
-      const allRoutes = [];
-      const seen = new Set();
-
       const graph = await this.getGraph();
+      const startResolvedCandidates = startCandidates
+        .map((candidate) => graph[candidate?.stop_id])
+        .filter(Boolean);
+      const endResolvedCandidates = endCandidates
+        .map((candidate) => graph[candidate?.stop_id])
+        .filter(Boolean);
 
-      console.log(`🔍 Searching routes between ${startCandidates.length} start and ${endCandidates.length} end candidates`);
-
-      for (const startCandidate of startCandidates) {
-        for (const endCandidate of endCandidates) {
-          console.log(`  🚦 Trying: ${startCandidate.stop_id} → ${endCandidate.stop_id}`);
-          
-          const routes = kShortestPaths(
-            graph,
-            startCandidate.stop_id,
-            endCandidate.stop_id,
-            limit
-          );
-
-          console.log(`    ✓ Found ${routes.length} route(s)`);
-
-          routes.forEach((route) => {
-            // Clean and validate the route
-            const cleanedRoute = this.cleanAndValidateRoute(route);
-            
-            // Skip invalid routes
-            if (!cleanedRoute) {
-              console.log(`  ⚠️ Skipping invalid route`);
-              return;
-            }
-            
-            // Create route key based on stop names (after cleaning)
-            const nameKey = cleanedRoute.routeStops.map((s) => s.stop_name).join('>');
-            
-            if (!seen.has(nameKey)) {
-              allRoutes.push(cleanedRoute);
-              seen.add(nameKey);
-            }
-          });
-        }
+      if (!startResolvedCandidates.length || !endResolvedCandidates.length) {
+        throw new Error('Could not resolve stop coordinates for external route API');
       }
 
-      if (allRoutes.length === 0) {
-        throw new Error('No route found between these stops');
+      if (startResolvedCandidates.length > 1 || endResolvedCandidates.length > 1) {
+        console.log(
+          `⚠️ Multiple stop variants found (start: ${startResolvedCandidates.length}, end: ${endResolvedCandidates.length}); selecting best coordinate pair by least walking`
+        );
       }
 
-      allRoutes.sort((a, b) => a.totalDistance - b.totalDistance);
-      const routeKeyMap = new Map();
-      allRoutes.forEach((route) => {
-        // Use stop names for final deduplication
-        const nameKey = route.routeStops.map((s) => s.stop_name).join('>');
-        if (!routeKeyMap.has(nameKey)) {
-          routeKeyMap.set(nameKey, route);
-        }
-      });
+      const bestCandidate = await this.fetchBestExternalPayload(
+        startResolvedCandidates,
+        endResolvedCandidates
+      );
 
-     const uniqueRoutes = Array.from(routeKeyMap.values()).map((route) => {
-        console.log(`  📊 Route: ${route.routeStops.length} stops, ${route.totalDistance.toFixed(2)}km, ${route.estimatedMinutes}min, ${route.fare.amount} PKR, ${route.transferCount} transfers, buses: ${route.busesUsed.join(', ')}, bus sequence: ${route.busSequence.join(' → ')}`);
-
-        return route;
-      });
-
-      // Filter out routes with duplicate buses in sequence
-      const validRoutes = uniqueRoutes.filter((route) => {
-        const busSequence = route.busSequence;
-        const uniqueBuses = new Set(busSequence);
-        
-        // If the set size is different from array length, there are duplicates
-        const hasDuplicates = uniqueBuses.size !== busSequence.length;
-        
-        if (hasDuplicates) {
-          console.log(`  ⚠️ Discarding route with duplicate buses: ${busSequence.join(' → ')}`);
-        }
-        
-        return !hasDuplicates; // Keep only routes without duplicates
-      });
-
-      // Deduplicate routes by bus sequence - keep only the one with least distance
-      const busSequenceMap = new Map();
-      validRoutes.forEach((route) => {
-        const sequenceKey = route.busSequence.join('→');
-        const existing = busSequenceMap.get(sequenceKey);
-        
-        if (!existing || route.totalDistance < existing.totalDistance) {
-          if (existing) {
-            console.log(`  🔄 Replacing route with same sequence (${sequenceKey}): ${existing.totalDistance.toFixed(2)}km → ${route.totalDistance.toFixed(2)}km`);
-          }
-          busSequenceMap.set(sequenceKey, route);
-        } else {
-          console.log(`  ⚠️ Discarding route with same sequence (${sequenceKey}): ${route.totalDistance.toFixed(2)}km (keeping ${existing.totalDistance.toFixed(2)}km)`);
-        }
-      });
-
-      const finalRoutes = Array.from(busSequenceMap.values());
-      finalRoutes.sort((a, b) => a.totalDistance - b.totalDistance);
-
-      return {
-        routes: finalRoutes.slice(0, limit),
-        farePolicy: {
-          currency: 'PKR',
-          fares: {
-            'Red Line': 30,
-            'Orange2 (Airport)': 90,
-            'Blue, Green, Orange, FR-3A, FR-4, FR-6, FR-7, FR-8A, FR-8C, FR-9, FR-14': 50,
-          },
-        },
-      };
+      return this.mapExternalPayloadToRouteFormat(bestCandidate.payload, maxRoutes);
     } catch (error) {
       console.error('❌ Find route by names error:', error);
       throw new Error(`Failed to find route: ${error.message}`);
@@ -605,27 +1040,17 @@ class RouteFinderService {
         throw new Error(`End stop not found: ${endStopId}`);
       }
 
-      const result = dijkstraShortestPath(graph, startStopId, endStopId);
+      const result = await this.findRoutesViaExternalApi(
+        graph[startStopId],
+        graph[endStopId],
+        1
+      );
 
-      if (!result.success) {
-        throw new Error(result.message);
+      if (!result.routes.length) {
+        throw new Error('No route found between these stops');
       }
-      
-      // Remove consecutive duplicate stops
-      const cleanedStops = this.removeDuplicateStops(result.routeStops);
-      result.routeStops = cleanedStops;
-      result.numberOfStops = cleanedStops.length;
-      
-      const transferInfo = this.getTransfersAndBuses(result.routeEdges, cleanedStops);
-      return {
-        ...result,
-        estimatedMinutes: this.estimateMinutes(
-          result.totalDistance,
-          result.numberOfStops
-        ),
-        fare: this.calculateFare(result.routeEdges),
-        ...transferInfo,
-      };
+
+      return result.routes[0];
     } catch (error) {
       console.error('❌ Route finding error:', error);
       throw new Error(`Failed to find route: ${error.message}`);

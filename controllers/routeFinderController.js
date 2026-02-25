@@ -91,9 +91,18 @@ class RouteFinderController {
       res.status(200).json(responsePayload);
     } catch (error) {
       console.error('❌ Find route by names error:', error);
+      const isApiError =
+        error.message.includes('External API') ||
+        error.message.includes('ENOTFOUND') ||
+        error.message.includes('ECONNREFUSED') ||
+        error.message.includes('ETIMEDOUT') ||
+        error.message.includes('FUNCTION_INVOCATION_TIMEOUT') ||
+        error.message.includes('504') ||
+        error.message.includes('503') ||
+        error.message.includes('502');
       res.status(400).json({
         success: false,
-        message: error.message,
+        message: isApiError ? 'Routing error' : error.message,
       });
     }
   }

@@ -29,6 +29,24 @@ INSTRUCTIONS:
 - Keep responses conversational but informative
 """
 
+
+SYSTEM_PROMPT_NLP = """
+
+Your task:
+Extract the user's intended SOURCE stop and DESTINATION stop
+from a spoken natural language sentence.
+
+STRICT RULES:
+1. Output MUST be valid JSON.
+2. Do NOT add explanations.
+
+Output format:
+{
+  "source": "<stop name>",
+  "destination": "<stop name>"
+}
+
+"""
 SYSTEM_PROMPT_VOICE = """
 You are a public transport journey summarization engine.
 
@@ -209,7 +227,72 @@ async def dictate(request: OCRRequest):
             "prediction": None, 
             "error": str(e)
         }
+    
 
+class VoiceSearchRequest(BaseModel):
+    transcript: str
+# Load stops once at startup
+with open("unique_stop_names.txt", "r", encoding="utf-8") as f:
+    stops = [line.strip() for line in f if line.strip()]
+from fuzzywuzzy import process
+
+@app.post("/voice-search")
+async def voice_search(request: VoiceSearchRequest):
+    try:
+        # 1️⃣ Call LLM to extract source/destination
+        response = client.chat.completions.create(
+            model="arcee-ai/trinity-large-preview:free",
+            temperature=0,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT_NLP},
+                {"role": "user", "content": request.transcript}
+            ]
+        )
+
+        prediction = response.choices[0].message.content.strip()
+
+        # 2️⃣ Parse prediction JSON
+        import json
+        data = json.loads(prediction)
+
+        # 3️⃣ Fuzzy match source & destination
+        source_input = data.get("source", "")
+        destination_input = data.get("destination", "")
+
+        best_source, source_score = process.extractOne(source_input, stops)
+        best_destination, dest_score = process.extractOne(destination_input, stops)
+
+        # 4️⃣ Return results
+        return {
+            "success": True,
+            "prediction": {
+                    "source": best_source,
+                    "destination": best_destination
+            },
+            "error": None
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "prediction": None,
+            "error": str(e)
+        }
+
+
+# import requests
+
+# url = "http://127.0.0.1:8000/voice-search"
+
+# payload = {
+#     "transcript": "I want to go from G6 to Metro station"
+# }
+
+# response = requests.post(url, json=payload)
+
+# print("Status Code:", response.status_code)
+# print("Response JSON:")
+# print(response.json())
 # # --- TESTING BLOCK ---
 # if __name__ == "__main__":
 #     import asyncio

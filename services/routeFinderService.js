@@ -1024,7 +1024,16 @@ class RouteFinderService {
       return this.mapExternalPayloadToRouteFormat(bestCandidate.payload, maxRoutes);
     } catch (error) {
       console.error('❌ Find route by names error:', error);
-      throw new Error(`Failed to find route: ${error.message}`);
+      const isApiError =
+        error.message.includes('External API') ||
+        error.message.includes('ENOTFOUND') ||
+        error.message.includes('ECONNREFUSED') ||
+        error.message.includes('ETIMEDOUT') ||
+        error.message.includes('FUNCTION_INVOCATION_TIMEOUT') ||
+        error.message.includes('504') ||
+        error.message.includes('503') ||
+        error.message.includes('502');
+      throw new Error(isApiError ? 'Server error. Please restart the server.' : `Failed to find route: ${error.message}`);
     }
   }
 

@@ -1,0 +1,357 @@
+stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,location_type,parent_station,stop_timezone,wheelchair_boarding
+saddar,,Saddar Metro Station,,33.5936443,73.056053,,,0,,,1
+marrirChowk,,Marrir Chowk Metro Station,,33.5995017,73.0625795,,,0,,,1
+liaquatBagh,,Liaquat Bagh Metro Station,,33.6062291,73.065699,,,0,,,1
+committeeChowk,,Committee Chowk Metro Station,,33.6131163,73.0652107,,,0,,,1
+warisKhan,,Waris Khan Metro Station,,33.6205626,73.066092,,,0,,,1
+chandaniChowk,,Chandani Chowk Metro Station,,33.6301297,73.0719579,,,0,,,1
+rehmanabad,,Rehmanabad Metro Station,,33.6362563,73.0749242,,,0,,,1
+sixthRoad,,6th Road Metro Station,,33.6433588,73.0777364,,,0,,,1
+shamsabad,,Shamsabad Metro Station,,33.6501388,73.0799013,,,0,,,1
+faizabad,,Faizabad Metro Station,,33.6617972,73.0826385,,,0,,,1
+ijPrincipal,,IJ Principal Metro Station,,33.6561634,73.0717019,,,0,,,1
+potohar,,Potohar Metro Station,,33.6605287,73.064574,,,0,,,1
+khayabanEJohar,,Khayaban-e-Johar Metro Station,,33.6694001,73.059125,,,0,,,1
+faizAhmadFaiz,,Faiz Ahmad Faiz Metro Station,,33.675756,73.0542997,,,0,,,1
+kashmirHighway,,Kashmir Highway Metro Station,,33.6840535,73.0479942,,,0,,,1
+chaman,,Chaman Metro Station,,33.6901809,73.0435413,,,0,,,1
+ibnESina,,Ibn-e-Sina Metro Station,,33.6969193,73.0393663,,,0,,,1
+kachehry,,Kachehry Metro Station,,33.7025069,73.0420554,,,0,,,1
+pims,,PIMS Metro Station,,33.705651,73.0483477,,,0,,,1
+stockExchange,,Stock Exchange Metro Station,,33.7117685,73.060332,,,0,,,1
+seventhAvenue,,7th Avenue Metro Station,,33.7180774,73.0717796,,,0,,,1
+shaheedEMillat,,Shaheed-E-Millat Metro Station,,33.7217407,73.0787775,,,0,,,1
+paradeGround,,Parade Ground Metro Station,,33.7250052,73.0847182,,,0,,,1
+secretariat,,Secretariat Metro Station,,33.7362131,73.0915904,,,0,,,1
+nha,,NHA/G-9 Metro Station,,33.6772902,73.0348232,,,0,,,1
+g10,,G-10 Metro Station,,33.6671121,73.0153848,,,0,,,1
+policeFoundation,,Police Foundation Metro Station,,33.6630205,73.0073486,,,0,,,1
+nust,,NUST/G-12 Metro Station,,33.6558428,72.9944411,,,0,,,1
+g13,,G-13 Metro Station,,33.6501591,72.9797833,,,0,,,1
+golraMorr,,Golra Morh Metro Station,,33.6419043,72.9618262,,,0,,,1
+n5,,N-5/26 No Chungi Metro Station,,33.6319637,72.9447701,,,0,,,1
+airport,,Islamabad Int. Airport Stop,,33.5559396,72.8373561,,,0,,,1
+rakhPindRanjhan,,Rakh Pind Ranjhan Stop,,33.5755811,72.8603839,,,0,,,1
+motorwayInterchange,,Motorway Interchange Stop,,33.5899702,72.8702321,,,0,,,1
+badhanaKalan,,Badhana Kalan Stop,,33.6164769,72.9138348,,,0,,,1
+bharakau,,"Jillani, Barakahu Stop",,33.7354559,73.1656173,,,0,,,1
+shahdara,,Shahdara Stop,,33.7345439,73.1593785,,,0,,,1
+malpur,,Malpur Stop,,33.728902,73.1440105,,,0,,,1
+lakeviewPark,,Lakeview Park Stop,,33.7229765,73.1360368,,,0,,,1
+foreignOffice,,Foreign Office Stop,,33.712534,73.1014702,,,0,,,1
+aabpara,,Aabpara Stop,,33.7057267,73.0879408,,,0,,,1
+cda,,CDA Stop,,33.7002627,73.0781622,,,0,,,1
+g7g8,,G7/G8 Stop,,33.6976564,73.0619225,,,0,,,1
+pims_children_hospital,,Children Hospital Stop,,33.7053652,73.0555847,,,0,,,1
+pims_gate,,PIMS Gate Stop,,33.7061483,73.0521991,,,0,,,1
+h8Shakarparia,,H-8 / Shakarparia Stop,,33.6840999,73.0727329,,,0,,,1
+i8ParadeGround,,I-8 / Parade Ground Stop,,33.6734678,73.080716,,,0,,,1
+sohan,,Sohan Stop,,33.6596256,73.0905242,,,0,,,1
+dhokeKalaKhan,,Dhoke Kala Khan Stop,,33.6497653,73.097783,,,0,,,1
+iqbalTown,,Iqbal Town Stop,,33.6458237,73.1008445,,,0,,,1
+kuriRoad,,Kuri Road Stop,,33.6421623,73.1035328,,,0,,,1
+ziaMasjid,,Zia Masjid Stop,,33.6366299,73.1076815,,,0,,,1
+khannaPul,,Khanna Pul Stop,,33.6259023,73.115628,,,0,,,1
+fazaia,,Fazaia Stop,,33.6209476,73.1193772,,,0,,,1
+gangal,,Gangal Stop,,33.6124425,73.1260661,,,0,,,1
+koralChowk,,Koral Chowk Stop,,33.6032251,73.1329987,,,0,,,1
+gulberg,,Gulberg Stop,,33.5977253,73.1373495,,,0,,,1
+i8Markaz,,I-8 Markaz Stop,,33.6658611,73.0743614,,,0,,,1
+mciModelSchool,,MCI Model School Stop,,33.6595147,73.0609969,,,0,,,1
+cdaComplaintCenter,,CDA Complaint Center Stop,,33.6572377,73.0565538,,,0,,,1
+ogtiStop,,OGTI Stop,,33.6553545,73.0528758,,,0,,,1
+suiGasStop,,Sui Gas Stop,,33.6532425,73.0489456,,,0,,,1
+ptclI10,,PTCL I-10 Stop,,33.6491882,73.0412338,,,0,,,1
+iescoI10Markaz,,IESCO I-10 Markaz Stop,,33.6476327,73.0382272,,,0,,,1
+korangRoad,,Korang Road Stop,,33.6443595,73.0319801,,,0,,,1
+mandiMorh,,Mandi Morh Stop,,33.6345773,73.0315952,,,0,,,1
+metroCashAndCarry,,Metro Cash and Carry Stop,,33.6401094,73.0245706,,,0,,,1
+islamabadMedicalComplex,,Islamabad Medical Complex Stop,,33.6485062,73.0171616,,,0,,,1
+bahriaUniversityH11,,Bahria University H-11 Stop,,33.6551828,73.0195337,,,0,,,1
+islamicInternationalUniversity,,Islamic International University Stop,,33.6579189,73.0175125,,,0,,,1
+fastUniversity,,FAST University Stop,,33.6567402,73.0148852,,,0,,,1
+policeLines,,Police Lines Stop,,33.6551816,73.0106915,,,0,,,1
+saidpurVillage,,Saidpur Village Stop,,33.7399609,73.067073,,,0,,,1
+f6_3,,F-6/3,,33.7357681,73.0696651,,,0,,,1
+oldZoo,,Old Zoo Stop,,33.7323838,73.0631246,,,0,,,1
+kohsarRoad,,Kohsar Road Stop,,33.7268035,73.0524867,,,0,,,1
+parveenShakirRoad,,Parveen Shakir Road Stop,,33.7227397,73.0447267,,,0,,,1
+faisalMasjid,,Faisal Masjid Stop,,33.7274014,73.0398081,,,0,,,1
+navalComplex,,Naval Complex Stop,,33.7188664,73.0374431,,,0,,,1
+bahriaUniversity,,Bahria University Stop,,33.7155913,73.031213,,,0,,,1
+shaheenChowk,,Shaheen Chowk Stop,,33.7122179,73.026621,,,0,,,1
+raviGateF9,,F-9 Park Ravi Gate Stop,,33.7097419,73.0284952,,,0,,,1
+f8Markaz,,F-8 Markaz Stop,,33.711734,73.0371628,,,0,,,1
+f8Katchery,,F-8 Katchery Stop,,33.7088077,73.0393485,,,0,,,1
+bariImam,,Bari Imam Stop,,33.7435554,73.109445,,,0,,,1
+muslimColony,,Muslim Colony Stop,,33.7382182,73.108218,,,0,,,1
+aiwanESadarColony,,Aiwan e Sadar Colony Stop,,33.7337182,73.1084934,,,0,,,1
+diplomaticEnclaveGate4,,Diplomatic Enclave Gate 4 Stop,,33.7310188,73.1105499,,,0,,,1
+secretariatePoliceStation,,Secretariate Police Station Stop,,33.7275344,73.1082894,,,0,,,1
+nationalLibrary,,National Library Stop,,33.7246072,73.102706,,,0,,,1
+radioPakistan,,Radio Pakistan Stop,,33.7226287,73.1004565,,,0,,,1
+ministryOfForeignAffairs,,Ministry of Foreign Affairs Stop,,33.718352,73.1037311,,,0,,,1
+sukhChaynPark,,Sukh Chayn Park Stop,,33.7136071,73.1002971,,,0,,,1
+lodgesPark,,Lodges Park Stop,,33.7160488,73.0984699,,,0,,,1
+nadraChowk,,NADRA Chowk Stop,,33.7202353,73.0952968,,,0,,,1
+icbCollege,,ICB College Stop,,33.7181181,73.0905731,,,0,,,1
+metropolitanCorporation,,Metropolitan Corporation Stop,,33.715945,73.0873495,,,0,,,1
+youthHostel,,Youth Hostel Stop,,33.7098963,73.0918373,,,0,,,1
+abparaMarket,,Abpara Market Stop,,33.7102876,73.0883173,,,0,,,1
+melodyMarket,,Melody Market Stop,,33.7147241,73.0849502,,,0,,,1
+g61,,"G-6/1,2 Stop",,33.7129049,73.0807878,,,0,,,1
+iqbalHall,,Iqbal Hall Stop,,33.7092677,73.0749385,,,0,,,1
+pullyStop,,Pully Stop,,33.7069321,73.0704668,,,0,,,1
+sitaraMarket,,Sitara Market Stop,,33.7060646,73.0667981,,,0,,,1
+salaiCentre,,Salai Centre Stop,,33.7027395,73.066402,,,0,,,1
+bankColony,,Bank Colony Stop,,33.7003844,73.0619449,,,0,,,1
+rescue15,,Rescue 15 Stop,,33.6998374,73.0598123,,,0,,,1
+qau,,Quaid-e-Azam University Stop,,33.7450283,73.1398105,,,0,,,1
+babulQuaid,,Babul Quaid Stop,,33.7449966,73.1326729,,,0,,,1
+cTypeQuaidEAzamColony,,C-Type Quaid-e-Azam Colony Stop,,33.7448369,73.1249584,,,0,,,1
+dTypeQuaidEAzamColony,,D-Type Quaid-e-Azam Colony Stop,,33.7447221,73.120659,,,0,,,1
+communityHealthCentre,,Community Health Centre Stop,,33.7445801,73.1173419,,,0,,,1
+muhallahNooriBagh,,Muhallah Noori Bagh Stop,,33.7444219,73.1130878,,,0,,,1
+tipuMarket,,Tipu Market Stop,,33.7011171,73.0433941,,,0,,,1
+g94Park,,G-9/4 Park Stop,,33.6890295,73.0370618,,,0,,,1
+margallaGroundG9,,Margalla Ground G-9 Stop,,33.6847833,73.0345901,,,0,,,1
+g9Markaz,,G-9 Markaz Stop,,33.6898681,73.0302745,,,0,,,1
+ibnESinaRoadG9,,Ibn-e-Sina Road G-9 Stop,,33.6977826,73.0362464,,,0,,,1
+f9KhyberGate,,F-9 Park Khyber Gate Stop,,33.7101905,73.0213784,,,0,,,1
+pafHospital,,PAF Hospital Stop,,33.7077932,73.0168326,,,0,,,1
+pakistanGateDci,,Pakistan Gate DCI Stop,,33.703787,73.0092361,,,0,,,1
+maroofInternationalHospital,,Maroof International Hospital Stop,,33.6978715,73.0124255,,,0,,,1
+f10Markaz,,F-10 Markaz Stop,,33.6940732,73.0122906,,,0,,,1
+imcbF104,,IMCB F-10/4 Stop,,33.6908244,73.0060487,,,0,,,1
+f10f11Greenbelt,,F-10/ F-11 Greenbelt Stop,,33.6867382,72.9969564,,,0,,,1
+majorRoadStop,,Major Road Stop,,33.6844287,72.9917639,,,0,,,1
+f11Markaz,,F-11 Markaz Stop,,33.6825768,72.9889853,,,0,,,1
+opf,,OPF Stop,,33.6865898,72.9839249,,,0,,,1
+golraShareefF11,,Golra Sharif F-11 Stop,,33.6893956,72.9818364,,,0,,,1
+golraShareefE11,,Golra Sharif Darbar Stop,,33.6879504,72.9760622,,,0,,,1
+noriHospital,,NORI Hospital Stop,,33.6984547,73.053514,,,0,,,1
+dentalHospital,,Dental Hospital Stop,,33.6996484,73.048884,,,0,,,1
+g8Markaz,,G-8 Markaz Stop,,33.6989306,73.0474312,,,0,,,1
+developmentPark,,Development Park Stop,,33.6954393,73.0478314,,,0,,,1
+karachiCompany,,Karachi Company Stop,,33.68868,73.0346444,,,0,,,1
+policeFlats,,Police Flats Stop,,33.6842814,73.0251417,,,0,,,1
+collegeMorh,,College Morh Stop,,33.6811736,73.0190493,,,0,,,1
+g10Markaz,,G-10 Markaz Stop,,33.6771506,73.0154211,,,0,,,1
+phaFlats,,PHA Flats Stop,,33.675495,73.0125534,,,0,,,1
+tankiStop,,Tanki Stop,,33.674178,73.0100168,,,0,,,1
+greenbeltG10G11,,Greenbelt G-10/G-11 Stop,,33.6728327,73.0074547,,,0,,,1
+instituteOfModernStudies,,Institute of Modern Studies Stop,,33.6717601,73.0028906,,,0,,,1
+g11Markaz,,G-11 Markaz Stop,,33.6696951,72.9981643,,,0,,,1
+mehrabad,,Mehrabad Stop,,33.6663282,72.9898202,,,0,,,1
+districtCourt,,District Court Stop,,33.6592671,72.9972424,,,0,,,1
+akBrohiRoad,,A. K. Brohi Road Stop,,33.6623178,73.0024146,,,0,,,1
+tramriChowk,,Tramri Chowk Stop,,33.6447853,73.1638663,,,0,,,1
+tammaStop,,Tamma Stop,,33.6484356,73.1621404,,,0,,,1
+comsatsUniversity,,COMSATS University Stop,,33.6531625,73.1576092,,,0,,,1
+hostelCity,,Hostel City Stop,,33.6571943,73.1538689,,,0,,,1
+gulshanAlhuda,,Gulshan Alhuda Stop,,33.6587897,73.1537427,,,0,,,1
+chattaBakhtawar,,Chatta Bakhtawar Stop,,33.6642002,73.1527488,,,0,,,1
+greenAvenue,,Green Avenue Stop,,33.6673058,73.1501416,,,0,,,1
+parkViewKuriRoad,,Park View (Kuri Road) Stop,,33.6741388,73.1443678,,,0,,,1
+shahzadTown,,Shahzad Town Stop,,33.6765639,73.1423405,,,0,,,1
+nihAllergyCenter,,NIH Allergy Center Stop,,33.6851197,73.135109,,,0,,,1
+narcColony,,NARC Colony Stop,,33.6875288,73.1309279,,,0,,,1
+rawalDamColony,,Rawal Dam Colony Stop,,33.6881947,73.1211485,,,0,,,1
+schoolBoardStop,,School Board Stop,,33.689002,73.116265,,,0,,,1
+rawalTown,,Rawal Town Stop,,33.6888638,73.1128335,,,0,,,1
+rawalChowk,,Rawal Chowk Stop,,33.6925938,73.1104196,,,0,,,1
+kashmirChowk,,Kashmir Chowk Stop,,33.7075017,73.1063113,,,0,,,1
+zeroPakMonument,,Zero Point (Pak Monument) Stop,,33.69597,73.0690285,,,0,,,1
+nilore,,Nilore Stop,,33.6534563,73.2432415,,,0,,,1
+azizMarket,,Aziz Market Stop,,33.6535492,73.238843,,,0,,,1
+malaal,,Malaal Morh Stop,,33.6515323,73.2339274,,,0,,,1
+imcgThanda,,IMCG Thanda Pani Stop,,33.6504827,73.2256665,,,0,,,1
+thandaPani,,Thanda Pani Stop,,33.6477198,73.2203308,,,0,,,1
+shaheenTown,,Shaheen Town Stop,,33.6460681,73.2154136,,,0,,,1
+arsalanTown,,Arslan Town Stop,,33.6446217,73.2118851,,,0,,,1
+jhangSayedanFr8b,,Jhang Sayedan Stop,,33.6427058,73.207299,,,0,,,1
+sultana,,Sultana Foundation Stop,,33.6430874,73.2031105,,,0,,,1
+farash,,Farash Town Stop,,33.6433645,73.1993724,,,0,,,1
+punjgran,,Punjgran Stop,,33.6443708,73.1940071,,,0,,,1
+khaula,,Khaula Shaheed Model College Stop,,33.6449506,73.1890722,,,0,,,1
+aliPur,,Ali Pur Bank Stop,,33.6453738,73.180701,,,0,,,1
+hbs,,HBS General Hospital Stop,,33.6451807,73.1724478,,,0,,,1
+hbsCollege,,HBS Medical and Dental College Stop,,33.6428058,73.1597068,,,0,,,1
+tarlaiSchool,,Tarlai Kalan School Stop,,33.6413512,73.1568797,,,0,,,1
+dakKhana,,Dak Khana Stop,,33.6392472,73.1533829,,,0,,,1
+poTarlai,,Post Office Tarlai Stop,,33.6396687,73.1500211,,,0,,,1
+tarlai,,Tarlai Farms Stop,,33.6376407,73.1431564,,,0,,,1
+ghauriGardens,,Ghauri Gardens Stop,,33.6350127,73.1363654,,,0,,,1
+burma,,Burma Town Stop,,33.6336522,73.1324935,,,0,,,1
+sanam,,Sanam Chowk Stop,,33.6327462,73.1267335,,,0,,,1
+rawalGeneral,,Rawal General Hospital Stop,,33.6320858,73.1228161,,,0,,,1
+gardenAvenue,,Garden Avenue Stop,,33.6853014,73.1065224,,,0,,,1
+margallaTown,,Margalla Town Stop,,33.6814565,73.1016052,,,0,,,1
+itpCentre,,ITP Centre Stop,,33.6717877,73.0929128,,,0,,,1
+faizabadInterchange,,Faizabad Interchange Stop,,33.6668035,73.0868644,,,0,,,1
+pindoraChungi,,Pindora Chungi Stop,,33.6517287,73.0639992,,,0,,,1
+katarianChungi,,Katarian Chungi Stop,,33.6486467,73.0579997,,,0,,,1
+katarianPull,,Katarian Pull Stop,,33.6458721,73.0524261,,,0,,,1
+cdaStop,,"CDA Stop, I10 Stop",,33.6413134,73.0441755,,,0,,,1
+pullyStopI10,,Pully Stop I-10 Stop,,33.6378884,73.0376501,,,0,,,1
+faujiColony,,Fauji Colony Stop,,33.6325273,73.0274253,,,0,,,1
+carriageFactory,,Carriage Factory Stop,,33.6299679,73.0225776,,,0,,,1
+westridge,,Westridge Stop,,33.626351,73.0157056,,,0,,,1
+ctti,,CTTI Stop,,33.623618,73.0104973,,,0,,,1
+socialSecurityHospital,,Social Security Hospital Stop,,33.6198022,73.0031822,,,0,,,1
+britishHomes,,British Homes Stop,,33.6182627,73.0002113,,,0,,,1
+pirWadahiMor,,Pir Wadahi Morh Stop,,33.61452,72.99188,,,0,,,1
+kohinoorMillColony,,Kohinoor Mill Colony Stop,,33.6165601,72.9868175,,,0,,,1
+kohinoorMill,,Kohinoor Mill Stop,,33.6190254,72.9808592,,,0,,,1
+golraMorhChowk,,Golra Morh Chowk Stop,,33.6246158,72.9707914,,,0,,,1
+fgcF11,,Federal Government College F-11 Stop,,33.6790448,72.9959733,,,0,,,1
+npfSocietyGate,,NPF Society Gate Stop,,33.7011486,72.9852379,,,0,,,1
+multyGate,,Multi Gate Stop,,33.7049679,72.9823732,,,0,,,1
+islamabadInternationalHospital,,Islamabad International Hospital (E-11/2) Stop,,33.7024034,72.9674196,,,0,,,1
+d12ServiceRoad,,D-12 Service Road Stop,,33.700529,72.9609879,,,0,,,1
+iescoD12,,IESCO D-12 Stop,,33.6972169,72.9533507,,,0,,,1
+d12Markaz,,D-12 Markaz Stop,,33.702715,72.9491956,,,0,,,1
+shahAllahDitta,,Shah Allah Ditta Stop,,33.7057862,72.9294483,,,0,,,1
+sangjani,,Sangjani Stop,,33.6770386,72.8510981,,,0,,,1
+b17Gate1,,B-17 Gate No. 1 Stop,,33.6870611,72.8402213,,,0,,,1
+b17Gate2,,B-17 Gate No. 2 Stop,,33.6944953,72.8348704,,,0,,,1
+taxillaBypass,,Taxilla Bypass Stop,,33.7118874,72.8130774,,,0,,,1
+wahdatColony,,Wahdat Colony Stop,,33.7254514,72.8050587,,,0,,,1
+timberMarket,,Timber Market Stop,,33.7307774,72.8043387,,,0,,,1
+taxillaHighwayStop,,Taxilla Highway Stop,,33.7370309,72.7987338,,,0,,,1
+imcgI14,,IMCG I-14 Stop,,33.6214813,72.9707333,,,0,,,1
+riphahIntUniversity,,Riphah Int University Stop,,33.6170597,72.9697835,,,0,,,1
+mainRoadSt32Chowk,,Main Road - St 32 Chowk Stop,,33.6113835,72.9701929,,,0,,,1
+mianChowk,,Mian Chowk Stop,,33.6108418,72.965404,,,0,,,1
+shaheedChowkI14,,Shaheed Chowk I-14 Stop,,33.6066196,72.9606992,,,0,,,1
+ranaChowk,,Rana Chowk Stop,,33.5978319,72.9400854,,,0,,,1
+phaFlatsFr11,,PHA Flats Stop,,33.5950309,72.9348328,,,0,,,1
+noon,,Noon I-16 Stop,,33.5900922,72.9255156,,,0,,,1
+universityOfWah,,University of Wah Stop,,33.7410247,72.7884541,,,0,,,1
+wahBarrier2,,Wah Barrier 2 Stop,,33.746624,72.771194,,,0,,,1
+gulshanEAnwar,,Gulshan-e-Anwar Stop,,33.7486422,72.7675681,,,0,,,1
+jinnahColony,,Jinnah Colony Stop,,33.7518253,72.7619905,,,0,,,1
+newCityPhase1,,New City Phase 1 Stop,,33.7543861,72.7564669,,,0,,,1
+losarSharfo,,Losar Sharfo Stop,,33.7550803,72.7498353,,,0,,,1
+newCityPhase2,,New City Phase 2 Stop,,33.7560626,72.7422573,,,0,,,1
+bahtarMorh,,Bahtar Morh Stop,,33.760017,72.7330403,,,0,,,1
+wahModelTownPhase1,,Wah Model Town Phase 1 Stop,,33.7613876,72.7300059,,,0,,,1
+wahModelTownPhase2,,Wah Model Town Phase 2 Stop,,33.7671152,72.7228529,,,0,,,1
+swedishCollege,,Swedish College Stop,,33.7712239,72.7210658,,,0,,,1
+malakandStop,,Malakand Stop,,33.776509,72.7190458,,,0,,,1
+basti,,Basti Stop,,33.7819463,72.7184492,,,0,,,1
+sabriGali,,Sabri Gali Stop,,33.7886869,72.7201401,,,0,,,1
+wahBarrier3,,Wah Barrier 3 Stop,,33.7921825,72.7194441,,,0,,,1
+ahmadNagar,,Ahmad Nagar Stop,,33.7940141,72.7182152,,,0,,,1
+shahWaliColonyRoad,,Shah Wali Colony Road Stop,,33.7972613,72.7128568,,,0,,,1
+cementFactoryRoad,,Cement Factory Road Stop,,33.8060347,72.7004949,,,0,,,1
+dhokDhollian,,Dhok Dhollian Stop,,33.8101077,72.6948507,,,0,,,1
+wapdaColony,,WAPDA Colony Stop,,33.813454,72.6902849,,,0,,,1
+hassanAbdal,,Hassan Abdal Stop,,33.8164996,72.6863771,,,0,,,1
+tipuSultanChowk,,Tipu Sultan Chowk Stop,,33.8207797,72.6798225,,,0,,,1
+topCity,,Top City Stop,,33.5846663,72.8614001,,,0,,,1
+dhuma,,Dhuma Stop,,33.5985167,72.8442206,,,0,,,1
+pechs,,PECHS Stop,,33.5960971,72.8334017,,,0,,,1
+mohriPatak,,Mohri Patak Stop,,33.5953442,72.8232753,,,0,,,1
+dhokeMiskeen,,Dhoke Miskeen Stop,,33.596227,72.8153447,,,0,,,1
+gracelandHousingSociety,,Graceland Housing Society Stop,,33.5977221,72.7858828,,,0,,,1
+mangial,,Mangial Stop,,33.599399,72.781226,,,0,,,1
+doiyan,,Doiyan Stop,,33.598896,72.7702848,,,0,,,1
+qutbal,,Qutbal Stop,,33.5986692,72.7595974,,,0,,,1
+banguChowk,,Bangu Chowk Stop,,33.598245,72.750035,,,0,,,1
+hattar,,Hattar Stop,,33.595284,72.725881,,,0,,,1
+hattarChoki,,Hattar Choki Stop,,33.5942086,72.6993989,,,0,,,1
+garhiHasuKhan,,Garhi Hasu Khan Stop,,33.5899982,72.6855373,,,0,,,1
+theAveneu03,,The Aveneu 03 Stop,,33.590218,72.666763,,,0,,,1
+akramCity,,Akram City Stop,,33.580677,72.656826,,,0,,,1
+civilCityRoad,,Civil City Road Stop,,33.5748857,72.6500302,,,0,,,1
+fatehJang,,Fateh Jang Stop,,33.5700948,72.6474806,,,0,,,1
+satraMeel,,Satra Meel Stop,,33.7635534,73.2193527,,,0,,,1
+alwadiColony,,Alwadi Colony Stop,,33.7620734,73.2186976,,,0,,,1
+punjabCollege,,Punjab College Stop,,33.7604866,73.2172209,,,0,,,1
+dhokBadam,,Dhok Badam Stop,,33.7587617,73.2154584,,,0,,,1
+phulgran,,Phulgran Stop,,33.7575898,73.212779,,,0,,,1
+akbarNiazi,,Akbar Niazi Stop,,33.7562992,73.2096774,,,0,,,1
+imtiazMart,,Imtiaz Mart Stop,,33.7476513,73.1931903,,,0,,,1
+bheraPul,,Bhera Pul Stop,,33.7449987,73.1890995,,,0,,,1
+ghugi,,Ghugi Stop,,33.7430308,73.1850729,,,0,,,1
+athalChowk,,Athal Chowk Stop,,33.7389887,73.1781742,,,0,,,1
+colAmmanullahRoad,,Col. Ammanullah Road Stop,,33.7372763,73.1751329,,,0,,,1
+paghStop,,Pagh Stop,,33.5856446,73.1464227,,,0,,,1
+pwdHousingSociety,,PWD Housing society Stop,,33.5763915,73.1533772,,,0,,,1
+sohanGardenEBlock,,Soan garden E block Stop,,33.5680895,73.1596328,,,0,,,1
+sohanGardenGBlock,,Soan garden G block Stop,,33.5615791,73.1644677,,,0,,,1
+sohanGardenHBlock,,Soan garden H block Stop,,33.5571957,73.1677691,,,0,,,1
+riverGarden,,River Garden Stop,,33.5504876,73.1728737,,,0,,,1
+kaakPul,,Kaak Pul Stop,,33.5431956,73.1781213,,,0,,,1
+dhaGate8,,DHA Gate 8 Stop,,33.5388587,73.1807901,,,0,,,1
+dhaGate7,,DHA Gate 7 Stop,,33.5332727,73.1813268,,,0,,,1
+suparco,,Suparco Stop,,33.5186967,73.1793485,,,0,,,1
+tChowk,,T Chowk Stop,,33.514729,73.178805,,,0,,,1
+aariSyedan,,Aari Syedan Stop,,33.5730144,73.280849,,,0,,,1
+heer,,Her Do Gher Stop,,33.5625384,73.2412784,,,0,,,1
+sihala,,Sihala Stop,,33.5512688,73.2056301,,,0,,,1
+korangTown,,Korang Town Stop,,33.5829476,73.1484366,,,0,,,1
+pakistanTown,,Pakistan Town Stop,,33.5777249,73.1523738,,,0,,,1
+pwdBarrier,,PWD Barrier Stop,,33.5746971,73.1521639,,,0,,,1
+dDBlock,,DD Block Stop,,33.5731671,73.1483428,,,0,,,1
+londonBakers,,London Bakers Stop,,33.571263,73.1446824,,,0,,,1
+baraPlaza,,Bara Plaza Stop,,33.5671604,73.1350895,,,0,,,1
+doctorTown,,Doctor Town Stop,,33.5661085,73.1310747,,,0,,,1
+mediaTown,,Media Town Stop,,33.5643031,73.1243715,,,0,,,1
+gulzarEQuaid,,Gulzar e Quaid Stop,,33.601774,73.125334,,,0,,,1
+mazenSchoolQuaidCampus,,MAZEN School Quaid Campus Stop,,33.6048494,73.1193127,,,0,,,1
+shahKhalidColony,,Shah Khalid Colony Stop,,33.606337,73.116039,,,0,,,1
+nastp,,NASTP Stop,,33.606356,73.101079,,,0,,,1
+chaklalaStop,,Chaklala Stop,,33.6012161,73.0938353,,,0,,,1
+umarBaigChowk,,Umar Baig Chowk Stop,,33.600606,73.088502,,,0,,,1
+rahimabad,,Rahimabad Stop,,33.5990583,73.0799517,,,0,,,1
+ammarChowk,,Ammar Chowk Stop,,33.592904,73.078725,,,0,,,1
+jhandaChichi,,Jhanda Chichi Stop,,33.5889522,73.0761139,,,0,,,1
+jinnahPark,,Jinnah Park Stop,,33.5863875,73.0723902,,,0,,,1
+katcheryRwp,,Katchery Stop,,33.5843484,73.0661126,,,0,,,1
+fatimaJinnahUniversity,,Fatima Jinnah University Stop,,33.5861402,73.0662098,,,0,,,1
+punjabHouse,,Punjab House Stop,,33.590488,73.065716,,,0,,,1
+marrirHassanStop,,Marrir Hassan Stop,,33.5968898,73.0646729,,,0,,,1
+gawalmandi,,Gawalmandi Stop,,33.609033,73.060076,,,0,,,1
+fawaraChowk,,Fawara Chowk Stop,,33.6127917,73.0551833,,,0,,,1
+sarwarPark,,Sarwar Park Stop,,33.588922,73.058508,,,0,,,1
+adialaPark,,Adiala Park Stop,,33.5860367,73.0631991,,,0,,,1
+csd,,CSD Stop,,33.584904,73.055667,,,0,,,1
+cmhGateNo2,,CMH Gate No 2 Stop,,33.5801993,73.0513694,,,0,,,1
+dheriHasanabad1,,Dheri Hasanabad-1 Stop,,33.575445,73.05425,,,0,,,1
+dheriHasanabad2,,Dheri Hasanabad-2 Stop,,33.574086,73.057143,,,0,,,1
+mahfoozShaheedPark,,Mahfooz Shaheed Park Stop,,33.5745705,73.0615063,,,0,,,1
+ziaUlHaqPark,,Zia Ul Haq Park Stop,,33.571079,73.064744,,,0,,,1
+askariVii,,Askari VII Stop,,33.5606815,73.0635669,,,0,,,1
+khawjaCorporation,,Khawja Corporation Stop,,33.558309,73.062091,,,0,,,1
+dharmaSyedan,,Dharma Syedan Stop,,33.5537818,73.0580989,,,0,,,1
+aliTown,,Ali Town Stop,,33.5513672,73.0563926,,,0,,,1
+noorHospital,,Noor Hospital Stop,,33.547991,73.055204,,,0,,,1
+kamranMarket,,Kamran Market Stop,,33.5987058,73.056029,,,0,,,1
+gpoChowk,,GPO Chowk Stop,,33.595609,73.051024,,,0,,,1
+mh,,MH Stop,,33.596929,73.046052,,,0,,,1
+roomiPark,,Roomi Park Stop,,33.598725,73.042467,,,0,,,1
+qasimMarket,,Qasim Market Stop,,33.6015762,73.0336989,,,0,,,1
+radioPakistanRwp,,Radio Pakistan Stop,,33.603092,73.0284479,,,0,,,1
+laneNo4,,Lane No 4 Stop,,33.604557,73.0237425,,,0,,,1
+chairingCross,,Chairing Cross Stop,,33.6055093,73.0203512,,,0,,,1
+churChowk,,Chur Chowk Stop,,33.6082869,73.0119166,,,0,,,1
+churHarpal,,Chur Harpal Stop,,33.610018,73.006429,,,0,,,1
+modelBazar,,Model Bazar Stop,,33.6124194,73.0004466,,,0,,,1
+kainatBusTerminal,,Kainat Bus Terminal Stop,,33.6135529,72.9972851,,,0,,,1
+chistianabad,,Chistianabad Stop,,33.6223405,72.9755557,,,0,,,1
+nustEme,,Nust EME Stop,,33.6250412,72.9618441,,,0,,,1
+daewooBusTerminal,,Daewoo Bus Terminal Stop,,33.62378,72.95374,,,0,,,1
+jhangiSyedan,,Jhangi Syedan Stop,,33.62631,72.9469,,,0,,,1
+motorwayBusTerminal,,Motorway Bus Terminal Stop,,33.6277244,72.9446627,,,0,,,1
+motorwayChowk26No,,Motorway Chowk (26 No) Stop,,33.63303,72.93497,,,0,,,1
+saddarStopRwp,,Saddar Stop,,33.592786,73.054722,,,0,,,1
+askari11,,Askari 11 Stop,,33.5982054,73.0313026,,,0,,,1
+faridFamilyHospital,,Farid Family Hospital Stop,,33.5978685,73.023567,,,0,,,1
+afzalTown,,Afzal Town Lane No 4 Stop,,33.5982256,73.020389,,,0,,,1
+malikAzam,,Malik Azam Street Stop,,33.5989726,73.0160691,,,0,,,1
+hakeemPlaza,,Hakeem Plaza Street No 4 Stop,,33.6003486,73.0082717,,,0,,,1
+misriyalChowk,,Misriyal Chowk Stop,,33.6008546,72.9997988,,,0,,,1
+qabristanChowk,,Qabristan Chowk Stop,,33.6009921,72.9958871,,,0,,,1
+bhatta,,Bhatta Chowk Stop,,33.6020133,72.9800085,,,0,,,1

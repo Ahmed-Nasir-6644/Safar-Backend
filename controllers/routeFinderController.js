@@ -44,22 +44,14 @@ class RouteFinderController {
       }
 
       const route = await routeFinderService.findRoute(startStopId, endStopId);
-
-      await routeFinderService.saveRouteSearchHistory({
-        userId,
-        startingPoint: route?.routeStops?.[0]?.stop_name || startStopId,
-        destination:
-          route?.routeStops?.[route.routeStops.length - 1]?.stop_name || endStopId,
-        startStopId,
-        endStopId,
-        searchType: 'by-id',
-      });
-
-      res.status(200).json({
+      const responsePayload = {
         success: true,
         message: 'Route found successfully',
         data: route,
-      });
+      };
+      console.log('📤 Sending /routes/find response to frontend:', JSON.stringify(responsePayload, null, 2));
+
+      res.status(200).json(responsePayload);
     } catch (error) {
       console.error('❌ Find route error:', error);
       res.status(400).json({
@@ -89,19 +81,14 @@ class RouteFinderController {
         endStopName,
         maxRoutes
       );
-
-      await routeFinderService.saveRouteSearchHistory({
-        userId,
-        startingPoint: startStopName,
-        destination: endStopName,
-        searchType: 'by-name',
-      });
-
-      res.status(200).json({
+      const responsePayload = {
         success: true,
         message: 'Routes found successfully',
         data: result,
-      });
+      };
+      console.log('📤 Sending /routes/find/by-name response to frontend:', JSON.stringify(responsePayload, null, 2));
+
+      res.status(200).json(responsePayload);
     } catch (error) {
       console.error('❌ Find route by names error:', error);
       res.status(400).json({
@@ -263,6 +250,7 @@ class RouteFinderController {
     try {
       console.log('📍 Fetching all stops...');
       const stops = await routeFinderService.getAllStops();
+      // console.log('📋 Sending all stops to frontend:', JSON.stringify(stops, null, 2));
 
       res.status(200).json({
         success: true,
@@ -293,6 +281,7 @@ class RouteFinderController {
       }
 
       const stops = await routeFinderService.searchStops(query);
+      console.log(`📋 Sending searched stops to frontend for query "${query}":`, JSON.stringify(stops, null, 2));
 
       res.status(200).json({
         success: true,

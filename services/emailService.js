@@ -5,11 +5,11 @@ class EmailService {
     // Create reusable transporter
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: process.env.SMTP_PORT || 587,
-      secure: false, // true for 465, false for other ports
+      port: Number(process.env.SMTP_PORT) || 587,
+      secure: Number(process.env.SMTP_PORT) === 465,
       auth: {
-        user: 'aanish.waseem113@gmail.com',
-        pass: 'pass',
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
     });
   }
@@ -124,8 +124,8 @@ Reply directly to this email to respond to ${fullName}.
     // Mail options - Send from SMTP_USER to SMTP_USER itself
     const mailOptions = {
       from: `"MetroMate Contact Form" <${process.env.SMTP_USER}>`,
-      to: 'aanish.waseem113@gmail.com', // Send to the same email address
-      replyTo: emailAddress, // Keep reply-to as user's email for easy responses
+      to: process.env.SUPPORT_EMAIL,
+      replyTo: emailAddress,
       subject: `Suggestion/Message from ${fullName}`,
       text: textContent,
       html: htmlContent,

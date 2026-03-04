@@ -1,9 +1,12 @@
-from fastapi import FastAPI
+import asyncio
+import tempfile
+from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
 from openai import OpenAI
 import os
 import json
 from fastapi.middleware.cors import CORSMiddleware # 1. ADD THIS IMPORT
+from faster_whisper import WhisperModel
 # start using: uvicorn ai_service:app --reload --port 8000
 SYSTEM_PROMPT = """
 You are a helpful customer service assistant for MetroMate, a public transportation route finding and management system. 
@@ -142,7 +145,7 @@ app.add_middleware(
     allow_methods=["*"], # Allows POST, GET, OPTIONS, etc.
     allow_headers=["*"], # Allows all headers like Content-Type
 )
-DEEPSEEK_API_KEY = "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" # Put your NEW key here
+DEEPSEEK_API_KEY = "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" # Put your NEW key here
 DEEPSEEK_BASE_URL = "https://openrouter.ai/api/v1"
 
 # 1. Added a 60-second timeout directly to the client
@@ -234,7 +237,7 @@ class VoiceSearchRequest(BaseModel):
 # Load stops once at startup
 with open("unique_stop_names.txt", "r", encoding="utf-8") as f:
     stops = [line.strip() for line in f if line.strip()]
-from fuzzywuzzy import process
+from fuzzywuzzy import fuzz,process
 
 @app.post("/voice-search")
 async def voice_search(request: VoiceSearchRequest):
@@ -255,9 +258,16 @@ async def voice_search(request: VoiceSearchRequest):
         import json
         data = json.loads(prediction)
 
-        # 3️⃣ Fuzzy match source & destination
-        source_input = data.get("source", "")
-        destination_input = data.get("destination", "")
+        # 3️⃣ Validate extracted stops before fuzzy matching
+        source_input = data.get("source") or ""
+        destination_input = data.get("destination") or ""
+
+        if not source_input.strip() or not destination_input.strip():
+            return {
+                "success": False,
+                "prediction": None,
+                "error": "Unclear input, please speak again."
+            }
 
         best_source, source_score = process.extractOne(source_input, stops)
         best_destination, dest_score = process.extractOne(destination_input, stops)
@@ -279,6 +289,182 @@ async def voice_search(request: VoiceSearchRequest):
             "error": str(e)
         }
 
+
+
+
+import sounddevice as sd
+from scipy.io.wavfile import write
+# Load stops
+with open("unique_stop_names.txt", "r", encoding="utf-8") as f:
+    stops = [line.strip() for line in f if line.strip()]
+
+SYSTEM_PROMPT_NLP = """
+The user will speak a natural language sentence expressing their desire to travel from one location to another using public transportation. The sentence may be informal, ungrammatical, or raw.
+
+Your task is to extract:
+- source location phrase
+- destination location phrase
+
+
+Rules:
+
+1. Extract any raw source and destination phrases as spoken, even if misspelled, raw or ungrammatical.
+2. Do NOT correct spelling.
+3. Do NOT normalize names.
+4. Do NOT invent new location names.
+5. If text is unclear, extract the closest location phrase as spoken.
+6. If only one location is mentioned:
+   - If sentence implies movement toward it (e.g., "to X"), set destination only.
+   - If sentence implies movement from it (e.g., "from X"), set source only.
+7. Return strictly valid JSON.
+8. No explanations. No extra text.
+Output format:
+
+{
+  "source": string | null,
+  "destination": string | null
+}
+"""
+
+# --- 1️⃣ Record live audio ---
+def record_audio(filename="live_input.wav", duration=5, fs=16000):
+    print(f"Recording for {duration} seconds... Speak now!")
+    audio_data = sd.rec(int(duration * fs), samplerate=fs, channels=1)
+    sd.wait()
+    write(filename, fs, audio_data)
+    print(f"Recording saved to {filename}")
+    return filename
+
+# --- 2️⃣ Speech-to-text (using faster-whisper locally) ---
+_whisper_model = WhisperModel("base", device="cpu", compute_type="int8")
+
+async def speech_to_text(audio_path: str):
+    segments, info = _whisper_model.transcribe(audio_path, beam_size=5)
+    transcript = " ".join(segment.text.strip() for segment in segments)
+    print("Transcript:", transcript)
+    return transcript
+
+# --- 3️⃣ Extract stops ---
+async def extract_stops_from_transcript(transcript: str):
+    response = client.chat.completions.create(
+        model="arcee-ai/trinity-large-preview:free",
+        temperature=0,
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT_NLP},
+            {"role": "user", "content": transcript}
+        ]
+    )
+
+    prediction = response.choices[0].message.content.strip()
+    data = json.loads(prediction)
+    print("LLM Extracted Data:", data)
+    source_input = data.get("source", "")
+    destination_input = data.get("destination", "")
+    # source_input = "Fessal Mosque"
+    # destination_input = "Apara"
+
+    best_source, _ = process.extractOne(source_input, stops, scorer=fuzz.token_sort_ratio)
+    best_destination, _ = process.extractOne(destination_input, stops, scorer=fuzz.token_sort_ratio)
+
+    return best_source, best_destination
+
+
+@app.post("/voice-route")
+async def voice_route(audio: UploadFile = File(...)):
+    """
+    Full pipeline endpoint:
+    1. Accept audio file from frontend
+    2. Transcribe using Faster-Whisper (STT)
+    3. Extract raw source & destination via LLM
+    4. Fuzzy-match against stop list
+    5. Return structured JSON result
+    """
+    try:
+        # 1️⃣ Save uploaded audio to a temp file
+        suffix = os.path.splitext(audio.filename)[-1] or ".wav"
+        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+            tmp.write(await audio.read())
+            tmp_path = tmp.name
+
+        # 2️⃣ Transcribe with Faster-Whisper
+        segments, _ = _whisper_model.transcribe(tmp_path, beam_size=5)
+        transcript = " ".join(seg.text.strip() for seg in segments).strip()
+        os.unlink(tmp_path)  # clean up temp file
+
+        if not transcript:
+            return {
+                "success": False,
+                "transcript": None,
+                "prediction": None,
+                "error": "Could not transcribe audio. Please speak clearly and try again."
+            }
+
+        # 3️⃣ Extract source & destination via LLM
+        llm_response = client.chat.completions.create(
+            model="arcee-ai/trinity-large-preview:free",
+            temperature=0,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT_NLP},
+                {"role": "user", "content": transcript}
+            ]
+        )
+        llm_raw = llm_response.choices[0].message.content.strip()
+        data = json.loads(llm_raw)
+
+        source_input = data.get("source") or ""
+        destination_input = data.get("destination") or ""
+
+        # 4️⃣ Validate — don't fuzzy-match if LLM returned null/empty
+        if not source_input.strip() or not destination_input.strip():
+            return {
+                "success": False,
+                "transcript": transcript,
+                "prediction": None,
+                "error": "Unclear input, please speak again."
+            }
+
+        # 5️⃣ Fuzzy match against stop list
+        best_source, source_score = process.extractOne(
+            source_input, stops, scorer=fuzz.token_sort_ratio
+        )
+        best_destination, dest_score = process.extractOne(
+            destination_input, stops, scorer=fuzz.token_sort_ratio
+        )
+
+        # 6️⃣ Return structured result
+        return {
+            "success": True,
+            "transcript": transcript,
+            "prediction": {
+                "source": best_source,
+                "source_score": source_score,
+                "destination": best_destination,
+                "destination_score": dest_score
+            },
+            "error": None
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "transcript": None,
+            "prediction": None,
+            "error": str(e)
+        }
+# async def main():
+#     # Step 1: Record live speech
+#     audio_file = record_audio(duration=7)  # record for 7 seconds
+
+#     # Step 2: Convert speech to text
+#     transcript = await speech_to_text('live_input.wav')  # Use the recorded file
+
+#     # Step 3: Extract source/destination
+#     source, destination = await extract_stops_from_transcript(transcript)
+#     print("Best-matched source:", source)
+#     print("Best-matched destination:", destination)
+
+# if __name__ == "__main__":
+#     asyncio.run(main())
 
 # import requests
 

@@ -145,41 +145,91 @@ app.add_middleware(
     allow_methods=["*"], # Allows POST, GET, OPTIONS, etc.
     allow_headers=["*"], # Allows all headers like Content-Type
 )
-DEEPSEEK_API_KEY = "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" # Put your NEW key here
-DEEPSEEK_BASE_URL = "https://openrouter.ai/api/v1"
+# Multiple API keys with fallback mechanism
+API_KEYS = [
+    os.getenv("DEEPSEEK_API_KEY"),
+    os.getenv("DEEPSEEK_API_KEY_2"), 
+    os.getenv("DEEPSEEK_API_KEY_3"),
+]
+# Filter out None values (for keys not set in .env)
+API_KEYS = [key for key in API_KEYS if key]
 
-# 1. Added a 60-second timeout directly to the client
-client = OpenAI(
-    api_key=DEEPSEEK_API_KEY,
-    base_url=DEEPSEEK_BASE_URL,
-    timeout=60.0 
-)
+if not API_KEYS:
+    raise ValueError("No API keys found in environment variables!")
+
+DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://openrouter.ai/api/v1")
+current_api_key_index = 0
+
+def get_openai_client():
+    """Get OpenAI client with current API key"""
+    return OpenAI(
+        api_key=API_KEYS[current_api_key_index],
+        base_url=DEEPSEEK_BASE_URL,
+        timeout=60.0
+    )
+
+def rotate_api_key():
+    """Switch to next API key in the list"""
+    global current_api_key_index
+    current_api_key_index = (current_api_key_index + 1) % len(API_KEYS)
+    print(f"Switched to API key #{current_api_key_index + 1}")
+
+async def make_llm_request(messages, model="arcee-ai/trinity-large-preview:free", temperature=0, max_retries=None):
+    """
+    Make LLM request with automatic API key fallback
+    Tries all API keys before giving up
+    """
+    if max_retries is None:
+        max_retries = len(API_KEYS)
+    
+    last_error = None
+    
+    for attempt in range(max_retries):
+        try:
+            client = get_openai_client()
+            response = client.chat.completions.create(
+                model=model,
+                temperature=temperature,
+                messages=messages
+            )
+            return response.choices[0].message.content.strip()
+            
+        except Exception as e:
+            last_error = e
+            error_str = str(e).lower()
+            
+            # Check if it's an API key related error (401, 403, 429, or rate limit)
+            if any(code in error_str for code in ['401', '403', '429', 'unauthorized', 'forbidden', 'rate limit', 'quota']):
+                print(f"API key error (attempt {attempt + 1}/{max_retries}): {e}")
+                rotate_api_key()
+                continue
+            else:
+                # Non-API-key error, don't retry
+                print(f"Non-API-key error: {e}")
+                break
+    
+    # All retries exhausted
+    raise last_error
 
 class OCRRequest(BaseModel):
     ocr_result: str
 
 @app.post("/message")
 async def classify(request: OCRRequest):
-    # 2. Try/Except block for error handling
     try:
-        response = client.chat.completions.create(
-            model="arcee-ai/trinity-large-preview:free",
-            temperature=0,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {
-                    "role": "user",
-                    "content": json.dumps(
-                        {"ocr_result": request.ocr_result},
-                        ensure_ascii=False
-                    )
-                }
-            ]
-        )
-
-        prediction = response.choices[0].message.content.strip()
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {
+                "role": "user",
+                "content": json.dumps(
+                    {"ocr_result": request.ocr_result},
+                    ensure_ascii=False
+                )
+            }
+        ]
         
-        # 3. Success Response format
+        prediction = await make_llm_request(messages)
+        
         return {
             "success": True, 
             "prediction": prediction, 
@@ -187,7 +237,6 @@ async def classify(request: OCRRequest):
         }
 
     except Exception as e:
-        # 4. Error Response format (catches timeouts, bad API keys, etc.)
         return {
             "success": False, 
             "prediction": None, 
@@ -197,26 +246,20 @@ async def classify(request: OCRRequest):
 
 @app.post("/dictate")
 async def dictate(request: OCRRequest):
-    # 2. Try/Except block for error handling
     try:
-        response = client.chat.completions.create(
-            model="arcee-ai/trinity-large-preview:free",
-            temperature=0,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT_VOICE},
-                {
-                    "role": "user",
-                    "content": json.dumps(
-                        {"ocr_result": request.ocr_result},
-                        ensure_ascii=False
-                    )
-                }
-            ]
-        )
-
-        prediction = response.choices[0].message.content.strip()
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT_VOICE},
+            {
+                "role": "user",
+                "content": json.dumps(
+                    {"ocr_result": request.ocr_result},
+                    ensure_ascii=False
+                )
+            }
+        ]
         
-        # 3. Success Response format
+        prediction = await make_llm_request(messages)
+        
         return {
             "success": True, 
             "prediction": prediction, 
@@ -224,7 +267,6 @@ async def dictate(request: OCRRequest):
         }
 
     except Exception as e:
-        # 4. Error Response format (catches timeouts, bad API keys, etc.)
         return {
             "success": False, 
             "prediction": None, 
@@ -242,17 +284,13 @@ from fuzzywuzzy import fuzz,process
 @app.post("/voice-search")
 async def voice_search(request: VoiceSearchRequest):
     try:
-        # 1️⃣ Call LLM to extract source/destination
-        response = client.chat.completions.create(
-            model="arcee-ai/trinity-large-preview:free",
-            temperature=0,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT_NLP},
-                {"role": "user", "content": request.transcript}
-            ]
-        )
-
-        prediction = response.choices[0].message.content.strip()
+        # 1️⃣ Call LLM to extract source/destination using fallback mechanism
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT_NLP},
+            {"role": "user", "content": request.transcript}
+        ]
+        
+        prediction = await make_llm_request(messages)
 
         # 2️⃣ Parse prediction JSON
         import json
@@ -346,16 +384,12 @@ async def speech_to_text(audio_path: str):
 
 # --- 3️⃣ Extract stops ---
 async def extract_stops_from_transcript(transcript: str):
-    response = client.chat.completions.create(
-        model="arcee-ai/trinity-large-preview:free",
-        temperature=0,
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT_NLP},
-            {"role": "user", "content": transcript}
-        ]
-    )
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT_NLP},
+        {"role": "user", "content": transcript}
+    ]
 
-    prediction = response.choices[0].message.content.strip()
+    prediction = await make_llm_request(messages)
     data = json.loads(prediction)
     print("LLM Extracted Data:", data)
     source_input = data.get("source", "")
@@ -399,16 +433,13 @@ async def voice_route(audio: UploadFile = File(...)):
                 "error": "Could not transcribe audio. Please speak clearly and try again."
             }
 
-        # 3️⃣ Extract source & destination via LLM
-        llm_response = client.chat.completions.create(
-            model="arcee-ai/trinity-large-preview:free",
-            temperature=0,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT_NLP},
-                {"role": "user", "content": transcript}
-            ]
-        )
-        llm_raw = llm_response.choices[0].message.content.strip()
+        # 3️⃣ Extract source & destination via LLM using fallback mechanism
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT_NLP},
+            {"role": "user", "content": transcript}
+        ]
+        
+        llm_raw = await make_llm_request(messages)
         data = json.loads(llm_raw)
 
         source_input = data.get("source") or ""

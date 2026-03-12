@@ -1,0 +1,490 @@
+{
+  "success": true,
+  "message": "Routes found successfully",
+  "data": {
+    "routes": [
+      {
+        "duration": "50 min",
+        "durationMinutes": 50,
+        "transfers": 1,
+        "totalStops": 8,
+        "fare": "Rs. 90",
+        "farePkr": 90,
+        "transferCount": 1,
+        "busesUsed": [
+          "RED",
+          "BLUE"
+        ],
+        "busSequence": [
+          "RED",
+          "BLUE"
+        ],
+        "routeSegments": [
+          {
+            "routeName": "RED",
+            "routeId": "red",
+            "stops": [
+              {
+                "stop_id": "stop_1",
+                "stop_name": "Downtown Station",
+                "stop_lat": 24.8607,
+                "stop_lon": 67.0011
+              },
+              {
+                "stop_id": "stop_2",
+                "stop_name": "Central Station",
+                "stop_lat": 24.8667,
+                "stop_lon": 67.0089
+              },
+              {
+                "stop_id": "stop_3",
+                "stop_name": "Hospital Road",
+                "stop_lat": 24.8725,
+                "stop_lon": 67.0156
+              },
+              {
+                "stop_id": "stop_4",
+                "stop_name": "Clifton Market",
+                "stop_lat": 24.8788,
+                "stop_lon": 67.0224
+              },
+              {
+                "stop_id": "stop_5",
+                "stop_name": "Central Park",
+                "stop_lat": 24.8845,
+                "stop_lon": 67.0289
+              }
+            ],
+            "stopCount": 5,
+            "distance": 8.5,
+            "boardingStop": "Downtown Station",
+            "alightingStop": "Central Park"
+          },
+          {
+            "routeName": "BLUE",
+            "routeId": "blue",
+            "stops": [
+              {
+                "stop_id": "stop_5",
+                "stop_name": "Central Park",
+                "stop_lat": 24.8845,
+                "stop_lon": 67.0289
+              },
+              {
+                "stop_id": "stop_6",
+                "stop_name": "Sunset Boulevard",
+                "stop_lat": 24.8902,
+                "stop_lon": 67.0356
+              },
+              {
+                "stop_id": "stop_7",
+                "stop_name": "Marina Station",
+                "stop_lat": 24.8959,
+                "stop_lon": 67.0423
+              },
+              {
+                "stop_id": "stop_8",
+                "stop_name": "Airport Terminal",
+                "stop_lat": 24.9016,
+                "stop_lon": 67.0489
+              }
+            ],
+            "stopCount": 4,
+            "distance": 6.2,
+            "boardingStop": "Central Park",
+            "alightingStop": "Airport Terminal"
+          }
+        ],
+        "tripLegs": [
+          {
+            "bus": "RED",
+            "edgeRange": "0-4"
+          },
+          {
+            "bus": "BLUE",
+            "edgeRange": "5-8"
+          }
+        ],
+        "realTimeStart": "14:23:45",
+        "realTimeStart12Hour": "2:23 PM",
+        "timeline": {
+          "timeline": [
+            {
+              "stopId": "stop_1",
+              "stopName": "Downtown Station",
+              "stopLat": 24.8607,
+              "stopLon": 67.0011,
+              "bus": "RED",
+              "busRouteId": "red",
+              "arrivalTime": "14:23:45",
+              "arrivalTimeMs": 1710685425000,
+              "departureTime": "14:25:45",
+              "departureTimeMs": 1710685545000,
+              "dwellTimeMinutes": 2,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": true,
+              "isLastStop": false,
+              "actions": [
+                "Board bus"
+              ]
+            },
+            {
+              "stopId": "stop_2",
+              "stopName": "Central Station",
+              "stopLat": 24.8667,
+              "stopLon": 67.0089,
+              "bus": "RED",
+              "busRouteId": "red",
+              "arrivalTime": "14:27:18",
+              "arrivalTimeMs": 1710685638000,
+              "departureTime": "14:27:19",
+              "departureTimeMs": 1710685639000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": []
+            },
+            {
+              "stopId": "stop_3",
+              "stopName": "Hospital Road",
+              "stopLat": 24.8725,
+              "stopLon": 67.0156,
+              "bus": "RED",
+              "busRouteId": "red",
+              "arrivalTime": "14:28:51",
+              "arrivalTimeMs": 1710685731000,
+              "departureTime": "14:28:52",
+              "departureTimeMs": 1710685732000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": []
+            },
+            {
+              "stopId": "stop_4",
+              "stopName": "Clifton Market",
+              "stopLat": 24.8788,
+              "stopLon": 67.0224,
+              "bus": "RED",
+              "busRouteId": "red",
+              "arrivalTime": "14:30:24",
+              "arrivalTimeMs": 1710685824000,
+              "departureTime": "14:30:25",
+              "departureTimeMs": 1710685825000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": []
+            },
+            {
+              "stopId": "stop_5",
+              "stopName": "Central Park",
+              "stopLat": 24.8845,
+              "stopLon": 67.0289,
+              "bus": "RED",
+              "busRouteId": "red",
+              "arrivalTime": "14:31:57",
+              "arrivalTimeMs": 1710685917000,
+              "departureTime": "14:31:58",
+              "departureTimeMs": 1710685918000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": true,
+                "timeMinutes": 5,
+                "reason": "Transfer"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": [
+                "Wait for next bus",
+                "Find waiting area"
+              ]
+            },
+            {
+              "stopId": "stop_6",
+              "stopName": "Sunset Boulevard",
+              "stopLat": 24.8902,
+              "stopLon": 67.0356,
+              "bus": "BLUE",
+              "busRouteId": "blue",
+              "arrivalTime": "14:37:28",
+              "arrivalTimeMs": 1710686248000,
+              "departureTime": "14:37:30",
+              "departureTimeMs": 1710686250000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": []
+            },
+            {
+              "stopId": "stop_7",
+              "stopName": "Marina Station",
+              "stopLat": 24.8959,
+              "stopLon": 67.0423,
+              "bus": "BLUE",
+              "busRouteId": "blue",
+              "arrivalTime": "14:38:44",
+              "arrivalTimeMs": 1710686324000,
+              "departureTime": "14:38:45",
+              "departureTimeMs": 1710686325000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": []
+            },
+            {
+              "stopId": "stop_8",
+              "stopName": "Airport Terminal",
+              "stopLat": 24.9016,
+              "stopLon": 67.0489,
+              "bus": "BLUE",
+              "busRouteId": "blue",
+              "arrivalTime": "14:40:00",
+              "arrivalTimeMs": 1710686400000,
+              "departureTime": "14:40:00",
+              "departureTimeMs": 1710686400000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": true,
+              "actions": [
+                "Alight bus",
+                "End of journey"
+              ]
+            }
+          ],
+          "summary": {
+            "startTime": "14:23:45",
+            "startTime12Hour": "2:23 PM",
+            "endTime": "14:40:00",
+            "endTime12Hour": "2:40 PM",
+            "totalDurationMinutes": 16,
+            "totalDurationFormatted": "16 min",
+            "totalWaitingTimeMinutes": 5,
+            "journeyStops": 8,
+            "transfers": 1
+          },
+          "stops": [
+            {
+              "sequence": 1,
+              "stopId": "stop_1",
+              "stopName": "Downtown Station",
+              "stopLat": 24.8607,
+              "stopLon": 67.0011,
+              "bus": "RED",
+              "busRouteId": "red",
+              "arrivalTime": "14:23:45",
+              "arrivalTimeMs": 1710685425000,
+              "departureTime": "14:25:45",
+              "departureTimeMs": 1710685545000,
+              "dwellTimeMinutes": 2,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": true,
+              "isLastStop": false,
+              "actions": [
+                "Board bus"
+              ]
+            },
+            {
+              "sequence": 2,
+              "stopId": "stop_2",
+              "stopName": "Central Station",
+              "stopLat": 24.8667,
+              "stopLon": 67.0089,
+              "bus": "RED",
+              "busRouteId": "red",
+              "arrivalTime": "14:27:18",
+              "arrivalTimeMs": 1710685638000,
+              "departureTime": "14:27:19",
+              "departureTimeMs": 1710685639000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": []
+            },
+            {
+              "sequence": 3,
+              "stopId": "stop_3",
+              "stopName": "Hospital Road",
+              "stopLat": 24.8725,
+              "stopLon": 67.0156,
+              "bus": "RED",
+              "busRouteId": "red",
+              "arrivalTime": "14:28:51",
+              "arrivalTimeMs": 1710685731000,
+              "departureTime": "14:28:52",
+              "departureTimeMs": 1710685732000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": []
+            },
+            {
+              "sequence": 4,
+              "stopId": "stop_4",
+              "stopName": "Clifton Market",
+              "stopLat": 24.8788,
+              "stopLon": 67.0224,
+              "bus": "RED",
+              "busRouteId": "red",
+              "arrivalTime": "14:30:24",
+              "arrivalTimeMs": 1710685824000,
+              "departureTime": "14:30:25",
+              "departureTimeMs": 1710685825000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": []
+            },
+            {
+              "sequence": 5,
+              "stopId": "stop_5",
+              "stopName": "Central Park",
+              "stopLat": 24.8845,
+              "stopLon": 67.0289,
+              "bus": "RED",
+              "busRouteId": "red",
+              "arrivalTime": "14:31:57",
+              "arrivalTimeMs": 1710685917000,
+              "departureTime": "14:31:58",
+              "departureTimeMs": 1710685918000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": true,
+                "timeMinutes": 5,
+                "reason": "Transfer"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": [
+                "Wait for next bus",
+                "Find waiting area"
+              ]
+            },
+            {
+              "sequence": 6,
+              "stopId": "stop_6",
+              "stopName": "Sunset Boulevard",
+              "stopLat": 24.8902,
+              "stopLon": 67.0356,
+              "bus": "BLUE",
+              "busRouteId": "blue",
+              "arrivalTime": "14:37:28",
+              "arrivalTimeMs": 1710686248000,
+              "departureTime": "14:37:30",
+              "departureTimeMs": 1710686250000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": []
+            },
+            {
+              "sequence": 7,
+              "stopId": "stop_7",
+              "stopName": "Marina Station",
+              "stopLat": 24.8959,
+              "stopLon": 67.0423,
+              "bus": "BLUE",
+              "busRouteId": "blue",
+              "arrivalTime": "14:38:44",
+              "arrivalTimeMs": 1710686324000,
+              "departureTime": "14:38:45",
+              "departureTimeMs": 1710686325000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": false,
+              "actions": []
+            },
+            {
+              "sequence": 8,
+              "stopId": "stop_8",
+              "stopName": "Airport Terminal",
+              "stopLat": 24.9016,
+              "stopLon": 67.0489,
+              "bus": "BLUE",
+              "busRouteId": "blue",
+              "arrivalTime": "14:40:00",
+              "arrivalTimeMs": 1710686400000,
+              "departureTime": "14:40:00",
+              "departureTimeMs": 1710686400000,
+              "dwellTimeMinutes": 0,
+              "waiting": {
+                "hasWaiting": false,
+                "timeMinutes": 0,
+                "reason": "Final Stop"
+              },
+              "isFirstStop": false,
+              "isLastStop": true,
+              "actions": [
+                "Alight bus",
+                "End of journey"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

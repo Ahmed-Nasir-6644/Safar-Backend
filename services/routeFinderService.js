@@ -1,5 +1,6 @@
 const https = require('https');
 const gtfsService = require('./gtfsService');
+const timelineCalculator = require('../utils/timelineCalculator');
 const {
   buildStopGraph,
   buildAdjacencyList,
@@ -533,8 +534,30 @@ class RouteFinderService {
     }
 
     const limit = Math.max(1, Number.parseInt(maxRoutes, 10) || routes.length);
+    const limitedRoutes = routes.slice(0, limit);
+
+    // Generate timeline for each route with current time as start time
+    const currentTime = new Date();
+    const routesWithTimeline = limitedRoutes.map((route) => {
+      const expectedDurationMinutes =
+        Number.isFinite(route?.durationMinutes) && route.durationMinutes > 0
+          ? route.durationMinutes
+          : timelineCalculator.parseDurationMinutes(route?.duration);
+
+      return {
+        ...route,
+        timeline: timelineCalculator.generateTimeline(
+          route.routeSegments,
+          currentTime,
+          expectedDurationMinutes > 0 ? expectedDurationMinutes : null
+        ),
+        realTimeStart: timelineCalculator.formatTime(currentTime),
+        realTimeStart12Hour: timelineCalculator.formatTime12Hour(currentTime),
+      };
+    });
+
     return {
-      routes: routes.slice(0, limit),
+      routes: routesWithTimeline,
     };
   }
 
@@ -550,8 +573,30 @@ class RouteFinderService {
     }
 
     const limit = Math.max(1, Number.parseInt(maxRoutes, 10) || routes.length);
+    const limitedRoutes = routes.slice(0, limit);
+
+    // Generate timeline for each route with current time as start time
+    const currentTime = new Date();
+    const routesWithTimeline = limitedRoutes.map((route) => {
+      const expectedDurationMinutes =
+        Number.isFinite(route?.durationMinutes) && route.durationMinutes > 0
+          ? route.durationMinutes
+          : timelineCalculator.parseDurationMinutes(route?.duration);
+
+      return {
+        ...route,
+        timeline: timelineCalculator.generateTimeline(
+          route.routeSegments,
+          currentTime,
+          expectedDurationMinutes > 0 ? expectedDurationMinutes : null
+        ),
+        realTimeStart: timelineCalculator.formatTime(currentTime),
+        realTimeStart12Hour: timelineCalculator.formatTime12Hour(currentTime),
+      };
+    });
+
     return {
-      routes: routes.slice(0, limit),
+      routes: routesWithTimeline,
     };
   }
 

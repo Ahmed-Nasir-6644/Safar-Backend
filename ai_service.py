@@ -147,7 +147,9 @@ app.add_middleware(
 )
 # Multiple API keys with fallback mechanism
 API_KEYS = [
-   # Add more keys as needed
+    "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",
+    "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",
+    "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"
 ]
 
 DEEPSEEK_BASE_URL = "https://openrouter.ai/api/v1"

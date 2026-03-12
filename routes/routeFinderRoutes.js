@@ -19,6 +19,9 @@ router.post('/find/by-name', authenticateToken, routeFinderController.findRouteB
 // Get authenticated user's route search history
 router.get('/search-history', authenticateToken, routeFinderController.getSearchHistory.bind(routeFinderController));
 
+// Save route search history for authenticated user
+router.post('/search-history', authenticateToken, routeFinderController.saveSearchHistory.bind(routeFinderController));
+
 // Save selected generated route as favorite for authenticated user
 router.post('/favorite', authenticateToken, routeFinderController.saveFavoriteRoute.bind(routeFinderController));
 

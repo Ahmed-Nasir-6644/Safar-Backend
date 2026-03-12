@@ -131,6 +131,44 @@ class RouteFinderController {
   }
 
   /**
+   * Save route search history for authenticated user
+   */
+  async saveSearchHistory(req, res) {
+    try {
+      const userId = req.user?.userId;
+      const { startingPoint, destination, startStopId, endStopId, searchType } = req.body;
+
+      if (!startingPoint || !destination) {
+        return res.status(400).json({
+          success: false,
+          message: 'startingPoint and destination are required',
+        });
+      }
+
+      const savedSearch = await routeFinderService.saveRouteSearchHistory({
+        userId,
+        startingPoint,
+        destination,
+        startStopId,
+        endStopId,
+        searchType,
+      });
+
+      res.status(201).json({
+        success: true,
+        message: 'Route search history saved successfully',
+        data: savedSearch,
+      });
+    } catch (error) {
+      console.error('❌ Save search history error:', error);
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  /**
    * Save selected generated route as favorite for authenticated user
    */
   async saveFavoriteRoute(req, res) {

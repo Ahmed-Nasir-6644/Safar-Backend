@@ -147,17 +147,10 @@ app.add_middleware(
 )
 # Multiple API keys with fallback mechanism
 API_KEYS = [
-    os.getenv("DEEPSEEK_API_KEY"),
-    os.getenv("DEEPSEEK_API_KEY_2"), 
-    os.getenv("DEEPSEEK_API_KEY_3"),
+   # Add more keys as needed
 ]
-# Filter out None values (for keys not set in .env)
-API_KEYS = [key for key in API_KEYS if key]
 
-if not API_KEYS:
-    raise ValueError("No API keys found in environment variables!")
-
-DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://openrouter.ai/api/v1")
+DEEPSEEK_BASE_URL = "https://openrouter.ai/api/v1"
 current_api_key_index = 0
 
 def get_openai_client():

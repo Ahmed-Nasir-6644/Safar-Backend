@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const User = require('../models/User');
+const TempUser = require('../models/TempUser');
 const RefreshToken = require('../models/RefreshToken');
+const emailService = require('./emailService');
 
 class AuthService {
   // Generate Access Token
@@ -18,20 +21,86 @@ class AuthService {
   }
 
   // Register user
-  async register(userData) {
+  async register(userData, options = {}) {
     try {
+      const normalizedEmail = userData.email.toLowerCase().trim();
+
       // Check if user exists
-      const existingUser = await User.findOne({ email: userData.email });
+      const existingUser = await User.findOne({ email: normalizedEmail });
       if (existingUser) {
         throw new Error('User with this email already exists');
       }
 
-      // Create new user
-      const user = new User(userData);
+      // Replace any previous unverified signup for this email
+      await TempUser.deleteMany({ email: normalizedEmail });
+
+      const verificationToken = crypto.randomBytes(32).toString('hex');
+      const verificationTokenHash = crypto
+        .createHash('sha256')
+        .update(verificationToken)
+        .digest('hex');
+
+      const tempUser = new TempUser({
+        name: userData.name,
+        email: normalizedEmail,
+        password: userData.password,
+        verificationToken: verificationTokenHash,
+        verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      });
+      await tempUser.save();
+
+      const backendBaseUrl = options.backendBaseUrl || process.env.BACKEND_URL || 'http://localhost:5000';
+      const verificationLink = `${backendBaseUrl}/auth/verify-email?token=${verificationToken}`;
+
+      await emailService.sendVerificationEmail({
+        name: userData.name,
+        email: normalizedEmail,
+        verificationLink,
+      });
+
+      return {
+        email: normalizedEmail,
+        verificationRequired: true,
+      };
+    } catch (error) {
+      console.error('❌ Registration Error:', error);
+      throw new Error(`Registration failed: ${error.message}`);
+    }
+  }
+
+  async verifyEmail(token) {
+    try {
+      const verificationTokenHash = crypto
+        .createHash('sha256')
+        .update(token)
+        .digest('hex');
+
+      const tempUser = await TempUser.findOne({
+        verificationToken: verificationTokenHash,
+        verificationTokenExpiresAt: { $gt: new Date() },
+      });
+
+      if (!tempUser) {
+        throw new Error('Verification link is invalid or has expired');
+      }
+
+      const existingUser = await User.findOne({ email: tempUser.email });
+      if (existingUser) {
+        await TempUser.deleteOne({ _id: tempUser._id });
+        return { verified: true, alreadyVerified: true };
+      }
+
+      const user = new User({
+        name: tempUser.name,
+        email: tempUser.email,
+        password: tempUser.password,
+      });
       await user.save();
 
-      // Return only user data without tokens (user must login separately)
+      await TempUser.deleteOne({ _id: tempUser._id });
+
       return {
+        verified: true,
         user: {
           id: user._id,
           name: user.name,
@@ -39,8 +108,8 @@ class AuthService {
         },
       };
     } catch (error) {
-      console.error('❌ Registration Error:', error);
-      throw new Error(`Registration failed: ${error.message}`);
+      console.error('❌ Verify Email Error:', error);
+      throw new Error(`Email verification failed: ${error.message}`);
     }
   }
 

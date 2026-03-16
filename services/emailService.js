@@ -15,6 +15,95 @@ class EmailService {
   }
 
   /**
+   * Send signup verification email
+   * @param {Object} verificationData - Verification email data
+   * @param {string} verificationData.name - User name
+   * @param {string} verificationData.email - User email
+   * @param {string} verificationData.verificationLink - Link to verify account
+   * @returns {Promise<Object>}
+   */
+  async sendVerificationEmail(verificationData) {
+    const { name, email, verificationLink } = verificationData;
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+          }
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+          }
+          .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+          }
+          .btn {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 12px 18px;
+            background-color: #f97316;
+            color: #fff !important;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="content">
+            <h2>Verify your MetroMate account</h2>
+            <p>Hi ${name},</p>
+            <p>Thanks for signing up. Please verify your email address to activate your account.</p>
+            <a class="btn" href="${verificationLink}">Verify Email</a>
+            <p style="margin-top:16px;">If the button does not work, copy and paste this link in your browser:</p>
+            <p>${verificationLink}</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const textContent = `
+Hi ${name},
+
+Thanks for signing up to MetroMate.
+Please verify your email using this link:
+${verificationLink}
+    `;
+
+    const mailOptions = {
+      from: `"MetroMate" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: 'Verify your MetroMate account',
+      text: textContent,
+      html: htmlContent,
+    };
+
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      return {
+        success: true,
+        messageId: info.messageId,
+      };
+    } catch (error) {
+      console.error('Verification email sending error:', error);
+      throw new Error('Failed to send verification email');
+    }
+  }
+
+  /**
    * Send contact form email
    * @param {Object} contactData - Contact form data
    * @param {string} contactData.fullName - User's full name

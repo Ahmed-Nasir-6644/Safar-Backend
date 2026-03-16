@@ -18,11 +18,13 @@ class AuthController {
         name,
         email,
         password,
+      }, {
+        backendBaseUrl: `${req.protocol}://${req.get('host')}`,
       });
 
       res.status(201).json({
         success: true,
-        message: 'User registered successfully',
+        message: 'Signup successful. Please verify your email address.',
         data: result,
       });
     } catch (error) {
@@ -30,6 +32,23 @@ class AuthController {
         success: false,
         message: error.message,
       });
+    }
+  }
+
+  // Verify email for signup
+  async verifyEmail(req, res) {
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const token = req.query.token;
+
+    if (!token) {
+      return res.redirect(`${frontendUrl}/login?emailVerified=failed`);
+    }
+
+    try {
+      await authService.verifyEmail(token);
+      return res.redirect(`${frontendUrl}/login?emailVerified=success`);
+    } catch (error) {
+      return res.redirect(`${frontendUrl}/login?emailVerified=failed`);
     }
   }
 

@@ -39,17 +39,18 @@ class AuthController {
   async verifyEmail(req, res) {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
     const token = req.query.token;
+    const loginRedirectBase = `${frontendUrl}/#/login`;
 
     if (!token) {
-      return res.redirect(`${frontendUrl}/login?emailVerified=failed`);
+      return res.redirect(`${loginRedirectBase}?emailVerified=failed`);
     }
 
     try {
       await authService.verifyEmail(token);
-      return res.redirect(`${frontendUrl}/login?emailVerified=success`);
+      return res.redirect(`${loginRedirectBase}?emailVerified=success`);
     } catch (error) {
       console.error('❌ Email verification failed:', error.message);
-      return res.redirect(`${frontendUrl}/login?emailVerified=failed`);
+      return res.redirect(`${loginRedirectBase}?emailVerified=failed`);
     }
   }
 

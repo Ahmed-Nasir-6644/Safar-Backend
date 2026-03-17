@@ -38,8 +38,9 @@ class AuthController {
   // Verify email for signup
   async verifyEmail(req, res) {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const normalizedFrontendUrl = frontendUrl.replace(/\/+$/, '');
     const token = req.query.token;
-    const verificationRedirectBase = `${frontendUrl}/#/`;
+    const verificationRedirectBase = `${normalizedFrontendUrl}/`;
 
     if (!token) {
       return res.redirect(`${verificationRedirectBase}?emailVerified=failed`);

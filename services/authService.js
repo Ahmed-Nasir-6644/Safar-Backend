@@ -86,7 +86,8 @@ class AuthService {
 
       const existingUser = await User.findOne({ email: tempUser.email });
       if (existingUser) {
-        await TempUser.deleteOne({ _id: tempUser._id });
+        // User already verified (e.g. email security scanner consumed the token first).
+        // TempUser will be cleaned up by the MongoDB TTL index on verificationTokenExpiresAt.
         return { verified: true, alreadyVerified: true };
       }
 
@@ -97,7 +98,10 @@ class AuthService {
       });
       await user.save();
 
-      await TempUser.deleteOne({ _id: tempUser._id });
+      // Do NOT delete TempUser here. Keeping it lets subsequent clicks (e.g. the actual
+      // user clicking after a security scanner already verified) hit the existingUser branch
+      // above and return success instead of 'invalid or expired'. MongoDB TTL index on
+      // verificationTokenExpiresAt will automatically remove it after 24 h.
 
       return {
         verified: true,

@@ -15,6 +15,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const isServerless = process.env.VERCEL === '1';
 
+// Trust Vercel's proxy so req.protocol returns 'https' (needed for correct verification links)
+app.set('trust proxy', 1);
+
 // Connect to MongoDB
 connectDB();
 

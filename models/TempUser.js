@@ -26,6 +26,8 @@ const tempUserSchema = new mongoose.Schema(
     verificationTokenExpiresAt: {
       type: Date,
       required: true,
+      // TTL index: MongoDB deletes the document once this timestamp is reached
+      expires: 0,
     },
   },
   { timestamps: true, collection: 'temp_user' }

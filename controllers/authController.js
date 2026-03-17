@@ -48,6 +48,7 @@ class AuthController {
       await authService.verifyEmail(token);
       return res.redirect(`${frontendUrl}/login?emailVerified=success`);
     } catch (error) {
+      console.error('❌ Email verification failed:', error.message);
       return res.redirect(`${frontendUrl}/login?emailVerified=failed`);
     }
   }

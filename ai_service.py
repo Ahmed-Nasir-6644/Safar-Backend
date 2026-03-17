@@ -1,12 +1,16 @@
-import asyncio
 import tempfile
 from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
 from openai import OpenAI
 import os
 import json
-from fastapi.middleware.cors import CORSMiddleware # 1. ADD THIS IMPORT
-from faster_whisper import WhisperModel
+from pathlib import Path
+from fastapi.middleware.cors import CORSMiddleware
+
+try:
+    from faster_whisper import WhisperModel
+except Exception:
+    WhisperModel = None
 # start using: uvicorn ai_service:app --reload --port 8000
 SYSTEM_PROMPT = """
 You are a helpful customer service assistant for MetroMate, a public transportation route finding and management system. 
@@ -138,25 +142,38 @@ Do not return anything outside JSON.
 """
 
 app = FastAPI()
+
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173")
+allow_origins = [origin.strip() for origin in cors_origins.split(",") if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], # This is your React app's exact URL
+    allow_origins=allow_origins,
     allow_credentials=True,
-    allow_methods=["*"], # Allows POST, GET, OPTIONS, etc.
-    allow_headers=["*"], # Allows all headers like Content-Type
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
-# Multiple API keys with fallback mechanism
-API_KEYS = [
-    "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",
-    "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",
-    "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"
-]
 
-DEEPSEEK_BASE_URL = "https://openrouter.ai/api/v1"
+API_KEYS = [
+    os.getenv("DEEPSEEK_API_KEY"),
+    os.getenv("DEEPSEEK_API_KEY_2"),
+    os.getenv("DEEPSEEK_API_KEY_3"),
+]
+API_KEYS = [key for key in API_KEYS if key]
+
+DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://openrouter.ai/api/v1")
 current_api_key_index = 0
+
+BASE_DIR = Path(__file__).resolve().parent
+stops_file_path = BASE_DIR / "unique_stop_names.txt"
+with stops_file_path.open("r", encoding="utf-8") as f:
+    stops = [line.strip() for line in f if line.strip()]
 
 def get_openai_client():
     """Get OpenAI client with current API key"""
+    if not API_KEYS:
+        raise RuntimeError("No API key configured. Set DEEPSEEK_API_KEY in environment variables.")
+
     return OpenAI(
         api_key=API_KEYS[current_api_key_index],
         base_url=DEEPSEEK_BASE_URL,
@@ -271,9 +288,7 @@ async def dictate(request: OCRRequest):
 
 class VoiceSearchRequest(BaseModel):
     transcript: str
-# Load stops once at startup
-with open("unique_stop_names.txt", "r", encoding="utf-8") as f:
-    stops = [line.strip() for line in f if line.strip()]
+
 from fuzzywuzzy import fuzz,process
 
 @app.post("/voice-search")
@@ -322,15 +337,6 @@ async def voice_search(request: VoiceSearchRequest):
             "error": str(e)
         }
 
-
-
-
-import sounddevice as sd
-from scipy.io.wavfile import write
-# Load stops
-with open("unique_stop_names.txt", "r", encoding="utf-8") as f:
-    stops = [line.strip() for line in f if line.strip()]
-
 SYSTEM_PROMPT_NLP = """
 The user will speak a natural language sentence expressing their desire to travel from one location to another using public transportation. The sentence may be informal, ungrammatical, or raw.
 
@@ -359,20 +365,26 @@ Output format:
 }
 """
 
-# --- 1️⃣ Record live audio ---
-def record_audio(filename="live_input.wav", duration=5, fs=16000):
-    print(f"Recording for {duration} seconds... Speak now!")
-    audio_data = sd.rec(int(duration * fs), samplerate=fs, channels=1)
-    sd.wait()
-    write(filename, fs, audio_data)
-    print(f"Recording saved to {filename}")
-    return filename
+_whisper_model = None
 
-# --- 2️⃣ Speech-to-text (using faster-whisper locally) ---
-_whisper_model = WhisperModel("base", device="cpu", compute_type="int8")
+
+def get_whisper_model():
+    global _whisper_model
+
+    if WhisperModel is None:
+        raise RuntimeError(
+            "faster-whisper is not available in this deployment. "
+            "Deploy voice transcription on a dedicated Python host or install faster-whisper dependencies."
+        )
+
+    if _whisper_model is None:
+        _whisper_model = WhisperModel("base", device="cpu", compute_type="int8")
+
+    return _whisper_model
 
 async def speech_to_text(audio_path: str):
-    segments, info = _whisper_model.transcribe(audio_path, beam_size=5)
+    whisper_model = get_whisper_model()
+    segments, info = whisper_model.transcribe(audio_path, beam_size=5)
     transcript = " ".join(segment.text.strip() for segment in segments)
     print("Transcript:", transcript)
     return transcript
@@ -416,7 +428,8 @@ async def voice_route(audio: UploadFile = File(...)):
             tmp_path = tmp.name
 
         # 2️⃣ Transcribe with Faster-Whisper
-        segments, _ = _whisper_model.transcribe(tmp_path, beam_size=5)
+        whisper_model = get_whisper_model()
+        segments, _ = whisper_model.transcribe(tmp_path, beam_size=5)
         transcript = " ".join(seg.text.strip() for seg in segments).strip()
         os.unlink(tmp_path)  # clean up temp file
 

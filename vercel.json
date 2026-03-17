@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "ai_service.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/message",
+      "dest": "ai_service.py"
+    },
+    {
+      "src": "/dictate",
+      "dest": "ai_service.py"
+    },
+    {
+      "src": "/voice-search",
+      "dest": "ai_service.py"
+    },
+    {
+      "src": "/voice-route",
+      "dest": "ai_service.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "server.js"
+    }
+  ]
+}

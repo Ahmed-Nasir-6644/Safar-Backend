@@ -4,14 +4,20 @@ const dns = require('dns');
 // Configure DNS to use Google's public DNS for better reliability
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
+let cachedConnection = null;
+
 const connectDB = async (retryCount = 0) => {
   try {
+    if (cachedConnection || mongoose.connection.readyState === 1) {
+      return mongoose.connection;
+    }
+
     const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/safar';
     
     console.log('Attempting MongoDB connection...');
     console.log('Connection string (without password):', mongoURI.replace(/:[^:]*@/, ':****@'));
     
-    await mongoose.connect(mongoURI, {
+    cachedConnection = await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 60000,
@@ -25,8 +31,15 @@ const connectDB = async (retryCount = 0) => {
     });
     
     console.log('✓ MongoDB connected successfully');
+    return cachedConnection;
   } catch (error) {
     console.error('✗ MongoDB connection failed:', error.message);
+
+    const isServerless = process.env.VERCEL === '1';
+
+    if (isServerless) {
+      throw error;
+    }
     
     if (retryCount < 5) {
       console.log(`Retrying connection attempt ${retryCount + 1}/5 in 5 seconds...`);
@@ -45,7 +58,7 @@ const connectDB = async (retryCount = 0) => {
       console.error('\n3. CHECK YOUR NETWORK:');
       console.error('   - Test DNS: nslookup cluster0.4gcdqhe.mongodb.net');
       console.error('   - Test connectivity: ping 8.8.8.8');
-      process.exit(1);
+      throw error;
     }
   }
 };

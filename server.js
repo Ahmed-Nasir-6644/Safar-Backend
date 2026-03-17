@@ -13,13 +13,24 @@ const authenticateToken = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const isServerless = process.env.VERCEL === '1';
 
 // Connect to MongoDB
 connectDB();
 
 // CORS Configuration
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(',').map((origin) => origin.trim()).filter(Boolean)
+  : [process.env.FRONTEND_URL || 'http://localhost:5173'];
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:3001',
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -38,6 +49,14 @@ app.get('/', (req, res) => {
 
 app.get('/hello', (req, res) => {
   res.json({ message: 'Hello from the API!' });
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'API is healthy',
+    environment: process.env.NODE_ENV || 'development',
+  });
 });
 
 // Auth routes (public)
@@ -67,7 +86,11 @@ app.use((req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  console.log(`CORS enabled for: ${process.env.FRONTEND_URL || 'http://localhost:3001'}`);
-});
+if (!isServerless) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`CORS enabled for: ${allowedOrigins.join(', ')}`);
+  });
+}
+
+module.exports = app;

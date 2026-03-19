@@ -330,7 +330,7 @@ async def voice_search(request: VoiceSearchRequest):
 
 
 
-import sounddevice as sd
+# import sounddevice as sd
 from scipy.io.wavfile import write
 # Load stops
 with open("unique_stop_names.txt", "r", encoding="utf-8") as f:
@@ -365,13 +365,13 @@ Output format:
 """
 STOP_PROMPT = "Bus stops: " + ", ".join(stops[:50])
 # --- 1️⃣ Record live audio ---
-def record_audio(filename="live_input.wav", duration=5, fs=16000):
-    print(f"Recording for {duration} seconds... Speak now!")
-    audio_data = sd.rec(int(duration * fs), samplerate=fs, channels=1, dtype='int16')
-    sd.wait()
-    write(filename, fs, audio_data)
-    print(f"Recording saved to {filename}")
-    return filename
+# def record_audio(filename="live_input.wav", duration=5, fs=16000):
+#     print(f"Recording for {duration} seconds... Speak now!")
+#     audio_data = sd.rec(int(duration * fs), samplerate=fs, channels=1, dtype='int16')
+#     sd.wait()
+#     write(filename, fs, audio_data)
+#     print(f"Recording saved to {filename}")
+#     return filename
 import re
 from deepgram import DeepgramClient
 

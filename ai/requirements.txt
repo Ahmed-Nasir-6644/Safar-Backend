@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+gunicorn
+pydantic
+openai
+python-multipart
+fuzzywuzzy
+python-Levenshtein
+deepgram-sdk
+sounddevice
+scipy

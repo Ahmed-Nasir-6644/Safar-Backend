@@ -1,7 +1,8 @@
 import asyncio
 import tempfile
 #import tmp_path    
-
+from dotenv import load_dotenv
+load_dotenv()
 from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
 from openai import OpenAI
@@ -151,9 +152,9 @@ app.add_middleware(
 )
 # Multiple API keys with fallback mechanism
 API_KEYS = [
-    "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",
-    "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",
-    "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"
+    os.getenv("OPENROUTER_KEY_1"),
+    os.getenv("OPENROUTER_KEY_2"),
+    os.getenv("OPENROUTER_KEY_3"),
 ]
 
 DEEPSEEK_BASE_URL = "https://openrouter.ai/api/v1"
@@ -375,7 +376,7 @@ import re
 from deepgram import DeepgramClient
 
 # Initialize the client (You'll need to put your Deepgram API key here or in your .env file)
-DEEPGRAM_API_KEY = os.environ.get("DEEPGRAM_API_KEY", "2116db22ce16d397c9d769af93ca9efd89ca4374")
+DEEPGRAM_API_KEY = os.environ.get("DEEPGRAM_API_KEY")
 deepgram = DeepgramClient(api_key=DEEPGRAM_API_KEY)
 
 def clean_stop_name(name):

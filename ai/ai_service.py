@@ -145,7 +145,7 @@ Do not return anything outside JSON.
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], # This is your React app's exact URL
+    allow_origins=["http://localhost:5173", "https://safar-tg2c.vercel.app"], # This is your React app's exact URL
     allow_credentials=True,
     allow_methods=["*"], # Allows POST, GET, OPTIONS, etc.
     allow_headers=["*"], # Allows all headers like Content-Type

@@ -1,12 +1,16 @@
 import asyncio
 import tempfile
+#import tmp_path    
+
 from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
 from openai import OpenAI
 import os
 import json
 from fastapi.middleware.cors import CORSMiddleware # 1. ADD THIS IMPORT
-from faster_whisper import WhisperModel
+import wave
+import subprocess
+
 # start using: uvicorn ai_service:app --reload --port 8000
 SYSTEM_PROMPT = """
 You are a helpful customer service assistant for MetroMate, a public transportation route finding and management system. 
@@ -147,7 +151,7 @@ app.add_middleware(
 )
 # Multiple API keys with fallback mechanism
 API_KEYS = [
-    "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",
+    "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",
     "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",
     "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"
 ]
@@ -358,24 +362,74 @@ Output format:
   "destination": string | null
 }
 """
-
+STOP_PROMPT = "Bus stops: " + ", ".join(stops[:50])
 # --- 1️⃣ Record live audio ---
 def record_audio(filename="live_input.wav", duration=5, fs=16000):
     print(f"Recording for {duration} seconds... Speak now!")
-    audio_data = sd.rec(int(duration * fs), samplerate=fs, channels=1)
+    audio_data = sd.rec(int(duration * fs), samplerate=fs, channels=1, dtype='int16')
     sd.wait()
     write(filename, fs, audio_data)
     print(f"Recording saved to {filename}")
     return filename
+import re
+from deepgram import DeepgramClient
 
-# --- 2️⃣ Speech-to-text (using faster-whisper locally) ---
-_whisper_model = WhisperModel("base", device="cpu", compute_type="int8")
+# Initialize the client (You'll need to put your Deepgram API key here or in your .env file)
+DEEPGRAM_API_KEY = os.environ.get("DEEPGRAM_API_KEY", "2116db22ce16d397c9d769af93ca9efd89ca4374")
+deepgram = DeepgramClient(api_key=DEEPGRAM_API_KEY)
 
+def clean_stop_name(name):
+    name = name.strip()
+
+    # Remove trailing "Stop" or "Metro Station"
+    name = re.sub(r"\b(Stop|Metro Station)\b", "", name, flags=re.IGNORECASE)
+
+    # Remove extra commas
+    name = re.sub(r",.*", "", name)
+
+    # Remove multiple spaces
+    name = re.sub(r"\s+", " ", name)
+
+    return name.strip()
+cleaned_stops = []
+
+for stop in stops:
+    cleaned = clean_stop_name(stop)
+    cleaned_stops.append(cleaned.lower())
+
+# Remove duplicates
+unique_stops = list(set(cleaned_stops))
 async def speech_to_text(audio_path: str):
-    segments, info = _whisper_model.transcribe(audio_path, beam_size=5)
-    transcript = " ".join(segment.text.strip() for segment in segments)
-    print("Transcript:", transcript)
-    return transcript
+    print("Sending audio to Deepgram...")
+    
+    try:
+        # 1. Dynamically format your stops into Deepgram Keywords
+        # We attach ":2" to give every stop a 2x recognition boost
+        final_keywords = unique_stops
+
+        boosted_keywords = [f"{stop}:2" for stop in final_keywords]
+ # Print first 10 boosted keywords for verification
+        print(boosted_keywords[:50])  # Print first 10 boosted keywords for verification
+        # 2. Read the audio file you saved earlier
+        with open(audio_path, "rb") as audio:
+            # 3. Call the API using the v6 SDK format
+            response = deepgram.listen.v1.media.transcribe_file(
+                request=audio.read(),
+                model="nova-2",      
+                language="en-IN",    
+                smart_format=True
+            )
+
+        # 4. Extract the text from the response object
+        # With Deepgram SDK v6, the response is a standard Pydantic model
+        transcript = response.results.channels[0].alternatives[0].transcript
+        
+        print(f"Deepgram Transcript: {transcript}")
+        return transcript
+
+    except Exception as e:
+        print(f"Deepgram API Error: {e}")
+        return ""
 
 # --- 3️⃣ Extract stops ---
 async def extract_stops_from_transcript(transcript: str):
@@ -387,13 +441,13 @@ async def extract_stops_from_transcript(transcript: str):
     prediction = await make_llm_request(messages)
     data = json.loads(prediction)
     print("LLM Extracted Data:", data)
-    source_input = data.get("source", "")
-    destination_input = data.get("destination", "")
+    source_input = data.get("source") or ""
+    destination_input = data.get("destination") or ""
     # source_input = "Fessal Mosque"
     # destination_input = "Apara"
 
-    best_source, _ = process.extractOne(source_input, stops, scorer=fuzz.token_sort_ratio)
-    best_destination, _ = process.extractOne(destination_input, stops, scorer=fuzz.token_sort_ratio)
+    best_source = process.extractOne(source_input, stops, scorer=fuzz.token_sort_ratio) if source_input else (None, 0)
+    best_destination = process.extractOne(destination_input, stops, scorer=fuzz.token_sort_ratio) if destination_input else (None, 0)
 
     return best_source, best_destination
 
@@ -403,7 +457,7 @@ async def voice_route(audio: UploadFile = File(...)):
     """
     Full pipeline endpoint:
     1. Accept audio file from frontend
-    2. Transcribe using Faster-Whisper (STT)
+    2. Transcribe using Deepgram STT (Strict Grammar)
     3. Extract raw source & destination via LLM
     4. Fuzzy-match against stop list
     5. Return structured JSON result
@@ -415,9 +469,8 @@ async def voice_route(audio: UploadFile = File(...)):
             tmp.write(await audio.read())
             tmp_path = tmp.name
 
-        # 2️⃣ Transcribe with Faster-Whisper
-        segments, _ = _whisper_model.transcribe(tmp_path, beam_size=5)
-        transcript = " ".join(seg.text.strip() for seg in segments).strip()
+        # 2️⃣ Transcribe with Deepgram
+        transcript = await speech_to_text(tmp_path)
         os.unlink(tmp_path)  # clean up temp file
 
         if not transcript:
@@ -482,7 +535,7 @@ async def voice_route(audio: UploadFile = File(...)):
 #     audio_file = record_audio(duration=7)  # record for 7 seconds
 
 #     # Step 2: Convert speech to text
-#     transcript = await speech_to_text('live_input.wav')  # Use the recorded file
+#     transcript = await speech_to_text(audio_file)  # Use the recorded file
 
 #     # Step 3: Extract source/destination
 #     source, destination = await extract_stops_from_transcript(transcript)

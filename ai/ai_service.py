@@ -459,8 +459,8 @@ async def voice_route(audio: UploadFile = File(...)):
         # Use rule-based parser instead of LLM
         source_input, destination_input = parse_source_destination(transcript)
 
-        # 4️⃣ Validate — don't fuzzy-match if LLM returned null/empty
-        if not source_input.strip() or not destination_input.strip():
+        # 4️⃣ Validate — don't fuzzy-match if parser returned null/empty
+        if not source_input or not destination_input or not source_input.strip() or not destination_input.strip():
             return {
                 "success": False,
                 "transcript": transcript,

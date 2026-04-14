@@ -56,9 +56,7 @@ Output format:
 
 """
 SYSTEM_PROMPT_VOICE = """
-You are a public transport journey summarization engine.
-
-Your job is to extract high-level journey structure from structured or semi-structured transit data.
+Your job is to extract high-level journey structure from structured transit data.
 
 You must generate:
 
@@ -69,30 +67,10 @@ You must generate:
 IMPORTANT RULES
 -------------------------------------------------------
 
-- DO NOT list all stops.
 - DO NOT repeat intermediate station names.
-- DO NOT exceed one paragraph.
 - DO NOT explain reasoning.
-- DO NOT invent or guess missing values.
 - ALWAYS return valid JSON only.
 - If required data is missing, return the fallback response exactly as shown.
-
--------------------------------------------------------
-HOW TO IDENTIFY TRANSFERS
--------------------------------------------------------
-
-A transfer occurs when:
-- A new route begins after a previous one ends.
-
-There may be ZERO, ONE, or MULTIPLE transfers.
-
-You must dynamically extract all route segments in order.
-
-Each segment must include:
-- route_name
-- stop_count
-
-The transfer stop is the stop where one route ends and the next route begins.
 
 -------------------------------------------------------
 REQUIRED OUTPUT STRUCTURE
@@ -105,15 +83,7 @@ REQUIRED OUTPUT STRUCTURE
     "total_stops": "",
     "total_transfers": "",
     "walking_distance_meters": "",
-    "total_fare": "",
-    "segments": [
-      {
-        "route_name": "",
-        "stop_count": "",
-        "boarding_stop": "",
-        "alighting_stop": ""
-      }
-    ]
+    "total_fare": ""
   }
 }
 
@@ -123,11 +93,9 @@ SUMMARY REQUIREMENTS
 
 The summary must include:
 - Total journey time
-- Each route in order
-- Transfer locations (without listing all stops)
-- Total fare
-
-Keep it natural and concise.
+- Start and end points
+- Total fare (if available)
+- Duration (if available)
 
 -------------------------------------------------------
 FALLBACK RESPONSE (IF DATA IS INCOMPLETE)
@@ -165,7 +133,7 @@ def get_openai_client():
     return OpenAI(
         api_key=API_KEYS[current_api_key_index],
         base_url=DEEPSEEK_BASE_URL,
-        timeout=60.0
+        timeout=120.0
     )
 
 def rotate_api_key():
@@ -243,16 +211,18 @@ async def classify(request: OCRRequest):
             "error": str(e)
         }
     
+MAX_CHARS = 500  # adjust as needed
 
 @app.post("/dictate")
 async def dictate(request: OCRRequest):
     try:
+        limited_ocr = request.ocr_result[:MAX_CHARS]
         messages = [
             {"role": "system", "content": SYSTEM_PROMPT_VOICE},
             {
                 "role": "user",
                 "content": json.dumps(
-                    {"ocr_result": request.ocr_result},
+                    {"ocr_result": limited_ocr},
                     ensure_ascii=False
                 )
             }

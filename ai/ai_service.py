@@ -239,23 +239,11 @@ from fuzzywuzzy import fuzz,process
 @app.post("/voice-search")
 async def voice_search(request: VoiceSearchRequest):
     try:
-        # 1️⃣ Call LLM to extract source/destination using fallback mechanism
-        messages = [
-            {"role": "system", "content": SYSTEM_PROMPT_NLP},
-            {"role": "user", "content": request.transcript}
-        ]
-        
-        prediction = await make_llm_request(messages)
+        # 1️⃣ Extract source/destination using rule-based parser instead of LLM
+        source_input, destination_input = parse_source_destination(request.transcript)
 
-        # 2️⃣ Parse prediction JSON
-        import json
-        data = json.loads(prediction)
-
-        # 3️⃣ Validate extracted stops before fuzzy matching
-        source_input = data.get("source") or ""
-        destination_input = data.get("destination") or ""
-
-        if not source_input.strip() or not destination_input.strip():
+        # 2️⃣ Validate extracted stops before fuzzy matching
+        if not source_input or not destination_input:
             return {
                 "success": False,
                 "prediction": None,
@@ -387,23 +375,53 @@ async def speech_to_text(audio_path: str):
         print(f"Deepgram API Error: {e}")
         return ""
 
+
+def parse_source_destination(transcript: str):
+    """Simple rule-based parser to extract source and destination from transcript.
+
+    Rules implemented (in priority order):
+    1. "in <SOURCE> to <DESTINATION>" (e.g., "I am in Faisal Mosque I want to go to Aabpara")
+    2. "from <SOURCE> to <DESTINATION>"
+
+    If no rule matches, returns (None, None).
+    """
+    if not transcript or not transcript.strip():
+        return None, None
+
+    low = transcript.lower()
+
+    # Pattern: in <source> ... to <destination>
+    m = re.search(r"\bin\s+(.+?)\s+to\s+(.+?)(?:[\.,\?!]|$)", low)
+    if m:
+        # Use spans on the lowercase version to slice original transcript to preserve casing
+        g1_span = m.span(1)
+        g2_span = m.span(2)
+        source_raw = transcript[g1_span[0]:g1_span[1]].strip()
+        dest_raw = transcript[g2_span[0]:g2_span[1]].strip()
+        return source_raw, dest_raw
+
+    # Pattern: from <source> to <destination>
+    m = re.search(r"\bfrom\s+(.+?)\s+to\s+(.+?)(?:[\.,\?!]|$)", low)
+    if m:
+        g1_span = m.span(1)
+        g2_span = m.span(2)
+        source_raw = transcript[g1_span[0]:g1_span[1]].strip()
+        dest_raw = transcript[g2_span[0]:g2_span[1]].strip()
+        return source_raw, dest_raw
+
+    return None, None
+
 # --- 3️⃣ Extract stops ---
 async def extract_stops_from_transcript(transcript: str):
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT_NLP},
-        {"role": "user", "content": transcript}
-    ]
+    # Use rule-based parser instead of LLM
+    source_input, destination_input = parse_source_destination(transcript)
+    print("Parsed source/destination:", source_input, destination_input)
 
-    prediction = await make_llm_request(messages)
-    data = json.loads(prediction)
-    print("LLM Extracted Data:", data)
-    source_input = data.get("source") or ""
-    destination_input = data.get("destination") or ""
-    # source_input = "Fessal Mosque"
-    # destination_input = "Apara"
+    if not source_input or not destination_input:
+        return (None, 0), (None, 0)
 
-    best_source = process.extractOne(source_input, stops, scorer=fuzz.token_sort_ratio) if source_input else (None, 0)
-    best_destination = process.extractOne(destination_input, stops, scorer=fuzz.token_sort_ratio) if destination_input else (None, 0)
+    best_source = process.extractOne(source_input, stops, scorer=fuzz.token_sort_ratio)
+    best_destination = process.extractOne(destination_input, stops, scorer=fuzz.token_sort_ratio)
 
     return best_source, best_destination
 
@@ -438,16 +456,8 @@ async def voice_route(audio: UploadFile = File(...)):
             }
 
         # 3️⃣ Extract source & destination via LLM using fallback mechanism
-        messages = [
-            {"role": "system", "content": SYSTEM_PROMPT_NLP},
-            {"role": "user", "content": transcript}
-        ]
-        
-        llm_raw = await make_llm_request(messages)
-        data = json.loads(llm_raw)
-
-        source_input = data.get("source") or ""
-        destination_input = data.get("destination") or ""
+        # Use rule-based parser instead of LLM
+        source_input, destination_input = parse_source_destination(transcript)
 
         # 4️⃣ Validate — don't fuzzy-match if LLM returned null/empty
         if not source_input.strip() or not destination_input.strip():

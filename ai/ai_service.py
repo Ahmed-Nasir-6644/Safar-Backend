@@ -127,7 +127,7 @@ def rotate_api_key():
     current_api_key_index = (current_api_key_index + 1) % len(API_KEYS)
     print(f"Switched to API key #{current_api_key_index + 1}")
 
-async def make_llm_request(messages, model="arcee-ai/trinity-large-preview:free", temperature=0, max_retries=None):
+async def make_llm_request(messages, model="arcee-ai/trinity-large-preview", temperature=0, max_retries=None):
     """
     Make LLM request with automatic API key fallback
     Tries all API keys before giving up
